@@ -346,101 +346,6 @@ h1 {
   background: #FFF8E1;
 }
 
-.exercise-checkboxes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.exercise-checkbox {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.exercise-checkbox:hover {
-  border-color: #FFB300;
-  background: #f8f9fa;
-}
-
-.exercise-checkbox input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.exercise-checkbox label {
-  cursor: pointer;
-  user-select: none;
-  font-weight: 500;
-}
-
-.exercise-checkbox.checked {
-  background: linear-gradient(135deg, #FFF8E1, #FFECB3);
-  border-color: #FFB300;
-}
-
-.exercise-detail {
-  display: none;
-  margin-top: 15px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  border: 2px solid #e9ecef;
-}
-
-.exercise-detail.active {
-  display: block;
-}
-
-.exercise-detail h4 {
-  color: #F57C00;
-  margin-bottom: 15px;
-}
-
-.mode-selector {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.mode-btn {
-  flex: 1;
-  padding: 10px;
-  border: 2px solid #e9ecef;
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-weight: 500;
-}
-
-.mode-btn:hover {
-  border-color: #FFB300;
-}
-
-.mode-btn.active {
-  background: #FFB300;
-  color: white;
-  border-color: #FFB300;
-}
-
-.calorie-display {
-  background: linear-gradient(135deg, #ffd93d, #ffb93d);
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
-  margin-top: 15px;
-  font-weight: bold;
-  font-size: 1.2em;
-  color: #333;
-}
-
 .save-btn {
   width: 100%;
   padding: 15px;
@@ -473,6 +378,245 @@ h1 {
 
 .quick-fill-btn:hover {
   background: #5a6268;
+}
+
+/* カテゴリー選択ボタン */
+.exercise-category-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.category-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 16px;
+  background: white;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 90px;
+}
+
+.category-btn:hover {
+  border-color: #FFB300;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 179, 0, 0.2);
+}
+
+.category-btn.active {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  border-color: #F57C00;
+  color: white;
+}
+
+.category-icon {
+  font-size: 1.8em;
+}
+
+.category-name {
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+/* 運動リスト */
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.exercise-item {
+  background: white;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.exercise-item:hover {
+  border-color: #FFD54F;
+}
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.exercise-icon {
+  font-size: 1.5em;
+  margin-right: 10px;
+}
+
+.exercise-name {
+  flex: 1;
+  font-weight: 600;
+  color: #212121;
+}
+
+.exercise-toggle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #F57C00;
+  background: white;
+  color: #F57C00;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.exercise-toggle:hover {
+  background: #F57C00;
+  color: white;
+}
+
+.exercise-item.expanded .exercise-toggle {
+  transform: rotate(45deg);
+  background: #F57C00;
+  color: white;
+}
+
+.exercise-input {
+  display: none;
+  padding: 16px;
+  background: #FAFAFA;
+  border-top: 1px solid #E0E0E0;
+}
+
+.exercise-item.expanded .exercise-input {
+  display: block;
+}
+
+.exercise-select,
+.exercise-number {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+.exercise-select:focus,
+.exercise-number:focus {
+  outline: none;
+  border-color: #FFB300;
+  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.1);
+}
+
+.btn-add-exercise {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.btn-add-exercise:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+}
+
+/* 追加済み運動リスト */
+.added-exercises {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.added-exercise-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(145deg, #FFF9C4, #FFECB3);
+  border-radius: 10px;
+  border: 2px solid #FFD54F;
+}
+
+.added-exercise-info {
+  flex: 1;
+}
+
+.added-exercise-name {
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 4px;
+}
+
+.added-exercise-details {
+  font-size: 0.85em;
+  color: #616161;
+}
+
+.added-exercise-calories {
+  font-weight: 600;
+  color: #F57C00;
+  margin-right: 12px;
+}
+
+.btn-remove-exercise {
+  padding: 6px 12px;
+  background: #EF5350;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+}
+
+.btn-remove-exercise:hover {
+  background: #D32F2F;
+}
+
+/* 運動サマリー */
+.exercise-summary {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background: linear-gradient(145deg, #FFFFFF, #FFFBF5);
+  border-radius: 12px;
+  border: 2px solid #FFD54F;
+  margin-top: 20px;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-label {
+  display: block;
+  font-size: 0.9em;
+  color: #616161;
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* 月間サマリー */
@@ -570,12 +714,6 @@ h1 {
   font-weight: 600;
 }
 
-.summary-value {
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #1976D2;
-}
-
 .unit {
   font-size: 0.8em;
 }
@@ -633,6 +771,16 @@ h1 {
   .input-row {
     grid-template-columns: 1fr;
   }
+  .category-btn {
+    min-width: 80px;
+    padding: 10px 12px;
+  }
+  .category-icon {
+    font-size: 1.5em;
+  }
+  .category-name {
+    font-size: 0.75em;
+  }
 }
 /* ホームボタン */
 .home-button {
@@ -652,7 +800,6 @@ h1 {
   gap: 6px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
-  /* white-space: nowrap; を削除 - 小画面での折り返しを許可するため */
 }
 
 .home-button:hover {
@@ -683,7 +830,6 @@ h1 {
   gap: 6px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
-  /* white-space: nowrap; を削除 - 小画面での折り返しを許可するため */
 }
 
 .guide-button:hover {
@@ -696,73 +842,60 @@ h1 {
   transform: translateY(0);
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   アイコンのみ表示の設定（大画面・中画面用）
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-/* デフォルト: テキストを非表示 */
 .button-text {
   display: none;
   margin-left: 4px;
 }
 
-/* アイコンのサイズを固定ピクセルで完全統一 */
 .button-icon {
-  font-size: 20px;      /* 固定サイズ（emではなくpx） */
-  width: 20px;          /* 固定幅 */
-  height: 20px;         /* 固定高さ */
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
 }
 
-/* ボタンのサイズを小さくして重ならないように */
 .home-button,
 .yearly-summary-button,
 .guide-button {
-  width: 40px;           /* 48px → 40px に縮小 */
-  height: 40px;          /* 48px → 40px に縮小 */
-  padding: 0;            /* paddingをリセット */
+  width: 40px;
+  height: 40px;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-/* ホバー時: テキストを表示 */
 .home-button:hover .button-text,
 .yearly-summary-button:hover .button-text,
 .guide-button:hover .button-text {
   display: inline;
 }
 
-/* ホバー時: ボタンの幅を自動調整し、paddingを追加 */
 .home-button:hover,
 .yearly-summary-button:hover,
 .guide-button:hover {
   width: auto;
-  height: 40px;         /* 高さは維持 */
+  height: 40px;
   padding: 8px 16px;
 }
 
-/* レスポンシブ対応 */
-/* 小サイズ画面: ボタンを小さく、コンパクトに配置 */
 @media (max-width: 768px) {
   body {
     padding: 10px;
   }
   
   .container {
-    padding: 90px 15px 15px 15px;  /* ボタンがコンパクトなので縮小 */
+    padding: 90px 15px 15px 15px;
   }
   
-  /* 小画面ではデフォルトでテキストを非表示（ホバー時は表示） */
   .button-text {
     display: none;
   }
   
-  /* ホバー時にテキストを表示 */
   .home-button:hover .button-text,
   .yearly-summary-button:hover .button-text,
   .guide-button:hover .button-text {
@@ -770,24 +903,22 @@ h1 {
   }
   
   .button-icon {
-    font-size: 1.2em;  /* アイコンを少し大きく */
+    font-size: 1.2em;
   }
   
-  /* ボタンのスタイル調整 */
   .home-button,
   .yearly-summary-button,
   .guide-button {
-    width: 44px !important;     /* 固定サイズ */
-    height: 44px !important;    /* 固定サイズ */
-    padding: 0 !important;      /* paddingリセット */
-    min-width: 44px;            /* 最小サイズ */
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    min-width: 44px;
     min-height: 44px;
     justify-content: center;
     display: inline-flex !important;
     align-items: center;
   }
   
-  /* ホバー時のサイズ変更 */
   .home-button:hover,
   .yearly-summary-button:hover,
   .guide-button:hover {
@@ -795,19 +926,18 @@ h1 {
     padding: 8px 16px !important;
   }
   
-  /* 位置を統一 */
   .home-button {
     top: 10px !important;
     left: 10px !important;
   }
   
   .yearly-summary-button {
-    top: 60px !important;   /* 間隔50px */
-    left: 10px !important;  /* 統一 */
+    top: 60px !important;
+    left: 10px !important;
   }
   
   .guide-button {
-    top: 110px !important;  /* 間隔50px */
+    top: 110px !important;
     left: 10px !important;
   }
   
@@ -820,7 +950,6 @@ h1 {
   }
 }
 
-/* 年間サマリーボタン */
 .yearly-summary-button {
   position: fixed;
   top: 60px;
@@ -838,7 +967,6 @@ h1 {
   gap: 6px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-  /* white-space: nowrap; を削除 - 小画面での折り返しを許可するため */
 }
 
 .yearly-summary-button:hover {
@@ -879,7 +1007,7 @@ h1 {
   </div>
 
   <div class="month-selector">
-    <label for="month-select">表示月：</label>
+    <label for="month-select">表示月:</label>
     <select id="month-select" class="month-select-dropdown">
       <option value="0">1月</option>
       <option value="1">2月</option>
@@ -1035,137 +1163,200 @@ h1 {
       <!-- トレーニング内容 -->
       <div class="input-section" id="training-section" style="display: none;">
         <h3>🏃 トレーニング内容</h3>
-        <div class="exercise-checkboxes">
-          <div class="exercise-checkbox" onclick="toggleExercise('warmup')">
-            <input type="checkbox" id="check-warmup">
-            <label>ウォーミングアップ</label>
+        
+        <!-- カテゴリー選択 -->
+        <div class="exercise-category-selector">
+          <button type="button" class="category-btn active" data-category="cardio">
+            <span class="category-icon">🚶</span>
+            <span class="category-name">有酸素運動</span>
+          </button>
+          <button type="button" class="category-btn" data-category="water">
+            <span class="category-icon">🏊</span>
+            <span class="category-name">水中運動</span>
+          </button>
+          <button type="button" class="category-btn" data-category="flexibility">
+            <span class="category-icon">🧘</span>
+            <span class="category-name">柔軟性</span>
+          </button>
+          <button type="button" class="category-btn" data-category="other">
+            <span class="category-icon">💃</span>
+            <span class="category-name">その他</span>
+          </button>
+        </div>
+
+        <!-- 有酸素運動 -->
+        <div class="exercise-list" data-category="cardio">
+          <div class="exercise-item" data-exercise="walking">
+            <div class="exercise-header">
+              <span class="exercise-icon">🚶</span>
+              <span class="exercise-name">ウォーキング</span>
+              <button type="button" class="exercise-toggle">+</button>
+            </div>
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>速さ</label>
+                <select class="exercise-select" data-field="speed">
+                  <option value="slow">ゆっくり (3km/h)</option>
+                  <option value="normal" selected>普通 (4km/h)</option>
+                  <option value="fast">速歩 (5-6km/h)</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="300" placeholder="30">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="walking">追加</button>
+            </div>
           </div>
-          <div class="exercise-checkbox" onclick="toggleExercise('running')">
-            <input type="checkbox" id="check-running">
-            <label>ランニング</label>
+
+          <div class="exercise-item" data-exercise="running">
+            <div class="exercise-header">
+              <span class="exercise-icon">🏃</span>
+              <span class="exercise-name">ランニング</span>
+              <button type="button" class="exercise-toggle">+</button>
+            </div>
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>速度 (km/h)</label>
+                <select class="exercise-select" data-field="speed">
+                  <option value="4">4 km/h (軽いジョギング)</option>
+                  <option value="6">6 km/h (ジョギング)</option>
+                  <option value="8" selected>8 km/h (ランニング)</option>
+                  <option value="10">10 km/h (速いランニング)</option>
+                  <option value="12">12 km/h (とても速い)</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="180" placeholder="30">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="running">追加</button>
+            </div>
           </div>
-          <div class="exercise-checkbox" onclick="toggleExercise('bike')">
-            <input type="checkbox" id="check-bike">
-            <label>エアロバイク</label>
-          </div>
-          <div class="exercise-checkbox" onclick="toggleExercise('strength')">
-            <input type="checkbox" id="check-strength">
-            <label>筋トレ</label>
-          </div>
-          <div class="exercise-checkbox" onclick="toggleExercise('cooldown')">
-            <input type="checkbox" id="check-cooldown">
-            <label>クールダウン</label>
+
+          <div class="exercise-item" data-exercise="cycling">
+            <div class="exercise-header">
+              <span class="exercise-icon">🚴</span>
+              <span class="exercise-name">サイクリング</span>
+              <button type="button" class="exercise-toggle">+</button>
+            </div>
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>強度</label>
+                <select class="exercise-select" data-field="intensity">
+                  <option value="light">軽い（ゆっくり）</option>
+                  <option value="moderate" selected>普通</option>
+                  <option value="vigorous">激しい（速い）</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="180" placeholder="30">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="cycling">追加</button>
+            </div>
           </div>
         </div>
 
-        <!-- ウォーミングアップ詳細 -->
-        <div class="exercise-detail" id="detail-warmup">
-          <h4>🚶 ウォーミングアップ</h4>
-          <div class="mode-selector">
-            <button class="mode-btn active" onclick="setMode('warmup', 'time')">時間で入力</button>
-            <button class="mode-btn" onclick="setMode('warmup', 'distance')">距離で入力</button>
-          </div>
-          <div class="input-row">
-            <div class="input-group">
-              <label>速度 (km/h)</label>
-              <input type="number" step="0.5" id="warmup-speed" value="6" onchange="calculateExerciseCalories('warmup')">
+        <!-- 水中運動 -->
+        <div class="exercise-list" data-category="water" style="display: none;">
+          <div class="exercise-item" data-exercise="water-walking">
+            <div class="exercise-header">
+              <span class="exercise-icon">🏊</span>
+              <span class="exercise-name">水中ウォーキング</span>
+              <button type="button" class="exercise-toggle">+</button>
             </div>
-            <div class="input-group" id="warmup-time-group">
-              <label>時間 (分)</label>
-              <input type="number" id="warmup-time" value="10" onchange="calculateExerciseCalories('warmup')">
-            </div>
-            <div class="input-group" id="warmup-distance-group" style="display: none;">
-              <label>距離 (km)</label>
-              <input type="number" step="0.1" id="warmup-distance" value="1" onchange="calculateExerciseCalories('warmup')">
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="water-walking">追加</button>
             </div>
           </div>
-          <div class="calorie-display" id="warmup-calories">0 kcal</div>
+
+          <div class="exercise-item" data-exercise="swimming">
+            <div class="exercise-header">
+              <span class="exercise-icon">🏊‍♂️</span>
+              <span class="exercise-name">スイミング</span>
+              <button type="button" class="exercise-toggle">+</button>
+            </div>
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>距離（m）</label>
+                <input type="number" class="exercise-number" data-field="distance" min="25" max="10000" step="25" placeholder="500">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="swimming">追加</button>
+            </div>
+          </div>
         </div>
 
-        <!-- ランニング詳細 -->
-        <div class="exercise-detail" id="detail-running">
-          <h4>🏃 ランニング</h4>
-          <div class="mode-selector">
-            <button class="mode-btn" onclick="setMode('running', 'time')">時間で入力</button>
-            <button class="mode-btn active" onclick="setMode('running', 'distance')">距離で入力</button>
-          </div>
-          <div class="input-row">
-            <div class="input-group">
-              <label>速度 (km/h)</label>
-              <input type="number" step="0.5" id="running-speed" value="9" onchange="calculateExerciseCalories('running')">
+        <!-- 柔軟性・バランス -->
+        <div class="exercise-list" data-category="flexibility" style="display: none;">
+          <div class="exercise-item" data-exercise="stretching">
+            <div class="exercise-header">
+              <span class="exercise-icon">🤸</span>
+              <span class="exercise-name">ストレッチ</span>
+              <button type="button" class="exercise-toggle">+</button>
             </div>
-            <div class="input-group" id="running-time-group" style="display: none;">
-              <label>時間 (分)</label>
-              <input type="number" id="running-time" value="30" onchange="calculateExerciseCalories('running')">
-            </div>
-            <div class="input-group" id="running-distance-group">
-              <label>距離 (km)</label>
-              <input type="number" step="0.1" id="running-distance" value="5" onchange="calculateExerciseCalories('running')">
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="60" placeholder="10">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="stretching">追加</button>
             </div>
           </div>
-          <div class="calorie-display" id="running-calories">0 kcal</div>
+
+          <div class="exercise-item" data-exercise="yoga">
+            <div class="exercise-header">
+              <span class="exercise-icon">🧘</span>
+              <span class="exercise-name">ヨガ・ピラティス</span>
+              <button type="button" class="exercise-toggle">+</button>
+            </div>
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="yoga">追加</button>
+            </div>
+          </div>
         </div>
 
-        <!-- エアロバイク詳細 -->
-        <div class="exercise-detail" id="detail-bike">
-          <h4>🚴 エアロバイク</h4>
-          <div class="input-row">
-            <div class="input-group">
-              <label>負荷レベル</label>
-              <select id="bike-intensity" onchange="calculateExerciseCalories('bike')">
-                <option value="light">軽い負荷 (50-100W)</option>
-                <option value="moderate" selected>中程度 (100-160W)</option>
-                <option value="vigorous">高負荷 (160W以上)</option>
-              </select>
+        <!-- その他 -->
+        <div class="exercise-list" data-category="other" style="display: none;">
+          <div class="exercise-item" data-exercise="dance">
+            <div class="exercise-header">
+              <span class="exercise-icon">💃</span>
+              <span class="exercise-name">ダンス・エアロビクス</span>
+              <button type="button" class="exercise-toggle">+</button>
             </div>
-            <div class="input-group">
-              <label>時間 (分)</label>
-              <input type="number" id="bike-time" value="20" onchange="calculateExerciseCalories('bike')">
-            </div>
-          </div>
-          <div class="calorie-display" id="bike-calories">0 kcal</div>
-        </div>
-
-        <!-- 筋トレ詳細 -->
-        <div class="exercise-detail" id="detail-strength">
-          <h4>💪 筋トレ</h4>
-          <div class="input-row">
-            <div class="input-group">
-              <label>腕立て伏せ (回)</label>
-              <input type="number" id="strength-pushups" value="20" onchange="calculateExerciseCalories('strength')">
-            </div>
-            <div class="input-group">
-              <label>プランク (秒)</label>
-              <input type="number" id="strength-plank-sec" value="30" onchange="calculateExerciseCalories('strength')">
-            </div>
-            <div class="input-group">
-              <label>プランク (セット)</label>
-              <input type="number" id="strength-plank-sets" value="3" onchange="calculateExerciseCalories('strength')">
-            </div>
-            <div class="input-group">
-              <label>ランジ (片足回数)</label>
-              <input type="number" id="strength-lunges" value="10" onchange="calculateExerciseCalories('strength')">
+            <div class="exercise-input">
+              <div class="input-group">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
+              </div>
+              <button type="button" class="btn-add-exercise" data-exercise="dance">追加</button>
             </div>
           </div>
-          <div class="calorie-display" id="strength-calories">0 kcal</div>
         </div>
 
-        <!-- クールダウン詳細 -->
-        <div class="exercise-detail" id="detail-cooldown">
-          <h4>🚶 クールダウン</h4>
-          <div class="input-row">
-            <div class="input-group">
-              <label>ウォーキング時間 (分)</label>
-              <input type="number" id="cooldown-time" value="5" onchange="calculateExerciseCalories('cooldown')">
-            </div>
+        <!-- 追加済み運動リスト -->
+        <div class="added-exercises" id="added-exercises">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+
+        <!-- 運動サマリー -->
+        <div class="exercise-summary">
+          <div class="summary-item">
+            <span class="summary-label">総運動時間:</span>
+            <span class="summary-value" id="modal-total-time">0 分</span>
           </div>
-          <div class="calorie-display" id="cooldown-calories">0 kcal</div>
-        </div>
-
-        <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #F57C00, #FFB300); border-radius: 15px; color: white; text-align: center;">
-          <div style="font-size: 1.1em; margin-bottom: 10px;">総消費カロリー</div>
-          <div style="font-size: 2.5em; font-weight: bold;" id="modal-total-calories">0 kcal</div>
-          <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">総運動時間: <span id="modal-total-time">0</span>分</div>
+          <div class="summary-item">
+            <span class="summary-label">総消費カロリー:</span>
+            <span class="summary-value" id="modal-total-calories">0 kcal</span>
+          </div>
         </div>
       </div>
 
@@ -1177,8 +1368,8 @@ h1 {
 <script>
 // 現在の日付を取得して初期表示月を設定
 const today = new Date();
-let currentMonth = today.getMonth();  // 現在の月（0-11）
-let currentYear = today.getFullYear();  // 現在の年
+let currentMonth = today.getMonth();
+let currentYear = today.getFullYear();
 let selectedDate = null;
 let weight = null;
 let currentStatus = 'none';
@@ -1230,11 +1421,11 @@ const holidays2025 = {
 
 const monthColors = {
   0: { bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #BBDEFB 100%)', header: 'linear-gradient(135deg, #BBDEFB, #E3F2FD)', border: '#64B5F6', title: 'linear-gradient(135deg, #1976D2 0%, #42A5F5 100%)', icon: '❄️' },
-  1: { bg: 'linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 50%, #F8BBD0 100%)', header: 'linear-gradient(135deg, #F8BBD0, #FCE4EC)', border: '#EC407A', title: 'linear-gradient(135deg, #C2185B 0%, #EC407A 100%)', icon: '💝' },
+  1: { bg: 'linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 50%, #F8BBD0 100%)', header: 'linear-gradient(135deg, #F8BBD0, #FCE4EC)', border: '#EC407A', title: 'linear-gradient(135deg, #C2185B 0%, #EC407A 100%)', icon: '💗' },
   2: { bg: 'linear-gradient(135deg, #F1F8E9 0%, #DCEDC8 50%, #DCEDC8 100%)', header: 'linear-gradient(135deg, #DCEDC8, #F1F8E9)', border: '#9CCC65', title: 'linear-gradient(135deg, #689F38 0%, #9CCC65 100%)', icon: '🌸' },
   3: { bg: 'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 50%, #FFE0B2 100%)', header: 'linear-gradient(135deg, #FFE0B2, #FFF3E0)', border: '#FFB74D', title: 'linear-gradient(135deg, #F57C00 0%, #FFB74D 100%)', icon: '🌷' },
   4: { bg: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #C8E6C9 100%)', header: 'linear-gradient(135deg, #C8E6C9, #E8F5E9)', border: '#66BB6A', title: 'linear-gradient(135deg, #388E3C 0%, #66BB6A 100%)', icon: '🌿' },
-  5: { bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #E1BEE7 100%)', header: 'linear-gradient(135deg, #E1BEE7, #F3E5F5)', border: '#AB47BC', title: 'linear-gradient(135deg, #7B1FA2 0%, #AB47BC 100%)', icon: '🐸' },
+  5: { bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #E1BEE7 100%)', header: 'linear-gradient(135deg, #E1BEE7, #F3E5F5)', border: '#AB47BC', title: 'linear-gradient(135deg, #7B1FA2 0%, #AB47BC 100%)', icon: '🌈' },
   6: { bg: 'linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 50%, #B3E5FC 100%)', header: 'linear-gradient(135deg, #B3E5FC, #E1F5FE)', border: '#29B6F6', title: 'linear-gradient(135deg, #0277BD 0%, #29B6F6 100%)', icon: '🌊' },
   7: { bg: 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 50%, #FFCDD2 100%)', header: 'linear-gradient(135deg, #FFCDD2, #FFEBEE)', border: '#EF5350', title: 'linear-gradient(135deg, #D32F2F 0%, #EF5350 100%)', icon: '🌻' },
   8: { bg: 'linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 50%, #B2DFDB 100%)', header: 'linear-gradient(135deg, #B2DFDB, #E0F2F1)', border: '#26A69A', title: 'linear-gradient(135deg, #00796B 0%, #26A69A 100%)', icon: '🍂' },
@@ -1254,22 +1445,240 @@ function applyMonthColors(month) {
   document.getElementById('title-icon').textContent = colors.icon;
 }
 
-function getRunningMETs(speed) {
-  if (speed <= 4) return 3.0;
-  if (speed <= 5) return 4.0;
-  if (speed <= 6) return 6.0;
-  if (speed <= 7) return 7.0;
-  if (speed <= 8) return 8.3;
-  if (speed <= 9) return 9.0;
-  if (speed <= 10) return 9.8;
-  if (speed <= 11) return 10.5;
-  if (speed <= 12) return 11.0;
-  return 11.5;
+// ===== 運動種目のMETsデータベース（簡潔版：8種目） =====
+const exerciseDatabase = {
+  // 有酸素運動（3種目）
+  walking: {
+    name: 'ウォーキング',
+    icon: '🚶',
+    mets: {
+      slow: 2.5,
+      normal: 3.0,
+      fast: 4.3
+    },
+    speedLabels: {
+      slow: 'ゆっくり (3km/h)',
+      normal: '普通 (4km/h)',
+      fast: '速歩 (5-6km/h)'
+    }
+  },
+  running: {
+    name: 'ランニング',
+    icon: '🏃',
+    mets: {
+      4: 6.0,
+      6: 8.3,
+      8: 9.8,
+      10: 11.0,
+      12: 12.3
+    }
+  },
+  cycling: {
+    name: 'サイクリング',
+    icon: '🚴',
+    mets: {
+      light: 4.0,
+      moderate: 8.0,
+      vigorous: 10.0
+    },
+    intensityLabels: {
+      light: '軽い（ゆっくり）',
+      moderate: '普通',
+      vigorous: '激しい（速い）'
+    }
+  },
+  
+  // 水中運動（2種目）
+  'water-walking': {
+    name: '水中ウォーキング',
+    icon: '🏊',
+    mets: 4.5
+  },
+  swimming: {
+    name: 'スイミング',
+    icon: '🏊‍♂️',
+    mets: 8.0
+  },
+  
+  // 柔軟性（2種目）
+  stretching: {
+    name: 'ストレッチ',
+    icon: '🤸',
+    mets: 2.3
+  },
+  yoga: {
+    name: 'ヨガ・ピラティス',
+    icon: '🧘',
+    mets: 2.5
+  },
+  
+  // その他（1種目）
+  dance: {
+    name: 'ダンス・エアロビクス',
+    icon: '💃',
+    mets: 6.0
+  }
+};
+
+// ===== 追加済み運動データ =====
+let addedExercises = [];
+
+// ===== カテゴリー切り替え =====
+document.querySelectorAll('.category-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    const category = this.dataset.category;
+    document.querySelectorAll('.exercise-list').forEach(list => {
+      list.style.display = list.dataset.category === category ? 'flex' : 'none';
+    });
+  });
+});
+
+// ===== 運動項目の展開/折りたたみ =====
+document.querySelectorAll('.exercise-header').forEach(header => {
+  header.addEventListener('click', function() {
+    const exerciseItem = this.closest('.exercise-item');
+    exerciseItem.classList.toggle('expanded');
+  });
+});
+
+// ===== 運動追加ボタン =====
+document.querySelectorAll('.btn-add-exercise').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const exerciseType = this.dataset.exercise;
+    const exerciseItem = this.closest('.exercise-item');
+    
+    const inputData = {};
+    exerciseItem.querySelectorAll('[data-field]').forEach(input => {
+      const field = input.dataset.field;
+      inputData[field] = input.value;
+    });
+    
+    const exercise = createExerciseData(exerciseType, inputData);
+    
+    if (exercise) {
+      addedExercises.push(exercise);
+      updateAddedExercisesList();
+      updateExerciseSummary();
+      
+      exerciseItem.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = '';
+      });
+      
+      exerciseItem.classList.remove('expanded');
+    }
+  });
+});
+
+// ===== 運動データ作成 =====
+function createExerciseData(type, inputData) {
+  const exerciseInfo = exerciseDatabase[type];
+  if (!exerciseInfo) return null;
+  
+  let mets, duration, calories, details;
+  
+  switch(type) {
+    case 'walking':
+      mets = exerciseInfo.mets[inputData.speed] || exerciseInfo.mets.normal;
+      duration = parseInt(inputData.duration);
+      details = exerciseInfo.speedLabels[inputData.speed];
+      break;
+      
+    case 'running':
+      mets = exerciseInfo.mets[inputData.speed] || 8.3;
+      duration = parseInt(inputData.duration);
+      details = `${inputData.speed} km/h`;
+      break;
+      
+    case 'cycling':
+      mets = exerciseInfo.mets[inputData.intensity] || exerciseInfo.mets.moderate;
+      duration = parseInt(inputData.duration);
+      details = exerciseInfo.intensityLabels[inputData.intensity];
+      break;
+      
+    case 'water-walking':
+      mets = exerciseInfo.mets;
+      duration = parseInt(inputData.duration);
+      details = `${duration}分`;
+      break;
+      
+    case 'swimming':
+      mets = exerciseInfo.mets;
+      const distance = parseInt(inputData.distance);
+      duration = Math.round(distance / 50);
+      details = `${distance}m`;
+      break;
+      
+    default:
+      mets = exerciseInfo.mets;
+      duration = parseInt(inputData.duration);
+      details = `${duration}分`;
+  }
+  
+  const profile = JSON.parse(localStorage.getItem('user_profile') || '{}');
+  const userWeight = profile.weight || 65;
+  
+  calories = calculateCalories(mets, userWeight, duration);
+  
+  return {
+    type: type,
+    name: exerciseInfo.name,
+    icon: exerciseInfo.icon,
+    mets: mets,
+    duration: duration,
+    calories: calories,
+    details: details,
+    timestamp: Date.now()
+  };
 }
 
-function getBikeMETs(intensity) {
-  const mets = { light: 5.5, moderate: 7.0, vigorous: 10.0 };
-  return mets[intensity] || 7.0;
+// ===== カロリー計算 =====
+function calculateCalories(mets, weight, duration) {
+  return Math.round(mets * weight * (duration / 60) * 1.05);
+}
+
+// ===== 追加済み運動リストの更新 =====
+function updateAddedExercisesList() {
+  const container = document.getElementById('added-exercises');
+  
+  if (addedExercises.length === 0) {
+    container.innerHTML = '<p style="text-align: center; color: #9E9E9E; padding: 20px;">まだ運動が追加されていません</p>';
+    return;
+  }
+  
+  container.innerHTML = addedExercises.map((exercise, index) => `
+    <div class="added-exercise-card">
+      <div class="added-exercise-info">
+        <div class="added-exercise-name">
+          <span>${exercise.icon}</span> ${exercise.name}
+        </div>
+        <div class="added-exercise-details">
+          ${exercise.details} · ${exercise.duration}分 · METs ${exercise.mets}
+        </div>
+      </div>
+      <span class="added-exercise-calories">${exercise.calories} kcal</span>
+      <button class="btn-remove-exercise" onclick="removeExercise(${index})">削除</button>
+    </div>
+  `).join('');
+}
+
+// ===== 運動サマリーの更新 =====
+function updateExerciseSummary() {
+  const totalTime = addedExercises.reduce((sum, ex) => sum + ex.duration, 0);
+  const totalCalories = addedExercises.reduce((sum, ex) => sum + ex.calories, 0);
+  
+  document.getElementById('modal-total-time').textContent = `${totalTime} 分`;
+  document.getElementById('modal-total-calories').textContent = `${totalCalories.toLocaleString()} kcal`;
+  document.getElementById('input-total-time').value = totalTime;
+}
+
+// ===== 運動削除 =====
+function removeExercise(index) {
+  addedExercises.splice(index, 1);
+  updateAddedExercisesList();
+  updateExerciseSummary();
 }
 
 function generateCalendar() {
@@ -1309,7 +1718,6 @@ function generateCalendar() {
     const dayCell = document.createElement('div');
     const dayOfWeek = (firstDay + day - 1) % 7;
     
-    // 祝日チェック
     const holidayInfo = holidays2025[currentMonth] && holidays2025[currentMonth].length > 0 ? 
       holidays2025[currentMonth].find(h => h.day === day) : null;
     const isHoliday = holidayInfo !== null && holidayInfo !== undefined;
@@ -1321,7 +1729,7 @@ function generateCalendar() {
       classes.push('weekend');
     }
     const data = loadDayData(day);
-    if (data && (data.bloodPressure || data.weight || data.exercises.length > 0)) {
+    if (data && (data.bloodPressure || data.weight || (data.exercises && data.exercises.length > 0))) {
       classes.push('has-data');
     }
     if (today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === day) {
@@ -1329,7 +1737,6 @@ function generateCalendar() {
     }
     dayCell.className = classes.join(' ');
     
-    // 日付と祝日名を表示
     let dayNumberHTML = `<div class="day-number"><span>${day}</span>`;
     if (isHoliday && holidayInfo && holidayInfo.name) {
       dayNumberHTML += `<span class="holiday-name">${holidayInfo.name}</span>`;
@@ -1398,6 +1805,9 @@ function closeModal() {
   document.getElementById('inputModal').classList.remove('active');
   selectedDate = null;
   currentStatus = 'none';
+  addedExercises = [];
+  updateAddedExercisesList();
+  updateExerciseSummary();
 }
 
 function loadModalData(day) {
@@ -1419,39 +1829,14 @@ function loadModalData(day) {
     }
     selectStatus(data.status || 'none');
     if (data.exercises && data.exercises.length > 0) {
-      data.exercises.forEach(ex => {
-        document.getElementById(`check-${ex.type}`).checked = true;
-        toggleExercise(ex.type, false);
-        if (ex.type === 'warmup' || ex.type === 'running') {
-          if (ex.distance) {
-            setMode(ex.type, 'distance', false);
-            document.getElementById(`${ex.type}-distance`).value = ex.distance;
-          } else {
-            setMode(ex.type, 'time', false);
-            document.getElementById(`${ex.type}-time`).value = ex.time;
-          }
-          document.getElementById(`${ex.type}-speed`).value = ex.speed;
-        } else if (ex.type === 'bike') {
-          document.getElementById('bike-intensity').value = ex.intensity;
-          document.getElementById('bike-time').value = ex.time;
-        } else if (ex.type === 'strength') {
-          document.getElementById('strength-pushups').value = ex.pushups;
-          document.getElementById('strength-plank-sec').value = ex.plankSeconds;
-          document.getElementById('strength-plank-sets').value = ex.plankSets;
-          document.getElementById('strength-lunges').value = ex.lunges;
-        } else if (ex.type === 'cooldown') {
-          document.getElementById('cooldown-time').value = ex.time;
-        }
-        calculateExerciseCalories(ex.type);
-      });
-    } else {
-      resetExercises();
+      addedExercises = data.exercises.map(ex => ({...ex}));
+      updateAddedExercisesList();
+      updateExerciseSummary();
     }
   } else {
     resetModalInputs();
     weight = findPreviousWeight(day);
   }
-  updateTotalCalories();
 }
 
 function findPreviousWeight(fromDay) {
@@ -1483,16 +1868,9 @@ function resetModalInputs() {
   document.getElementById('input-diastolic').value = '';
   document.getElementById('input-weight').value = '';
   selectStatus('none');
-  resetExercises();
-  updateTotalCalories();
-}
-
-function resetExercises() {
-  ['warmup', 'running', 'bike', 'strength', 'cooldown'].forEach(type => {
-    document.getElementById(`check-${type}`).checked = false;
-    document.getElementById(`detail-${type}`).classList.remove('active');
-    document.querySelector(`[onclick*="toggleExercise('${type}')"]`).classList.remove('checked');
-  });
+  addedExercises = [];
+  updateAddedExercisesList();
+  updateExerciseSummary();
 }
 
 function fillPreviousData() {
@@ -1513,120 +1891,6 @@ function fillPreviousData() {
   alert('前回のデータが見つかりません');
 }
 
-function toggleExercise(type, recalculate = true) {
-  const checkbox = document.getElementById(`check-${type}`);
-  const detail = document.getElementById(`detail-${type}`);
-  const exerciseBox = document.querySelector(`[onclick*="toggleExercise('${type}')"]`);
-  if (checkbox.checked) {
-    detail.classList.add('active');
-    exerciseBox.classList.add('checked');
-    if (recalculate) {
-      calculateExerciseCalories(type);
-    }
-  } else {
-    detail.classList.remove('active');
-    exerciseBox.classList.remove('checked');
-    if (recalculate) {
-      updateTotalCalories();
-    }
-  }
-}
-
-function setMode(type, mode, recalculate = true) {
-  const buttons = document.querySelectorAll(`#detail-${type} .mode-btn`);
-  buttons.forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  if (mode === 'time') {
-    document.getElementById(`${type}-time-group`).style.display = 'flex';
-    document.getElementById(`${type}-distance-group`).style.display = 'none';
-  } else {
-    document.getElementById(`${type}-time-group`).style.display = 'none';
-    document.getElementById(`${type}-distance-group`).style.display = 'flex';
-  }
-  if (recalculate) {
-    calculateExerciseCalories(type);
-  }
-}
-
-function calculateExerciseCalories(type) {
-  const weightInput = document.getElementById('input-weight').value;
-  let currentWeight = weightInput ? parseFloat(weightInput) : weight;
-  if (!currentWeight) {
-    document.getElementById(`${type}-calories`).textContent = `-- kcal (体重を入力してください)`;
-    updateTotalCalories();
-    return;
-  }
-  let calories = 0;
-  let time = 0;
-  if (type === 'warmup' || type === 'running') {
-    const speed = parseFloat(document.getElementById(`${type}-speed`).value) || 0;
-    const mets = getRunningMETs(speed);
-    const timeGroup = document.getElementById(`${type}-time-group`);
-    if (timeGroup.style.display !== 'none') {
-      time = parseFloat(document.getElementById(`${type}-time`).value) || 0;
-    } else {
-      const distance = parseFloat(document.getElementById(`${type}-distance`).value) || 0;
-      time = distance > 0 ? (distance / speed) * 60 : 0;
-    }
-    calories = mets * currentWeight * (time / 60) * 1.05;
-  } else if (type === 'bike') {
-    const intensity = document.getElementById('bike-intensity').value;
-    const mets = getBikeMETs(intensity);
-    time = parseFloat(document.getElementById('bike-time').value) || 0;
-    calories = mets * currentWeight * (time / 60) * 1.05;
-  } else if (type === 'strength') {
-    const pushups = parseFloat(document.getElementById('strength-pushups').value) || 0;
-    const plankSec = parseFloat(document.getElementById('strength-plank-sec').value) || 0;
-    const plankSets = parseFloat(document.getElementById('strength-plank-sets').value) || 0;
-    const lunges = parseFloat(document.getElementById('strength-lunges').value) || 0;
-    time = (pushups / 10) * 1 + (plankSets * plankSec / 60) + (plankSets * 0.5) + (lunges * 2 / 10) * 1 + 3;
-    const mets = 3.8;
-    calories = mets * currentWeight * (time / 60) * 1.05;
-  } else if (type === 'cooldown') {
-    time = parseFloat(document.getElementById('cooldown-time').value) || 0;
-    const mets = 3.0;
-    calories = mets * currentWeight * (time / 60) * 1.05;
-  }
-  document.getElementById(`${type}-calories`).textContent = `${Math.round(calories)} kcal`;
-  updateTotalCalories();
-}
-
-function updateTotalCalories() {
-  let totalCalories = 0;
-  let totalTime = 0;
-  ['warmup', 'running', 'bike', 'strength', 'cooldown'].forEach(type => {
-    const checkbox = document.getElementById(`check-${type}`);
-    if (checkbox.checked) {
-      const caloriesText = document.getElementById(`${type}-calories`).textContent;
-      const calories = parseInt(caloriesText) || 0;
-      totalCalories += calories;
-      if (type === 'warmup' || type === 'running') {
-        const timeGroup = document.getElementById(`${type}-time-group`);
-        if (timeGroup.style.display !== 'none') {
-          totalTime += parseFloat(document.getElementById(`${type}-time`).value) || 0;
-        } else {
-          const distance = parseFloat(document.getElementById(`${type}-distance`).value) || 0;
-          const speed = parseFloat(document.getElementById(`${type}-speed`).value) || 1;
-          totalTime += distance > 0 ? (distance / speed) * 60 : 0;
-        }
-      } else if (type === 'bike') {
-        totalTime += parseFloat(document.getElementById('bike-time').value) || 0;
-      } else if (type === 'strength') {
-        const pushups = parseFloat(document.getElementById('strength-pushups').value) || 0;
-        const plankSec = parseFloat(document.getElementById('strength-plank-sec').value) || 0;
-        const plankSets = parseFloat(document.getElementById('strength-plank-sets').value) || 0;
-        const lunges = parseFloat(document.getElementById('strength-lunges').value) || 0;
-        totalTime += (pushups / 10) * 1 + (plankSets * plankSec / 60) + (plankSets * 0.5) + (lunges * 2 / 10) * 1 + 3;
-      } else if (type === 'cooldown') {
-        totalTime += parseFloat(document.getElementById('cooldown-time').value) || 0;
-      }
-    }
-  });
-  document.getElementById('modal-total-calories').textContent = `${Math.round(totalCalories)} kcal`;
-  document.getElementById('modal-total-time').textContent = Math.round(totalTime);
-  document.getElementById('input-total-time').value = Math.round(totalTime);
-}
-
 function saveData() {
   const systolic = document.getElementById('input-systolic').value;
   const diastolic = document.getElementById('input-diastolic').value;
@@ -1636,48 +1900,16 @@ function saveData() {
     status: currentStatus,
     bloodPressure: systolic && diastolic ? { systolic: parseInt(systolic), diastolic: parseInt(diastolic) } : null,
     weight: weightValue ? parseFloat(weightValue) : null,
-    totalTime: parseInt(document.getElementById('input-total-time').value) || 0,
-    totalCalories: parseInt(document.getElementById('modal-total-calories').textContent) || 0,
-    exercises: []
+    totalTime: addedExercises.reduce((sum, ex) => sum + ex.duration, 0),
+    totalCalories: addedExercises.reduce((sum, ex) => sum + ex.calories, 0),
+    exercises: addedExercises
   };
-  ['warmup', 'running', 'bike', 'strength', 'cooldown'].forEach(type => {
-    const checkbox = document.getElementById(`check-${type}`);
-    if (checkbox.checked) {
-      const exercise = { type };
-      if (type === 'warmup' || type === 'running') {
-        exercise.speed = parseFloat(document.getElementById(`${type}-speed`).value);
-        const timeGroup = document.getElementById(`${type}-time-group`);
-        if (timeGroup.style.display !== 'none') {
-          exercise.time = parseFloat(document.getElementById(`${type}-time`).value);
-        } else {
-          exercise.distance = parseFloat(document.getElementById(`${type}-distance`).value);
-          const speed = exercise.speed || 1;
-          exercise.time = (exercise.distance / speed) * 60;
-        }
-        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
-      } else if (type === 'bike') {
-        exercise.intensity = document.getElementById('bike-intensity').value;
-        exercise.time = parseFloat(document.getElementById('bike-time').value);
-        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
-      } else if (type === 'strength') {
-        exercise.pushups = parseInt(document.getElementById('strength-pushups').value);
-        exercise.plankSeconds = parseInt(document.getElementById('strength-plank-sec').value);
-        exercise.plankSets = parseInt(document.getElementById('strength-plank-sets').value);
-        exercise.lunges = parseInt(document.getElementById('strength-lunges').value);
-        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
-      } else if (type === 'cooldown') {
-        exercise.time = parseFloat(document.getElementById('cooldown-time').value);
-        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
-      }
-      data.exercises.push(exercise);
-    }
-  });
   saveDayData(selectedDate, data);
   updateDaySummary(selectedDate);
   updateMonthlySummary();
   updateNextMonthGoals();
   closeModal();
-  alert('✅ データを保存しました！');
+  alert('✅ データを保存しました!');
 }
 
 function getStorageKey(day) {
@@ -1808,7 +2040,6 @@ function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, 
 }
 
 function loadPreviousMonthGoals() {
-  // 1月は前月がないので目標を空欄にする
   if (currentMonth < 1) {
     document.getElementById('goal-bp').value = '';
     document.getElementById('goal-weight').value = '';
@@ -1817,7 +2048,6 @@ function loadPreviousMonthGoals() {
   
   const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
   
-  // 既に保存された目標があればそれを使用
   const currentDataStr = localStorage.getItem(getMonthStorageKey());
   if (currentDataStr) {
     const currentData = JSON.parse(currentDataStr);
@@ -1828,13 +2058,11 @@ function loadPreviousMonthGoals() {
     }
   }
   
-  // 前月のデータを確認
   const previousMonth = currentMonth - 1;
   let bpSum = { systolic: 0, diastolic: 0, count: 0 };
   let weightSum = { total: 0, count: 0 };
   const prevDaysInMonth = new Date(currentYear, previousMonth + 1, 0).getDate();
   
-  // 前月の実績データを集計
   for (let day = 1; day <= prevDaysInMonth; day++) {
     const prevKey = `training_${currentYear}_${previousMonth}_${day}`;
     const dayDataStr = localStorage.getItem(prevKey);
@@ -1852,14 +2080,12 @@ function loadPreviousMonthGoals() {
     }
   }
   
-  // 前月にデータがない場合は目標を空欄にする
   if (bpSum.count === 0 && weightSum.count === 0) {
     document.getElementById('goal-bp').value = '';
     document.getElementById('goal-weight').value = '';
     return;
   }
   
-  // 前月の実績から目標を計算
   if (bpSum.count > 0) {
     const avgSys = Math.round(bpSum.systolic / bpSum.count);
     const avgDia = Math.round(bpSum.diastolic / bpSum.count);
@@ -1937,9 +2163,11 @@ document.getElementById('month-select').addEventListener('change', function() {
   generateCalendar();
 });
 
-// 月選択ドロップダウンを現在の月に設定
 document.getElementById('month-select').value = currentMonth;
 
+// 初期化
+updateAddedExercisesList();
+updateExerciseSummary();
 generateCalendar();
 </script>
 
