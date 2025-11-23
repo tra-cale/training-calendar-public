@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="0; url=home.html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トレーニング管理カレンダー 2025</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFE082 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #212121;
+}
+
+.message-container {
+  text-align: center;
+  background: white;
+  padding: 60px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  max-width: 500px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+h1 {
+  font-size: 2em;
+  background: linear-gradient(135deg, #F57C00 0%, #FFB300 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #616161;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.manual-link {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+}
+
+.manual-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+}
+
+.spinner {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #FFE082;
+  border-top: 3px solid #F57C00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-top: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="message-container">
+  <div class="icon">🏃‍♂️</div>
+  <h1>トレーニング管理カレンダー</h1>
+  <p>ホームページへリダイレクトしています...</p>
+  <div class="spinner"></div>
+  <p style="margin-top: 30px; font-size: 0.9em;">
+    自動で移動しない場合は下のボタンをクリック
+  </p>
+  <a href="home.html" class="manual-link">ホームへ移動</a>
+</div>
+
+<script>
+// JavaScriptでもリダイレクト（念のため）
+setTimeout(function() {
+  window.location.href = 'home.html';
+}, 100);
+</script>
+
+</body>
+</html>

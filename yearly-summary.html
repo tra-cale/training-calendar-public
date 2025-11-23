@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年間サマリー - トレーニング管理カレンダー 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFE082 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #212121;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #FAFAFA;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* ヘッダー */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #FFD54F;
+}
+
+.header h1 {
+  color: #212121;
+  font-size: 2.2em;
+  margin-bottom: 10px;
+}
+
+.title-text {
+  background: linear-gradient(135deg, #F57C00 0%, #FFB300 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: #616161;
+  font-size: 1.1em;
+  margin-top: 10px;
+}
+
+/* ナビゲーションボタン */
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.nav-btn {
+  padding: 12px 24px;
+  background: white;
+  color: #F57C00;
+  border: 2px solid #F57C00;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn:hover {
+  background: #F57C00;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+}
+
+/* 年間統計カード */
+.yearly-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.yearly-stat-card {
+  background: linear-gradient(145deg, #FFFFFF, #FFFBF5);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 2px solid #FFD54F;
+  transition: all 0.3s ease;
+}
+
+.yearly-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.yearly-stat-label {
+  font-size: 1.1em;
+  color: #616161;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.yearly-stat-value {
+  font-size: 2.5em;
+  font-weight: bold;
+  background: linear-gradient(135deg, #F57C00 0%, #FFB300 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* チャートコンテナ */
+.chart-container {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 2px solid #E0E0E0;
+}
+
+.chart-title {
+  font-size: 1.4em;
+  color: #212121;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 350px;
+  margin-bottom: 20px;
+}
+
+/* 月別サマリーグリッド */
+.monthly-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.monthly-summary-card {
+  background: linear-gradient(145deg, #F5F5F5, #FFFFFF);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #E0E0E0;
+  transition: all 0.3s ease;
+}
+
+.monthly-summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.monthly-summary-header {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #F57C00;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #FFD54F;
+  text-align: center;
+}
+
+.monthly-summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+
+.monthly-summary-label {
+  color: #616161;
+}
+
+.monthly-summary-value {
+  font-weight: 600;
+  color: #212121;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .header h1 {
+    font-size: 1.8em;
+  }
+
+  .yearly-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .yearly-stat-value {
+    font-size: 2em;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+  }
+
+  .nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* データなし表示 */
+.no-data-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #9E9E9E;
+  font-size: 1.2em;
+}
+
+.no-data-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ヘッダー -->
+  <div class="header">
+    <h1>📊 <span class="title-text">2025年 年間サマリー</span></h1>
+    <p class="subtitle">あなたのトレーニング実績を振り返りましょう</p>
+  </div>
+
+  <!-- ナビゲーションボタン -->
+  <div class="nav-buttons">
+    <a href="home.html" class="nav-btn">
+      <span>🏠</span>
+      <span>ホームへ戻る</span>
+    </a>
+    <a href="calendar.html" class="nav-btn">
+      <span>📅</span>
+      <span>カレンダーを見る</span>
+    </a>
+    <a href="features.html" class="nav-btn">
+      <span>📖</span>
+      <span>使い方ガイド</span>
+    </a>
+  </div>
+
+  <!-- 年間統計カード -->
+  <div class="yearly-stats">
+    <div class="yearly-stat-card">
+      <div class="yearly-stat-label">📊 年間平均血圧</div>
+      <div class="yearly-stat-value" id="yearly-avg-bp">--/--</div>
+    </div>
+    <div class="yearly-stat-card">
+      <div class="yearly-stat-label">⚖️ 年間平均体重</div>
+      <div class="yearly-stat-value" id="yearly-avg-weight">-- kg</div>
+    </div>
+    <div class="yearly-stat-card">
+      <div class="yearly-stat-label">🏃 年間トレーニング日数</div>
+      <div class="yearly-stat-value" id="yearly-total-days">0 日</div>
+    </div>
+    <div class="yearly-stat-card">
+      <div class="yearly-stat-label">🔥 年間総消費カロリー</div>
+      <div class="yearly-stat-value" id="yearly-total-calories">0 kcal</div>
+    </div>
+    <div class="yearly-stat-card">
+      <div class="yearly-stat-label">⏱️ 年間総運動時間</div>
+      <div class="yearly-stat-value" id="yearly-total-time">0 分</div>
+    </div>
+  </div>
+
+  <!-- 月別平均血圧推移 -->
+  <div class="chart-container">
+    <div class="chart-title">📈 月別平均血圧推移</div>
+    <div class="chart-wrapper">
+      <canvas id="bp-chart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別平均体重推移 -->
+  <div class="chart-container">
+    <div class="chart-title">⚖️ 月別平均体重推移</div>
+    <div class="chart-wrapper">
+      <canvas id="weight-chart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別トレーニング日数 -->
+  <div class="chart-container">
+    <div class="chart-title">🏃 月別トレーニング日数</div>
+    <div class="chart-wrapper">
+      <canvas id="days-chart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別総消費カロリー -->
+  <div class="chart-container">
+    <div class="chart-title">🔥 月別総消費カロリー</div>
+    <div class="chart-wrapper">
+      <canvas id="calories-chart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別詳細サマリー -->
+  <div class="chart-container">
+    <div class="chart-title">📋 月別詳細サマリー</div>
+    <div class="monthly-summary-grid" id="monthly-details">
+      <!-- JavaScriptで動的に生成 -->
+    </div>
+  </div>
+</div>
+
+<script>
+// 現在の年
+const currentYear = new Date().getFullYear();
+
+// 月名の配列
+const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
+                   'july', 'august', 'september', 'october', 'november', 'december'];
+
+// 全月のデータを取得
+function getAllMonthsData() {
+  const allData = {};
+  
+  for (let month = 0; month < 12; month++) {
+    const monthData = {};
+    
+    // 方法1: 月別データキー（november2025_data形式）を確認
+    const monthKey = `${monthNames[month]}${currentYear}_data`;
+    const monthDataStr = localStorage.getItem(monthKey);
+    
+    if (monthDataStr) {
+      try {
+        const parsed = JSON.parse(monthDataStr);
+        // calendarオブジェクト内のデータを取得
+        if (parsed.calendar) {
+          Object.assign(monthData, parsed.calendar);
+        }
+      } catch (e) {
+        console.error(`Error parsing ${monthKey}:`, e);
+      }
+    }
+    
+    // 方法2: 日別データキー（training_2025_10_4形式）を確認
+    const daysInMonth = new Date(currentYear, month + 1, 0).getDate();
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayKey = `training_${currentYear}_${month}_${day}`;
+      const dayDataStr = localStorage.getItem(dayKey);
+      
+      if (dayDataStr) {
+        try {
+          const dayData = JSON.parse(dayDataStr);
+          // この形式のデータも保存（日別キーが優先）
+          monthData[day] = dayData;
+        } catch (e) {
+          console.error(`Error parsing ${dayKey}:`, e);
+        }
+      }
+    }
+    
+    // データが存在する場合のみ追加
+    if (Object.keys(monthData).length > 0) {
+      allData[month] = monthData;
+    }
+  }
+  
+  return allData;
+}
+
+// 月別統計の計算
+function calculateMonthlyStats(monthData) {
+  const days = Object.keys(monthData).filter(key => key !== 'goals');
+  
+  if (days.length === 0) {
+    return {
+      avgBP: null,
+      avgWeight: null,
+      trainingDays: 0,
+      totalCalories: 0,
+      totalTime: 0
+    };
+  }
+
+  let totalSystolic = 0;
+  let totalDiastolic = 0;
+  let totalWeight = 0;
+  let bpCount = 0;
+  let weightCount = 0;
+  let trainingDays = 0;
+  let totalCalories = 0;
+  let totalTime = 0;
+
+  days.forEach(day => {
+    const data = monthData[day];
+    
+    // === 血圧データの処理（3つの形式に対応） ===
+    
+    // 形式1: data.bloodPressure.systolic/diastolic (training_2025_10_4形式)
+    if (data.bloodPressure && typeof data.bloodPressure === 'object') {
+      if (data.bloodPressure.systolic && data.bloodPressure.diastolic) {
+        totalSystolic += parseInt(data.bloodPressure.systolic);
+        totalDiastolic += parseInt(data.bloodPressure.diastolic);
+        bpCount++;
+      }
+    }
+    // 形式2: data.bp という文字列 "120/80" (calendar形式)
+    else if (data.bp && typeof data.bp === 'string' && data.bp.trim() !== '') {
+      const bpParts = data.bp.split('/');
+      if (bpParts.length === 2) {
+        const systolic = parseInt(bpParts[0]);
+        const diastolic = parseInt(bpParts[1]);
+        if (!isNaN(systolic) && !isNaN(diastolic)) {
+          totalSystolic += systolic;
+          totalDiastolic += diastolic;
+          bpCount++;
+        }
+      }
+    }
+    // 形式3: data.systolic と data.diastolic が別々
+    else if (data.systolic && data.diastolic) {
+      totalSystolic += parseInt(data.systolic);
+      totalDiastolic += parseInt(data.diastolic);
+      bpCount++;
+    }
+    
+    // === 体重データの処理 ===
+    if (data.weight) {
+      const weight = parseFloat(data.weight);
+      if (!isNaN(weight)) {
+        totalWeight += weight;
+        weightCount++;
+      }
+    }
+    
+    // === トレーニング判定（複数の形式に対応） ===
+    let hasTraining = false;
+    
+    // 形式1: exercises配列がある
+    if (data.exercises && Array.isArray(data.exercises) && data.exercises.length > 0) {
+      hasTraining = true;
+    }
+    // 形式2: time または calories が入力されている
+    else if ((data.time && data.time.toString().trim() !== '') || 
+             (data.calories && data.calories.toString().trim() !== '')) {
+      hasTraining = true;
+    }
+    // 形式3: totalTime がある
+    else if (data.totalTime && parseInt(data.totalTime) > 0) {
+      hasTraining = true;
+    }
+    
+    if (hasTraining) {
+      trainingDays++;
+    }
+    
+    // === カロリーの処理 ===
+    if (data.totalCalories) {
+      const cal = parseInt(data.totalCalories);
+      if (!isNaN(cal)) totalCalories += cal;
+    } else if (data.calories) {
+      const cal = parseInt(data.calories);
+      if (!isNaN(cal)) totalCalories += cal;
+    }
+    
+    // === 運動時間の処理 ===
+    if (data.totalTime) {
+      const time = parseInt(data.totalTime);
+      if (!isNaN(time)) totalTime += time;
+    } else if (data.time) {
+      const time = parseInt(data.time);
+      if (!isNaN(time)) totalTime += time;
+    }
+  });
+
+  return {
+    avgBP: bpCount > 0 ? {
+      systolic: Math.round(totalSystolic / bpCount),
+      diastolic: Math.round(totalDiastolic / bpCount)
+    } : null,
+    avgWeight: weightCount > 0 ? (totalWeight / weightCount).toFixed(1) : null,
+    trainingDays: trainingDays,
+    totalCalories: totalCalories,
+    totalTime: totalTime
+  };
+}
+
+// 年間統計の計算
+function calculateYearlyStats(allData) {
+  const months = Object.keys(allData);
+  
+  if (months.length === 0) {
+    return {
+      avgBP: null,
+      avgWeight: null,
+      totalTrainingDays: 0,
+      totalCalories: 0,
+      totalTime: 0
+    };
+  }
+
+  let totalSystolic = 0;
+  let totalDiastolic = 0;
+  let totalWeight = 0;
+  let bpCount = 0;
+  let weightCount = 0;
+  let totalTrainingDays = 0;
+  let totalCalories = 0;
+  let totalTime = 0;
+
+  months.forEach(month => {
+    const stats = calculateMonthlyStats(allData[month]);
+    
+    if (stats.avgBP) {
+      totalSystolic += stats.avgBP.systolic;
+      totalDiastolic += stats.avgBP.diastolic;
+      bpCount++;
+    }
+    
+    if (stats.avgWeight) {
+      totalWeight += parseFloat(stats.avgWeight);
+      weightCount++;
+    }
+    
+    totalTrainingDays += stats.trainingDays;
+    totalCalories += stats.totalCalories;
+    totalTime += stats.totalTime;
+  });
+
+  return {
+    avgBP: bpCount > 0 ? {
+      systolic: Math.round(totalSystolic / bpCount),
+      diastolic: Math.round(totalDiastolic / bpCount)
+    } : null,
+    avgWeight: weightCount > 0 ? (totalWeight / weightCount).toFixed(1) : null,
+    totalTrainingDays: totalTrainingDays,
+    totalCalories: totalCalories,
+    totalTime: totalTime
+  };
+}
+
+// 年間統計の表示
+function displayYearlyStats(stats) {
+  // 平均血圧
+  if (stats.avgBP) {
+    document.getElementById('yearly-avg-bp').textContent = 
+      `${stats.avgBP.systolic}/${stats.avgBP.diastolic}`;
+  } else {
+    document.getElementById('yearly-avg-bp').textContent = '--/--';
+  }
+  
+  // 平均体重
+  if (stats.avgWeight) {
+    document.getElementById('yearly-avg-weight').textContent = `${stats.avgWeight} kg`;
+  } else {
+    document.getElementById('yearly-avg-weight').textContent = '-- kg';
+  }
+  
+  // トレーニング日数
+  document.getElementById('yearly-total-days').textContent = `${stats.totalTrainingDays} 日`;
+  
+  // 総消費カロリー
+  document.getElementById('yearly-total-calories').textContent = 
+    `${stats.totalCalories.toLocaleString()} kcal`;
+  
+  // 総運動時間
+  document.getElementById('yearly-total-time').textContent = `${stats.totalTime} 分`;
+}
+
+// グラフの作成
+function createCharts(allData) {
+  const monthLabels = ['1月', '2月', '3月', '4月', '5月', '6月', 
+                      '7月', '8月', '9月', '10月', '11月', '12月'];
+  
+  const monthlyStats = [];
+  for (let i = 0; i < 12; i++) {
+    if (allData[i]) {
+      monthlyStats[i] = calculateMonthlyStats(allData[i]);
+    } else {
+      monthlyStats[i] = {
+        avgBP: null,
+        avgWeight: null,
+        trainingDays: 0,
+        totalCalories: 0,
+        totalTime: 0
+      };
+    }
+  }
+
+  // 血圧グラフ
+  const bpData = {
+    systolic: monthlyStats.map(stat => stat.avgBP ? stat.avgBP.systolic : null),
+    diastolic: monthlyStats.map(stat => stat.avgBP ? stat.avgBP.diastolic : null)
+  };
+
+  new Chart(document.getElementById('bp-chart'), {
+    type: 'line',
+    data: {
+      labels: monthLabels,
+      datasets: [
+        {
+          label: '収縮期血圧',
+          data: bpData.systolic,
+          borderColor: '#EF5350',
+          backgroundColor: 'rgba(239, 83, 80, 0.1)',
+          tension: 0.4,
+          fill: true
+        },
+        {
+          label: '拡張期血圧',
+          data: bpData.diastolic,
+          borderColor: '#42A5F5',
+          backgroundColor: 'rgba(66, 165, 245, 0.1)',
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: '血圧 (mmHg)'
+          }
+        }
+      }
+    }
+  });
+
+  // 体重グラフ
+  const weightData = monthlyStats.map(stat => stat.avgWeight ? parseFloat(stat.avgWeight) : null);
+
+  new Chart(document.getElementById('weight-chart'), {
+    type: 'line',
+    data: {
+      labels: monthLabels,
+      datasets: [{
+        label: '平均体重',
+        data: weightData,
+        borderColor: '#66BB6A',
+        backgroundColor: 'rgba(102, 187, 106, 0.1)',
+        tension: 0.4,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: '体重 (kg)'
+          }
+        }
+      }
+    }
+  });
+
+  // トレーニング日数グラフ
+  const daysData = monthlyStats.map(stat => stat.trainingDays);
+
+  new Chart(document.getElementById('days-chart'), {
+    type: 'bar',
+    data: {
+      labels: monthLabels,
+      datasets: [{
+        label: 'トレーニング日数',
+        data: daysData,
+        backgroundColor: 'rgba(255, 152, 0, 0.7)',
+        borderColor: '#FF9800',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '日数'
+          }
+        }
+      }
+    }
+  });
+
+  // カロリーグラフ
+  const caloriesData = monthlyStats.map(stat => stat.totalCalories);
+
+  new Chart(document.getElementById('calories-chart'), {
+    type: 'bar',
+    data: {
+      labels: monthLabels,
+      datasets: [{
+        label: '総消費カロリー',
+        data: caloriesData,
+        backgroundColor: 'rgba(156, 39, 176, 0.7)',
+        borderColor: '#9C27B0',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'カロリー (kcal)'
+          }
+        }
+      }
+    }
+  });
+}
+
+// 月別詳細の表示
+function displayMonthlyDetails(allData) {
+  const container = document.getElementById('monthly-details');
+  const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', 
+                     '7月', '8月', '9月', '10月', '11月', '12月'];
+  
+  container.innerHTML = '';
+  
+  for (let i = 0; i < 12; i++) {
+    const stats = allData[i] ? calculateMonthlyStats(allData[i]) : null;
+    
+    const card = document.createElement('div');
+    card.className = 'monthly-summary-card';
+    
+    let content = `<div class="monthly-summary-header">${monthNames[i]}</div>`;
+    
+    if (stats && stats.trainingDays > 0) {
+      content += `
+        <div class="monthly-summary-item">
+          <span class="monthly-summary-label">平均血圧</span>
+          <span class="monthly-summary-value">${stats.avgBP ? `${stats.avgBP.systolic}/${stats.avgBP.diastolic}` : '--'}</span>
+        </div>
+        <div class="monthly-summary-item">
+          <span class="monthly-summary-label">平均体重</span>
+          <span class="monthly-summary-value">${stats.avgWeight ? `${stats.avgWeight} kg` : '--'}</span>
+        </div>
+        <div class="monthly-summary-item">
+          <span class="monthly-summary-label">トレーニング日数</span>
+          <span class="monthly-summary-value">${stats.trainingDays} 日</span>
+        </div>
+        <div class="monthly-summary-item">
+          <span class="monthly-summary-label">総カロリー</span>
+          <span class="monthly-summary-value">${stats.totalCalories.toLocaleString()} kcal</span>
+        </div>
+        <div class="monthly-summary-item">
+          <span class="monthly-summary-label">総運動時間</span>
+          <span class="monthly-summary-value">${stats.totalTime} 分</span>
+        </div>
+      `;
+    } else {
+      content += '<div style="text-align: center; color: #9E9E9E; padding: 20px;">データなし</div>';
+    }
+    
+    card.innerHTML = content;
+    container.appendChild(card);
+  }
+}
+
+// 初期化
+window.addEventListener('DOMContentLoaded', function() {
+  const allData = getAllMonthsData();
+  const yearlyStats = calculateYearlyStats(allData);
+  
+  // データが存在するかチェック
+  if (Object.keys(allData).length === 0) {
+    document.querySelector('.container').innerHTML = `
+      <div class="header">
+        <h1>📊 <span class="title-text">2025年 年間サマリー</span></h1>
+      </div>
+      <div class="no-data-message">
+        <div class="no-data-icon">📭</div>
+        <p>まだトレーニングデータがありません。</p>
+        <p>カレンダーからデータを入力してください。</p>
+        <div style="margin-top: 30px;">
+          <a href="calendar.html" class="nav-btn">
+            <span>📅</span>
+            <span>カレンダーへ移動</span>
+          </a>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  
+  // 統計の表示
+  displayYearlyStats(yearlyStats);
+  
+  // グラフの作成
+  createCharts(allData);
+  
+  // 月別詳細の表示
+  displayMonthlyDetails(allData);
+});
+</script>
+
+</body>
+</html>

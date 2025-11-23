@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統合型トレーニング管理カレンダー</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #FFC107 0%, #FFD54F 50%, #FFECB3 100%);
+  min-height: 100vh;
+  padding: 20px;
+  transition: background 0.5s ease;
+}
+
+.container {
+  max-width: 1500px;
+  margin: 0 auto;
+  background: #FAFAFA;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #FFD54F;
+  transition: border-color 0.5s ease;
+}
+
+h1 {
+  color: #212121;
+  font-size: 1.8em;
+  margin-bottom: 8px;
+}
+
+.title-text {
+  background: linear-gradient(135deg, #F57C00 0%, #FFB300 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: #616161;
+  font-size: 0.9em;
+}
+
+.month-selector {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.month-select-dropdown {
+  padding: 8px 15px;
+  border-radius: 8px;
+  border: 2px solid #FFD54F;
+  font-size: 1em;
+  cursor: pointer;
+  background: white;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 25px;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: bold;
+  color: #424242;
+  padding: 8px;
+  background: linear-gradient(135deg, #FFD54F, #FFECB3);
+  border-radius: 6px;
+  font-size: 0.85em;
+  transition: background 0.5s ease;
+}
+
+.day-cell {
+  background: white;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  min-height: 100px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: #FFD54F;
+}
+
+.day-cell.empty {
+  background: #F5F5F5;
+  border: 1px dashed #E0E0E0;
+  cursor: default;
+}
+
+.day-cell.empty:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #E0E0E0;
+}
+
+.day-cell.has-data {
+  background: linear-gradient(145deg, #FFF8E1, #FFFFFF);
+  border-color: #FFB300;
+}
+
+.day-cell.today {
+  background: linear-gradient(145deg, #FFF9C4, #FFFFFF);
+  border-color: #FFB300;
+  border-width: 3px;
+}
+
+.day-cell.weekend {
+  background: #F0F8FF;
+}
+
+.day-cell.sunday,
+.day-cell.holiday {
+  background: #FFF5F5;
+}
+
+.day-number {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #212121;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.holiday-name {
+  font-size: 0.6em;
+  font-weight: normal;
+  color: #C62828;
+  background: #FFEBEE;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.day-cell.today .day-number::after {
+  content: " (今日)";
+  font-size: 0.65em;
+  color: #F57C00;
+  font-weight: normal;
+}
+
+.day-cell.holiday .day-number,
+.day-cell.sunday .day-number {
+  color: #C62828;
+}
+
+.training-status {
+  margin-top: auto;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 0.7em;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.status-scheduled {
+  background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+  color: #E65100;
+  border: 1px solid #FFB300;
+}
+
+.status-done {
+  background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
+  color: #2E7D32;
+  border: 1px solid #66BB6A;
+}
+
+.status-unplanned {
+  background: linear-gradient(135deg, #E8EAF6, #C5CAE9);
+  color: #3F51B5;
+  border: 1px solid #5C6BC0;
+}
+
+.status-skipped {
+  background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+  color: #C62828;
+  border: 1px solid #EF5350;
+}
+
+.day-summary {
+  font-size: 0.7em;
+  color: #666;
+  line-height: 1.4;
+}
+
+.data-icon {
+  margin-right: 2px;
+}
+
+/* モーダル */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.5em;
+}
+
+.close-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 1.5em;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.close-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.input-section {
+  margin-bottom: 25px;
+}
+
+.input-section h3 {
+  color: #F57C00;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.input-group input,
+.input-group select {
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: all 0.3s;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: #FFB300;
+  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.1);
+}
+
+.status-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-option {
+  padding: 10px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.status-option:hover {
+  border-color: #FFB300;
+}
+
+.status-option.selected {
+  border-color: #FFB300;
+  background: #FFF8E1;
+}
+
+.exercise-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.exercise-checkbox {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.exercise-checkbox:hover {
+  border-color: #FFB300;
+  background: #f8f9fa;
+}
+
+.exercise-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.exercise-checkbox label {
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+
+.exercise-checkbox.checked {
+  background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+  border-color: #FFB300;
+}
+
+.exercise-detail {
+  display: none;
+  margin-top: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+}
+
+.exercise-detail.active {
+  display: block;
+}
+
+.exercise-detail h4 {
+  color: #F57C00;
+  margin-bottom: 15px;
+}
+
+.mode-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #e9ecef;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.mode-btn:hover {
+  border-color: #FFB300;
+}
+
+.mode-btn.active {
+  background: #FFB300;
+  color: white;
+  border-color: #FFB300;
+}
+
+.calorie-display {
+  background: linear-gradient(135deg, #ffd93d, #ffb93d);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.save-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(245, 124, 0, 0.3);
+}
+
+.quick-fill-btn {
+  padding: 8px 15px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+  transition: all 0.3s;
+}
+
+.quick-fill-btn:hover {
+  background: #5a6268;
+}
+
+/* 月間サマリー */
+.summary-section {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  border: 2px solid #E0E0E0;
+  margin-bottom: 15px;
+}
+
+.summary-title {
+  font-size: 1.2em;
+  color: #212121;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1200px) {
+  .summary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-card {
+  padding: 12px;
+  background: linear-gradient(145deg, #FFFFFF, #F5F5F5);
+  border-radius: 10px;
+  border: 1px solid #E0E0E0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-label {
+  color: #616161;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 1px solid #E0E0E0;
+  padding-bottom: 6px;
+}
+
+.goal-input-wrapper {
+  text-align: center;
+  background: #FFF9C4;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #FFD54F;
+}
+
+.goal-label {
+  color: #F57C00;
+  font-size: 0.7em;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.goal-input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #FFD54F;
+  border-radius: 4px;
+  background: #FFF9C4;
+  font-size: 0.85em;
+  text-align: center;
+  font-weight: 600;
+}
+
+.summary-value-wrapper {
+  text-align: center;
+  background: #E3F2FD;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #90CAF9;
+}
+
+.summary-value-label {
+  color: #1976D2;
+  font-size: 0.7em;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.summary-value {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #1976D2;
+}
+
+.unit {
+  font-size: 0.8em;
+}
+
+.achievement-wrapper {
+  text-align: center;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #E0E0E0;
+}
+
+.achievement-label {
+  color: #616161;
+  font-size: 0.7em;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.achievement-value {
+  font-size: 1em;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.achievement-success {
+  background: #C8E6C9;
+  color: #2E7D32;
+}
+
+.achievement-fail {
+  background: #FFCDD2;
+  color: #C62828;
+}
+
+.achievement-percent {
+  color: #F57C00;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  .calendar {
+    gap: 3px;
+  }
+  .day-cell {
+    min-height: 85px;
+    padding: 5px;
+  }
+  .modal-body {
+    padding: 20px;
+  }
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* ホームボタン */
+.home-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+  /* white-space: nowrap; を削除 - 小画面での折り返しを許可するため */
+}
+
+.home-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
+  background: linear-gradient(135deg, #FF8F00, #FFC107);
+}
+
+.home-button:active {
+  transform: translateY(0);
+}
+
+/* 使い方ガイドボタン */
+.guide-button {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  z-index: 1000;
+  background: linear-gradient(135deg, #43A047, #66BB6A);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
+  /* white-space: nowrap; を削除 - 小画面での折り返しを許可するため */
+}
+
+.guide-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 160, 71, 0.4);
+  background: linear-gradient(135deg, #388E3C, #43A047);
+}
+
+.guide-button:active {
+  transform: translateY(0);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   アイコンのみ表示の設定（大画面・中画面用）
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* デフォルト: テキストを非表示 */
+.button-text {
+  display: none;
+  margin-left: 4px;
+}
+
+/* アイコンのサイズを固定ピクセルで完全統一 */
+.button-icon {
+  font-size: 20px;      /* 固定サイズ（emではなくpx） */
+  width: 20px;          /* 固定幅 */
+  height: 20px;         /* 固定高さ */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ボタンのサイズを小さくして重ならないように */
+.home-button,
+.yearly-summary-button,
+.guide-button {
+  width: 40px;           /* 48px → 40px に縮小 */
+  height: 40px;          /* 48px → 40px に縮小 */
+  padding: 0;            /* paddingをリセット */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ホバー時: テキストを表示 */
+.home-button:hover .button-text,
+.yearly-summary-button:hover .button-text,
+.guide-button:hover .button-text {
+  display: inline;
+}
+
+/* ホバー時: ボタンの幅を自動調整し、paddingを追加 */
+.home-button:hover,
+.yearly-summary-button:hover,
+.guide-button:hover {
+  width: auto;
+  height: 40px;         /* 高さは維持 */
+  padding: 8px 16px;
+}
+
+/* レスポンシブ対応 */
+/* 小サイズ画面: ボタンを小さく、コンパクトに配置 */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+  
+  .container {
+    padding: 90px 15px 15px 15px;  /* ボタンがコンパクトなので縮小 */
+  }
+  
+  /* 小画面ではデフォルトでテキストを非表示（ホバー時は表示） */
+  .button-text {
+    display: none;
+  }
+  
+  /* ホバー時にテキストを表示 */
+  .home-button:hover .button-text,
+  .yearly-summary-button:hover .button-text,
+  .guide-button:hover .button-text {
+    display: inline;
+  }
+  
+  .button-icon {
+    font-size: 1.2em;  /* アイコンを少し大きく */
+  }
+  
+  /* ボタンのスタイル調整 */
+  .home-button,
+  .yearly-summary-button,
+  .guide-button {
+    width: 44px !important;     /* 固定サイズ */
+    height: 44px !important;    /* 固定サイズ */
+    padding: 0 !important;      /* paddingリセット */
+    min-width: 44px;            /* 最小サイズ */
+    min-height: 44px;
+    justify-content: center;
+    display: inline-flex !important;
+    align-items: center;
+  }
+  
+  /* ホバー時のサイズ変更 */
+  .home-button:hover,
+  .yearly-summary-button:hover,
+  .guide-button:hover {
+    width: auto !important;
+    padding: 8px 16px !important;
+  }
+  
+  /* 位置を統一 */
+  .home-button {
+    top: 10px !important;
+    left: 10px !important;
+  }
+  
+  .yearly-summary-button {
+    top: 60px !important;   /* 間隔50px */
+    left: 10px !important;  /* 統一 */
+  }
+  
+  .guide-button {
+    top: 110px !important;  /* 間隔50px */
+    left: 10px !important;
+  }
+  
+  h1 {
+    font-size: 1.3em;
+  }
+  
+  .subtitle {
+    font-size: 0.8em;
+  }
+}
+
+/* 年間サマリーボタン */
+.yearly-summary-button {
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  z-index: 1000;
+  background: linear-gradient(135deg, #1976D2, #42A5F5);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+  /* white-space: nowrap; を削除 - 小画面での折り返しを許可するため */
+}
+
+.yearly-summary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+  background: linear-gradient(135deg, #1565C0, #1976D2);
+}
+
+.yearly-summary-button:active {
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ホームボタン -->
+  <a href="home.html" class="home-button">
+    <span class="button-icon">🏠</span>
+    <span class="button-text">ホームへ戻る</span>
+  </a>
+  
+  <!-- 年間サマリーボタン -->
+  <a href="yearly-summary.html" class="yearly-summary-button">
+    <span class="button-icon">📊</span>
+    <span class="button-text">年間サマリーを見る</span>
+  </a>
+  
+  <!-- 使い方ガイドボタン -->
+  <a href="features.html" class="guide-button">
+    <span class="button-icon">📖</span>
+    <span class="button-text">使い方ガイド</span>
+  </a>
+  
+  <div class="header">
+    <h1><span id="title-icon">🍂</span> <span class="title-text">2025年 トレーニング記録</span></h1>
+    <p class="subtitle">血圧・体重・トレーニング実績管理カレンダー</p>
+  </div>
+
+  <div class="month-selector">
+    <label for="month-select">表示月：</label>
+    <select id="month-select" class="month-select-dropdown">
+      <option value="0">1月</option>
+      <option value="1">2月</option>
+      <option value="2">3月</option>
+      <option value="3">4月</option>
+      <option value="4">5月</option>
+      <option value="5">6月</option>
+      <option value="6">7月</option>
+      <option value="7">8月</option>
+      <option value="8">9月</option>
+      <option value="9">10月</option>
+      <option value="10">11月</option>
+      <option value="11">12月</option>
+    </select>
+  </div>
+
+  <div class="monthly-view active">
+    <div class="calendar" id="calendar"></div>
+
+    <div class="summary-section">
+      <h2 class="summary-title">📊 月間目標・サマリー・達成度</h2>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">平均血圧</div>
+          <div class="goal-input-wrapper">
+            <div class="goal-label">目標</div>
+            <input type="text" class="goal-input" id="goal-bp" placeholder="" readonly>
+          </div>
+          <div class="summary-value-wrapper">
+            <div class="summary-value-label">実績</div>
+            <div class="summary-value" id="avg-bp">--/-- <span class="unit">mmHg</span></div>
+          </div>
+          <div class="achievement-wrapper">
+            <div class="achievement-label">達成度</div>
+            <div class="achievement-value" id="achievement-bp">-</div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">平均体重</div>
+          <div class="goal-input-wrapper">
+            <div class="goal-label">目標</div>
+            <input type="text" class="goal-input" id="goal-weight" placeholder="" readonly>
+          </div>
+          <div class="summary-value-wrapper">
+            <div class="summary-value-label">実績</div>
+            <div class="summary-value" id="avg-weight">-- <span class="unit">kg</span></div>
+          </div>
+          <div class="achievement-wrapper">
+            <div class="achievement-label">達成度</div>
+            <div class="achievement-value" id="achievement-weight">-</div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">トレーニング日数</div>
+          <div class="goal-input-wrapper">
+            <div class="goal-label">目標</div>
+            <input type="text" class="goal-input" id="goal-days" placeholder="" readonly>
+          </div>
+          <div class="summary-value-wrapper">
+            <div class="summary-value-label">実績</div>
+            <div class="summary-value" id="training-days">0 <span class="unit">日</span></div>
+          </div>
+          <div class="achievement-wrapper">
+            <div class="achievement-label">達成度</div>
+            <div class="achievement-value achievement-percent" id="achievement-days">0%</div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">総運動時間</div>
+          <div class="goal-input-wrapper">
+            <div class="goal-label">目標</div>
+            <input type="text" class="goal-input" id="goal-time" placeholder="" readonly>
+          </div>
+          <div class="summary-value-wrapper">
+            <div class="summary-value-label">実績</div>
+            <div class="summary-value" id="total-time">0 <span class="unit">分</span></div>
+          </div>
+          <div class="achievement-wrapper">
+            <div class="achievement-label">達成度</div>
+            <div class="achievement-value achievement-percent" id="achievement-time">0%</div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">総消費カロリー</div>
+          <div class="goal-input-wrapper">
+            <div class="goal-label">目標</div>
+            <input type="text" class="goal-input" id="goal-calories" placeholder="" readonly>
+          </div>
+          <div class="summary-value-wrapper">
+            <div class="summary-value-label">実績</div>
+            <div class="summary-value" id="total-calories">0 <span class="unit">kcal</span></div>
+          </div>
+          <div class="achievement-wrapper">
+            <div class="achievement-label">達成度</div>
+            <div class="achievement-value achievement-percent" id="achievement-calories">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 入力モーダル -->
+<div class="modal" id="inputModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modal-title">📅 10月15日のデータ入力</h2>
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      
+      <!-- 基本情報 -->
+      <div class="input-section">
+        <h3>💪 基本情報</h3>
+        <button class="quick-fill-btn" onclick="fillPreviousData()">前回の値を入力</button>
+        <div class="input-row">
+          <div class="input-group">
+            <label>最高血圧 (mmHg)</label>
+            <input type="number" id="input-systolic" placeholder="">
+          </div>
+          <div class="input-group">
+            <label>最低血圧 (mmHg)</label>
+            <input type="number" id="input-diastolic" placeholder="">
+          </div>
+          <div class="input-group">
+            <label>体重 (kg)</label>
+            <input type="number" step="0.1" id="input-weight" placeholder="">
+          </div>
+          <div class="input-group">
+            <label>総運動時間 (分)</label>
+            <input type="number" id="input-total-time" placeholder="自動計算されます" readonly style="background: #f8f9fa;">
+          </div>
+        </div>
+      </div>
+
+      <!-- トレーニングステータス -->
+      <div class="input-section">
+        <h3>📋 トレーニングステータス</h3>
+        <div class="status-selector" id="status-selector">
+          <div class="status-option" data-status="none" onclick="selectStatus('none')">記録なし</div>
+          <div class="status-option" data-status="scheduled" onclick="selectStatus('scheduled')">予定 🗓️</div>
+          <div class="status-option" data-status="done" onclick="selectStatus('done')">実行 ✅</div>
+          <div class="status-option" data-status="unplanned" onclick="selectStatus('unplanned')">予定外実行 💪</div>
+          <div class="status-option" data-status="skipped" onclick="selectStatus('skipped')">不実行 ❌</div>
+        </div>
+      </div>
+
+      <!-- トレーニング内容 -->
+      <div class="input-section" id="training-section" style="display: none;">
+        <h3>🏃 トレーニング内容</h3>
+        <div class="exercise-checkboxes">
+          <div class="exercise-checkbox" onclick="toggleExercise('warmup')">
+            <input type="checkbox" id="check-warmup">
+            <label>ウォーミングアップ</label>
+          </div>
+          <div class="exercise-checkbox" onclick="toggleExercise('running')">
+            <input type="checkbox" id="check-running">
+            <label>ランニング</label>
+          </div>
+          <div class="exercise-checkbox" onclick="toggleExercise('bike')">
+            <input type="checkbox" id="check-bike">
+            <label>エアロバイク</label>
+          </div>
+          <div class="exercise-checkbox" onclick="toggleExercise('strength')">
+            <input type="checkbox" id="check-strength">
+            <label>筋トレ</label>
+          </div>
+          <div class="exercise-checkbox" onclick="toggleExercise('cooldown')">
+            <input type="checkbox" id="check-cooldown">
+            <label>クールダウン</label>
+          </div>
+        </div>
+
+        <!-- ウォーミングアップ詳細 -->
+        <div class="exercise-detail" id="detail-warmup">
+          <h4>🚶 ウォーミングアップ</h4>
+          <div class="mode-selector">
+            <button class="mode-btn active" onclick="setMode('warmup', 'time')">時間で入力</button>
+            <button class="mode-btn" onclick="setMode('warmup', 'distance')">距離で入力</button>
+          </div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>速度 (km/h)</label>
+              <input type="number" step="0.5" id="warmup-speed" value="6" onchange="calculateExerciseCalories('warmup')">
+            </div>
+            <div class="input-group" id="warmup-time-group">
+              <label>時間 (分)</label>
+              <input type="number" id="warmup-time" value="10" onchange="calculateExerciseCalories('warmup')">
+            </div>
+            <div class="input-group" id="warmup-distance-group" style="display: none;">
+              <label>距離 (km)</label>
+              <input type="number" step="0.1" id="warmup-distance" value="1" onchange="calculateExerciseCalories('warmup')">
+            </div>
+          </div>
+          <div class="calorie-display" id="warmup-calories">0 kcal</div>
+        </div>
+
+        <!-- ランニング詳細 -->
+        <div class="exercise-detail" id="detail-running">
+          <h4>🏃 ランニング</h4>
+          <div class="mode-selector">
+            <button class="mode-btn" onclick="setMode('running', 'time')">時間で入力</button>
+            <button class="mode-btn active" onclick="setMode('running', 'distance')">距離で入力</button>
+          </div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>速度 (km/h)</label>
+              <input type="number" step="0.5" id="running-speed" value="9" onchange="calculateExerciseCalories('running')">
+            </div>
+            <div class="input-group" id="running-time-group" style="display: none;">
+              <label>時間 (分)</label>
+              <input type="number" id="running-time" value="30" onchange="calculateExerciseCalories('running')">
+            </div>
+            <div class="input-group" id="running-distance-group">
+              <label>距離 (km)</label>
+              <input type="number" step="0.1" id="running-distance" value="5" onchange="calculateExerciseCalories('running')">
+            </div>
+          </div>
+          <div class="calorie-display" id="running-calories">0 kcal</div>
+        </div>
+
+        <!-- エアロバイク詳細 -->
+        <div class="exercise-detail" id="detail-bike">
+          <h4>🚴 エアロバイク</h4>
+          <div class="input-row">
+            <div class="input-group">
+              <label>負荷レベル</label>
+              <select id="bike-intensity" onchange="calculateExerciseCalories('bike')">
+                <option value="light">軽い負荷 (50-100W)</option>
+                <option value="moderate" selected>中程度 (100-160W)</option>
+                <option value="vigorous">高負荷 (160W以上)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>時間 (分)</label>
+              <input type="number" id="bike-time" value="20" onchange="calculateExerciseCalories('bike')">
+            </div>
+          </div>
+          <div class="calorie-display" id="bike-calories">0 kcal</div>
+        </div>
+
+        <!-- 筋トレ詳細 -->
+        <div class="exercise-detail" id="detail-strength">
+          <h4>💪 筋トレ</h4>
+          <div class="input-row">
+            <div class="input-group">
+              <label>腕立て伏せ (回)</label>
+              <input type="number" id="strength-pushups" value="20" onchange="calculateExerciseCalories('strength')">
+            </div>
+            <div class="input-group">
+              <label>プランク (秒)</label>
+              <input type="number" id="strength-plank-sec" value="30" onchange="calculateExerciseCalories('strength')">
+            </div>
+            <div class="input-group">
+              <label>プランク (セット)</label>
+              <input type="number" id="strength-plank-sets" value="3" onchange="calculateExerciseCalories('strength')">
+            </div>
+            <div class="input-group">
+              <label>ランジ (片足回数)</label>
+              <input type="number" id="strength-lunges" value="10" onchange="calculateExerciseCalories('strength')">
+            </div>
+          </div>
+          <div class="calorie-display" id="strength-calories">0 kcal</div>
+        </div>
+
+        <!-- クールダウン詳細 -->
+        <div class="exercise-detail" id="detail-cooldown">
+          <h4>🚶 クールダウン</h4>
+          <div class="input-row">
+            <div class="input-group">
+              <label>ウォーキング時間 (分)</label>
+              <input type="number" id="cooldown-time" value="5" onchange="calculateExerciseCalories('cooldown')">
+            </div>
+          </div>
+          <div class="calorie-display" id="cooldown-calories">0 kcal</div>
+        </div>
+
+        <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #F57C00, #FFB300); border-radius: 15px; color: white; text-align: center;">
+          <div style="font-size: 1.1em; margin-bottom: 10px;">総消費カロリー</div>
+          <div style="font-size: 2.5em; font-weight: bold;" id="modal-total-calories">0 kcal</div>
+          <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">総運動時間: <span id="modal-total-time">0</span>分</div>
+        </div>
+      </div>
+
+      <button class="save-btn" onclick="saveData()">💾 保存する</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 現在の日付を取得して初期表示月を設定
+const today = new Date();
+let currentMonth = today.getMonth();  // 現在の月（0-11）
+let currentYear = today.getFullYear();  // 現在の年
+let selectedDate = null;
+let weight = null;
+let currentStatus = 'none';
+
+// 2025年の日本の祝日
+const holidays2025 = {
+  0: [
+    {day: 1, name: '元日'},
+    {day: 13, name: '成人の日'}
+  ],
+  1: [
+    {day: 11, name: '建国記念の日'},
+    {day: 23, name: '天皇誕生日'},
+    {day: 24, name: '振替休日'}
+  ],
+  2: [
+    {day: 20, name: '春分の日'}
+  ],
+  3: [
+    {day: 29, name: '昭和の日'}
+  ],
+  4: [
+    {day: 3, name: '憲法記念日'},
+    {day: 4, name: 'みどりの日'},
+    {day: 5, name: 'こどもの日'},
+    {day: 6, name: '振替休日'}
+  ],
+  5: [],
+  6: [
+    {day: 21, name: '海の日'}
+  ],
+  7: [
+    {day: 11, name: '山の日'}
+  ],
+  8: [
+    {day: 15, name: '敬老の日'},
+    {day: 23, name: '秋分の日'}
+  ],
+  9: [
+    {day: 13, name: 'スポーツの日'}
+  ],
+  10: [
+    {day: 3, name: '文化の日'},
+    {day: 23, name: '勤労感謝の日'},
+    {day: 24, name: '振替休日'}
+  ],
+  11: []
+};
+
+const monthColors = {
+  0: { bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #BBDEFB 100%)', header: 'linear-gradient(135deg, #BBDEFB, #E3F2FD)', border: '#64B5F6', title: 'linear-gradient(135deg, #1976D2 0%, #42A5F5 100%)', icon: '❄️' },
+  1: { bg: 'linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 50%, #F8BBD0 100%)', header: 'linear-gradient(135deg, #F8BBD0, #FCE4EC)', border: '#EC407A', title: 'linear-gradient(135deg, #C2185B 0%, #EC407A 100%)', icon: '💝' },
+  2: { bg: 'linear-gradient(135deg, #F1F8E9 0%, #DCEDC8 50%, #DCEDC8 100%)', header: 'linear-gradient(135deg, #DCEDC8, #F1F8E9)', border: '#9CCC65', title: 'linear-gradient(135deg, #689F38 0%, #9CCC65 100%)', icon: '🌸' },
+  3: { bg: 'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 50%, #FFE0B2 100%)', header: 'linear-gradient(135deg, #FFE0B2, #FFF3E0)', border: '#FFB74D', title: 'linear-gradient(135deg, #F57C00 0%, #FFB74D 100%)', icon: '🌷' },
+  4: { bg: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #C8E6C9 100%)', header: 'linear-gradient(135deg, #C8E6C9, #E8F5E9)', border: '#66BB6A', title: 'linear-gradient(135deg, #388E3C 0%, #66BB6A 100%)', icon: '🌿' },
+  5: { bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #E1BEE7 100%)', header: 'linear-gradient(135deg, #E1BEE7, #F3E5F5)', border: '#AB47BC', title: 'linear-gradient(135deg, #7B1FA2 0%, #AB47BC 100%)', icon: '🐸' },
+  6: { bg: 'linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 50%, #B3E5FC 100%)', header: 'linear-gradient(135deg, #B3E5FC, #E1F5FE)', border: '#29B6F6', title: 'linear-gradient(135deg, #0277BD 0%, #29B6F6 100%)', icon: '🌊' },
+  7: { bg: 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 50%, #FFCDD2 100%)', header: 'linear-gradient(135deg, #FFCDD2, #FFEBEE)', border: '#EF5350', title: 'linear-gradient(135deg, #D32F2F 0%, #EF5350 100%)', icon: '🌻' },
+  8: { bg: 'linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 50%, #B2DFDB 100%)', header: 'linear-gradient(135deg, #B2DFDB, #E0F2F1)', border: '#26A69A', title: 'linear-gradient(135deg, #00796B 0%, #26A69A 100%)', icon: '🍂' },
+  9: { bg: 'linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFECB3 100%)', header: 'linear-gradient(135deg, #FFECB3, #FFF9C4)', border: '#FFB300', title: 'linear-gradient(135deg, #F57C00 0%, #FFB300 100%)', icon: '🍁' },
+  10: { bg: 'linear-gradient(135deg, #EFEBE9 0%, #D7CCC8 50%, #D7CCC8 100%)', header: 'linear-gradient(135deg, #D7CCC8, #EFEBE9)', border: '#A1887F', title: 'linear-gradient(135deg, #6D4C41 0%, #A1887F 100%)', icon: '🍄' },
+  11: { bg: 'linear-gradient(135deg, #ECEFF1 0%, #CFD8DC 50%, #CFD8DC 100%)', header: 'linear-gradient(135deg, #CFD8DC, #ECEFF1)', border: '#78909C', title: 'linear-gradient(135deg, #455A64 0%, #78909C 100%)', icon: '⛄' }
+};
+
+function applyMonthColors(month) {
+  const colors = monthColors[month];
+  document.body.style.background = colors.bg;
+  document.querySelector('.header').style.borderBottomColor = colors.border;
+  const titleText = document.querySelector('.title-text');
+  titleText.style.background = colors.title;
+  titleText.style.webkitBackgroundClip = 'text';
+  titleText.style.backgroundClip = 'text';
+  document.getElementById('title-icon').textContent = colors.icon;
+}
+
+function getRunningMETs(speed) {
+  if (speed <= 4) return 3.0;
+  if (speed <= 5) return 4.0;
+  if (speed <= 6) return 6.0;
+  if (speed <= 7) return 7.0;
+  if (speed <= 8) return 8.3;
+  if (speed <= 9) return 9.0;
+  if (speed <= 10) return 9.8;
+  if (speed <= 11) return 10.5;
+  if (speed <= 12) return 11.0;
+  return 11.5;
+}
+
+function getBikeMETs(intensity) {
+  const mets = { light: 5.5, moderate: 7.0, vigorous: 10.0 };
+  return mets[intensity] || 7.0;
+}
+
+function generateCalendar() {
+  const calendar = document.getElementById('calendar');
+  calendar.innerHTML = '';
+  const dayHeaders = ['日', '月', '火', '水', '木', '金', '土'];
+  const colors = monthColors[currentMonth];
+  
+  dayHeaders.forEach((day, index) => {
+    const header = document.createElement('div');
+    header.className = 'day-header';
+    header.textContent = day;
+    if (index === 0) {
+      header.style.background = '#FFF5F5';
+    } else if (index === 6) {
+      header.style.background = '#F0F8FF';
+    } else {
+      const gradientPositions = { 1: '0%', 2: '25%', 3: '50%', 4: '75%', 5: '100%' };
+      const position = gradientPositions[index];
+      header.style.background = `linear-gradient(90deg, ${colors.header.match(/\((.+)\)/)[1].split(',')[0]} ${position}, ${colors.header.match(/\((.+)\)/)[1].split(',')[1]} ${position})`;
+    }
+    calendar.appendChild(header);
+  });
+
+  applyMonthColors(currentMonth);
+  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const emptyCell = document.createElement('div');
+    emptyCell.className = 'day-cell empty';
+    calendar.appendChild(emptyCell);
+  }
+
+  const today = new Date();
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dayCell = document.createElement('div');
+    const dayOfWeek = (firstDay + day - 1) % 7;
+    
+    // 祝日チェック
+    const holidayInfo = holidays2025[currentMonth] && holidays2025[currentMonth].length > 0 ? 
+      holidays2025[currentMonth].find(h => h.day === day) : null;
+    const isHoliday = holidayInfo !== null && holidayInfo !== undefined;
+    
+    let classes = ['day-cell'];
+    if (dayOfWeek === 0 || isHoliday) {
+      classes.push(isHoliday ? 'holiday' : 'sunday');
+    } else if (dayOfWeek === 6) {
+      classes.push('weekend');
+    }
+    const data = loadDayData(day);
+    if (data && (data.bloodPressure || data.weight || data.exercises.length > 0)) {
+      classes.push('has-data');
+    }
+    if (today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === day) {
+      classes.push('today');
+    }
+    dayCell.className = classes.join(' ');
+    
+    // 日付と祝日名を表示
+    let dayNumberHTML = `<div class="day-number"><span>${day}</span>`;
+    if (isHoliday && holidayInfo && holidayInfo.name) {
+      dayNumberHTML += `<span class="holiday-name">${holidayInfo.name}</span>`;
+    }
+    dayNumberHTML += `</div>`;
+    
+    dayCell.innerHTML = `${dayNumberHTML}<div id="status-${day}"></div><div class="day-summary" id="summary-${day}"></div>`;
+    dayCell.onclick = () => openModal(day);
+    calendar.appendChild(dayCell);
+    updateDaySummary(day);
+  }
+  loadPreviousMonthGoals();
+  updateMonthlySummary();
+}
+
+function updateDaySummary(day) {
+  const data = loadDayData(day);
+  const summaryEl = document.getElementById(`summary-${day}`);
+  const statusEl = document.getElementById(`status-${day}`);
+  if (!summaryEl || !statusEl) return;
+  if (data) {
+    if (data.status && data.status !== 'none') {
+      const statusLabels = { scheduled: '予定', done: '実行', unplanned: '予定外', skipped: '不実行' };
+      statusEl.innerHTML = `<div class="training-status status-${data.status}">${statusLabels[data.status]}</div>`;
+    } else {
+      statusEl.innerHTML = '';
+    }
+    let summary = '';
+    if (data.bloodPressure) {
+      summary += `<span class="data-icon">💉</span>${data.bloodPressure.systolic}/${data.bloodPressure.diastolic}<br>`;
+    }
+    if (data.weight) {
+      summary += `<span class="data-icon">⚖️</span>${data.weight}kg<br>`;
+    }
+    if (data.totalCalories) {
+      summary += `<span class="data-icon">🔥</span>${data.totalCalories}kcal`;
+    }
+    summaryEl.innerHTML = summary;
+  } else {
+    statusEl.innerHTML = '';
+    summaryEl.innerHTML = '';
+  }
+}
+
+function selectStatus(status) {
+  currentStatus = status;
+  const options = document.querySelectorAll('.status-option');
+  options.forEach(opt => opt.classList.remove('selected'));
+  document.querySelector(`[data-status="${status}"]`).classList.add('selected');
+  const trainingSection = document.getElementById('training-section');
+  if (status === 'done' || status === 'unplanned') {
+    trainingSection.style.display = 'block';
+  } else {
+    trainingSection.style.display = 'none';
+  }
+}
+
+function openModal(day) {
+  selectedDate = day;
+  document.getElementById('inputModal').classList.add('active');
+  document.getElementById('modal-title').textContent = `📅 ${currentMonth + 1}月${day}日のデータ入力`;
+  loadModalData(day);
+}
+
+function closeModal() {
+  document.getElementById('inputModal').classList.remove('active');
+  selectedDate = null;
+  currentStatus = 'none';
+}
+
+function loadModalData(day) {
+  const data = loadDayData(day);
+  if (data) {
+    if (data.bloodPressure) {
+      document.getElementById('input-systolic').value = data.bloodPressure.systolic;
+      document.getElementById('input-diastolic').value = data.bloodPressure.diastolic;
+    } else {
+      document.getElementById('input-systolic').value = '';
+      document.getElementById('input-diastolic').value = '';
+    }
+    if (data.weight) {
+      document.getElementById('input-weight').value = data.weight;
+      weight = data.weight;
+    } else {
+      document.getElementById('input-weight').value = '';
+      weight = findPreviousWeight(day);
+    }
+    selectStatus(data.status || 'none');
+    if (data.exercises && data.exercises.length > 0) {
+      data.exercises.forEach(ex => {
+        document.getElementById(`check-${ex.type}`).checked = true;
+        toggleExercise(ex.type, false);
+        if (ex.type === 'warmup' || ex.type === 'running') {
+          if (ex.distance) {
+            setMode(ex.type, 'distance', false);
+            document.getElementById(`${ex.type}-distance`).value = ex.distance;
+          } else {
+            setMode(ex.type, 'time', false);
+            document.getElementById(`${ex.type}-time`).value = ex.time;
+          }
+          document.getElementById(`${ex.type}-speed`).value = ex.speed;
+        } else if (ex.type === 'bike') {
+          document.getElementById('bike-intensity').value = ex.intensity;
+          document.getElementById('bike-time').value = ex.time;
+        } else if (ex.type === 'strength') {
+          document.getElementById('strength-pushups').value = ex.pushups;
+          document.getElementById('strength-plank-sec').value = ex.plankSeconds;
+          document.getElementById('strength-plank-sets').value = ex.plankSets;
+          document.getElementById('strength-lunges').value = ex.lunges;
+        } else if (ex.type === 'cooldown') {
+          document.getElementById('cooldown-time').value = ex.time;
+        }
+        calculateExerciseCalories(ex.type);
+      });
+    } else {
+      resetExercises();
+    }
+  } else {
+    resetModalInputs();
+    weight = findPreviousWeight(day);
+  }
+  updateTotalCalories();
+}
+
+function findPreviousWeight(fromDay) {
+  for (let day = fromDay - 1; day >= 1; day--) {
+    const data = loadDayData(day);
+    if (data && data.weight) {
+      return data.weight;
+    }
+  }
+  if (currentMonth > 0) {
+    const prevMonth = currentMonth - 1;
+    const prevDaysInMonth = new Date(currentYear, prevMonth + 1, 0).getDate();
+    for (let day = prevDaysInMonth; day >= 1; day--) {
+      const key = `training_${currentYear}_${prevMonth}_${day}`;
+      const dataStr = localStorage.getItem(key);
+      if (dataStr) {
+        const data = JSON.parse(dataStr);
+        if (data.weight) {
+          return data.weight;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function resetModalInputs() {
+  document.getElementById('input-systolic').value = '';
+  document.getElementById('input-diastolic').value = '';
+  document.getElementById('input-weight').value = '';
+  selectStatus('none');
+  resetExercises();
+  updateTotalCalories();
+}
+
+function resetExercises() {
+  ['warmup', 'running', 'bike', 'strength', 'cooldown'].forEach(type => {
+    document.getElementById(`check-${type}`).checked = false;
+    document.getElementById(`detail-${type}`).classList.remove('active');
+    document.querySelector(`[onclick*="toggleExercise('${type}')"]`).classList.remove('checked');
+  });
+}
+
+function fillPreviousData() {
+  for (let day = selectedDate - 1; day >= 1; day--) {
+    const data = loadDayData(day);
+    if (data) {
+      if (data.bloodPressure) {
+        document.getElementById('input-systolic').value = data.bloodPressure.systolic;
+        document.getElementById('input-diastolic').value = data.bloodPressure.diastolic;
+      }
+      if (data.weight) {
+        document.getElementById('input-weight').value = data.weight;
+      }
+      alert(`${currentMonth + 1}月${day}日のデータを入力しました`);
+      return;
+    }
+  }
+  alert('前回のデータが見つかりません');
+}
+
+function toggleExercise(type, recalculate = true) {
+  const checkbox = document.getElementById(`check-${type}`);
+  const detail = document.getElementById(`detail-${type}`);
+  const exerciseBox = document.querySelector(`[onclick*="toggleExercise('${type}')"]`);
+  if (checkbox.checked) {
+    detail.classList.add('active');
+    exerciseBox.classList.add('checked');
+    if (recalculate) {
+      calculateExerciseCalories(type);
+    }
+  } else {
+    detail.classList.remove('active');
+    exerciseBox.classList.remove('checked');
+    if (recalculate) {
+      updateTotalCalories();
+    }
+  }
+}
+
+function setMode(type, mode, recalculate = true) {
+  const buttons = document.querySelectorAll(`#detail-${type} .mode-btn`);
+  buttons.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  if (mode === 'time') {
+    document.getElementById(`${type}-time-group`).style.display = 'flex';
+    document.getElementById(`${type}-distance-group`).style.display = 'none';
+  } else {
+    document.getElementById(`${type}-time-group`).style.display = 'none';
+    document.getElementById(`${type}-distance-group`).style.display = 'flex';
+  }
+  if (recalculate) {
+    calculateExerciseCalories(type);
+  }
+}
+
+function calculateExerciseCalories(type) {
+  const weightInput = document.getElementById('input-weight').value;
+  let currentWeight = weightInput ? parseFloat(weightInput) : weight;
+  if (!currentWeight) {
+    document.getElementById(`${type}-calories`).textContent = `-- kcal (体重を入力してください)`;
+    updateTotalCalories();
+    return;
+  }
+  let calories = 0;
+  let time = 0;
+  if (type === 'warmup' || type === 'running') {
+    const speed = parseFloat(document.getElementById(`${type}-speed`).value) || 0;
+    const mets = getRunningMETs(speed);
+    const timeGroup = document.getElementById(`${type}-time-group`);
+    if (timeGroup.style.display !== 'none') {
+      time = parseFloat(document.getElementById(`${type}-time`).value) || 0;
+    } else {
+      const distance = parseFloat(document.getElementById(`${type}-distance`).value) || 0;
+      time = distance > 0 ? (distance / speed) * 60 : 0;
+    }
+    calories = mets * currentWeight * (time / 60) * 1.05;
+  } else if (type === 'bike') {
+    const intensity = document.getElementById('bike-intensity').value;
+    const mets = getBikeMETs(intensity);
+    time = parseFloat(document.getElementById('bike-time').value) || 0;
+    calories = mets * currentWeight * (time / 60) * 1.05;
+  } else if (type === 'strength') {
+    const pushups = parseFloat(document.getElementById('strength-pushups').value) || 0;
+    const plankSec = parseFloat(document.getElementById('strength-plank-sec').value) || 0;
+    const plankSets = parseFloat(document.getElementById('strength-plank-sets').value) || 0;
+    const lunges = parseFloat(document.getElementById('strength-lunges').value) || 0;
+    time = (pushups / 10) * 1 + (plankSets * plankSec / 60) + (plankSets * 0.5) + (lunges * 2 / 10) * 1 + 3;
+    const mets = 3.8;
+    calories = mets * currentWeight * (time / 60) * 1.05;
+  } else if (type === 'cooldown') {
+    time = parseFloat(document.getElementById('cooldown-time').value) || 0;
+    const mets = 3.0;
+    calories = mets * currentWeight * (time / 60) * 1.05;
+  }
+  document.getElementById(`${type}-calories`).textContent = `${Math.round(calories)} kcal`;
+  updateTotalCalories();
+}
+
+function updateTotalCalories() {
+  let totalCalories = 0;
+  let totalTime = 0;
+  ['warmup', 'running', 'bike', 'strength', 'cooldown'].forEach(type => {
+    const checkbox = document.getElementById(`check-${type}`);
+    if (checkbox.checked) {
+      const caloriesText = document.getElementById(`${type}-calories`).textContent;
+      const calories = parseInt(caloriesText) || 0;
+      totalCalories += calories;
+      if (type === 'warmup' || type === 'running') {
+        const timeGroup = document.getElementById(`${type}-time-group`);
+        if (timeGroup.style.display !== 'none') {
+          totalTime += parseFloat(document.getElementById(`${type}-time`).value) || 0;
+        } else {
+          const distance = parseFloat(document.getElementById(`${type}-distance`).value) || 0;
+          const speed = parseFloat(document.getElementById(`${type}-speed`).value) || 1;
+          totalTime += distance > 0 ? (distance / speed) * 60 : 0;
+        }
+      } else if (type === 'bike') {
+        totalTime += parseFloat(document.getElementById('bike-time').value) || 0;
+      } else if (type === 'strength') {
+        const pushups = parseFloat(document.getElementById('strength-pushups').value) || 0;
+        const plankSec = parseFloat(document.getElementById('strength-plank-sec').value) || 0;
+        const plankSets = parseFloat(document.getElementById('strength-plank-sets').value) || 0;
+        const lunges = parseFloat(document.getElementById('strength-lunges').value) || 0;
+        totalTime += (pushups / 10) * 1 + (plankSets * plankSec / 60) + (plankSets * 0.5) + (lunges * 2 / 10) * 1 + 3;
+      } else if (type === 'cooldown') {
+        totalTime += parseFloat(document.getElementById('cooldown-time').value) || 0;
+      }
+    }
+  });
+  document.getElementById('modal-total-calories').textContent = `${Math.round(totalCalories)} kcal`;
+  document.getElementById('modal-total-time').textContent = Math.round(totalTime);
+  document.getElementById('input-total-time').value = Math.round(totalTime);
+}
+
+function saveData() {
+  const systolic = document.getElementById('input-systolic').value;
+  const diastolic = document.getElementById('input-diastolic').value;
+  const weightValue = document.getElementById('input-weight').value;
+  const data = {
+    date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`,
+    status: currentStatus,
+    bloodPressure: systolic && diastolic ? { systolic: parseInt(systolic), diastolic: parseInt(diastolic) } : null,
+    weight: weightValue ? parseFloat(weightValue) : null,
+    totalTime: parseInt(document.getElementById('input-total-time').value) || 0,
+    totalCalories: parseInt(document.getElementById('modal-total-calories').textContent) || 0,
+    exercises: []
+  };
+  ['warmup', 'running', 'bike', 'strength', 'cooldown'].forEach(type => {
+    const checkbox = document.getElementById(`check-${type}`);
+    if (checkbox.checked) {
+      const exercise = { type };
+      if (type === 'warmup' || type === 'running') {
+        exercise.speed = parseFloat(document.getElementById(`${type}-speed`).value);
+        const timeGroup = document.getElementById(`${type}-time-group`);
+        if (timeGroup.style.display !== 'none') {
+          exercise.time = parseFloat(document.getElementById(`${type}-time`).value);
+        } else {
+          exercise.distance = parseFloat(document.getElementById(`${type}-distance`).value);
+          const speed = exercise.speed || 1;
+          exercise.time = (exercise.distance / speed) * 60;
+        }
+        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
+      } else if (type === 'bike') {
+        exercise.intensity = document.getElementById('bike-intensity').value;
+        exercise.time = parseFloat(document.getElementById('bike-time').value);
+        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
+      } else if (type === 'strength') {
+        exercise.pushups = parseInt(document.getElementById('strength-pushups').value);
+        exercise.plankSeconds = parseInt(document.getElementById('strength-plank-sec').value);
+        exercise.plankSets = parseInt(document.getElementById('strength-plank-sets').value);
+        exercise.lunges = parseInt(document.getElementById('strength-lunges').value);
+        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
+      } else if (type === 'cooldown') {
+        exercise.time = parseFloat(document.getElementById('cooldown-time').value);
+        exercise.calories = parseInt(document.getElementById(`${type}-calories`).textContent);
+      }
+      data.exercises.push(exercise);
+    }
+  });
+  saveDayData(selectedDate, data);
+  updateDaySummary(selectedDate);
+  updateMonthlySummary();
+  updateNextMonthGoals();
+  closeModal();
+  alert('✅ データを保存しました！');
+}
+
+function getStorageKey(day) {
+  return `training_${currentYear}_${currentMonth}_${day}`;
+}
+
+function getMonthStorageKey() {
+  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+  return `${monthNames[currentMonth]}${currentYear}_data`;
+}
+
+function saveDayData(day, data) {
+  localStorage.setItem(getStorageKey(day), JSON.stringify(data));
+}
+
+function loadDayData(day) {
+  const data = localStorage.getItem(getStorageKey(day));
+  return data ? JSON.parse(data) : null;
+}
+
+function updateMonthlySummary() {
+  let totalSystolic = 0, totalDiastolic = 0, bpCount = 0;
+  let totalWeight = 0, weightCount = 0;
+  let trainingDays = 0, goalDays = 0;
+  let totalTime = 0;
+  let totalCalories = 0;
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  for (let day = 1; day <= daysInMonth; day++) {
+    const data = loadDayData(day);
+    if (data) {
+      if (data.bloodPressure) {
+        totalSystolic += data.bloodPressure.systolic;
+        totalDiastolic += data.bloodPressure.diastolic;
+        bpCount++;
+      }
+      if (data.weight) {
+        totalWeight += data.weight;
+        weightCount++;
+      }
+      if (data.status === 'scheduled' || data.status === 'done' || data.status === 'skipped') {
+        goalDays++;
+      }
+      if (data.exercises && data.exercises.length > 0) {
+        trainingDays++;
+      }
+      if (data.totalTime) {
+        totalTime += data.totalTime;
+      }
+      if (data.totalCalories) {
+        totalCalories += data.totalCalories;
+      }
+    }
+  }
+  document.getElementById('avg-bp').innerHTML = bpCount > 0 
+    ? `${Math.round(totalSystolic / bpCount)}/${Math.round(totalDiastolic / bpCount)} <span class="unit">mmHg</span>`
+    : `--/-- <span class="unit">mmHg</span>`;
+  document.getElementById('avg-weight').innerHTML = weightCount > 0 
+    ? `${(totalWeight / weightCount).toFixed(1)} <span class="unit">kg</span>`
+    : `-- <span class="unit">kg</span>`;
+  document.getElementById('training-days').innerHTML = `${trainingDays} <span class="unit">日</span>`;
+  document.getElementById('total-time').innerHTML = `${totalTime} <span class="unit">分</span>`;
+  document.getElementById('total-calories').innerHTML = `${totalCalories} <span class="unit">kcal</span>`;
+  const goalTime = goalDays * 60;
+  const goalCalories = (goalTime / 60) * 300;
+  document.getElementById('goal-days').value = goalDays > 0 ? `${goalDays} 日` : '';
+  document.getElementById('goal-time').value = goalTime > 0 ? `${goalTime} 分` : '';
+  document.getElementById('goal-calories').value = goalCalories > 0 ? `${goalCalories} kcal` : '';
+  updateAchievements(
+    bpCount > 0 ? Math.round(totalSystolic / bpCount) : 0,
+    bpCount > 0 ? Math.round(totalDiastolic / bpCount) : 0,
+    weightCount > 0 ? totalWeight / weightCount : 0,
+    trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories
+  );
+}
+
+function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories) {
+  const goalBp = document.getElementById('goal-bp').value;
+  const achievementBp = document.getElementById('achievement-bp');
+  if (goalBp && goalBp.includes('/') && avgSys > 0) {
+    const [goalSys, goalDia] = goalBp.split('/').map(v => parseInt(v.trim().replace(/[^\d]/g, '')));
+    if (avgSys <= goalSys && avgDia <= goalDia) {
+      achievementBp.textContent = '達成';
+      achievementBp.className = 'achievement-value achievement-success';
+    } else {
+      achievementBp.textContent = '未達成';
+      achievementBp.className = 'achievement-value achievement-fail';
+    }
+  } else {
+    achievementBp.textContent = '-';
+    achievementBp.className = 'achievement-value';
+  }
+  const goalWeightStr = document.getElementById('goal-weight').value;
+  const goalWeight = goalWeightStr ? parseFloat(goalWeightStr.replace(/[^\d.]/g, '')) : 0;
+  const achievementWeight = document.getElementById('achievement-weight');
+  if (goalWeight && avgWeight > 0) {
+    if (avgWeight <= goalWeight) {
+      achievementWeight.textContent = '達成';
+      achievementWeight.className = 'achievement-value achievement-success';
+    } else {
+      achievementWeight.textContent = '未達成';
+      achievementWeight.className = 'achievement-value achievement-fail';
+    }
+  } else {
+    achievementWeight.textContent = '-';
+    achievementWeight.className = 'achievement-value';
+  }
+  const achievementDaysEl = document.getElementById('achievement-days');
+  if (goalDays > 0) {
+    const percentage = Math.round((trainingDays / goalDays) * 100);
+    achievementDaysEl.textContent = `${percentage}%`;
+  } else {
+    achievementDaysEl.textContent = '0%';
+  }
+  const achievementTimeEl = document.getElementById('achievement-time');
+  if (goalTime > 0) {
+    const percentage = Math.round((totalTime / goalTime) * 100);
+    achievementTimeEl.textContent = `${percentage}%`;
+  } else {
+    achievementTimeEl.textContent = '0%';
+  }
+  const achievementCaloriesEl = document.getElementById('achievement-calories');
+  if (goalCalories > 0) {
+    const percentage = Math.round((totalCalories / goalCalories) * 100);
+    achievementCaloriesEl.textContent = `${percentage}%`;
+  } else {
+    achievementCaloriesEl.textContent = '0%';
+  }
+}
+
+function loadPreviousMonthGoals() {
+  // 1月は前月がないので目標を空欄にする
+  if (currentMonth < 1) {
+    document.getElementById('goal-bp').value = '';
+    document.getElementById('goal-weight').value = '';
+    return;
+  }
+  
+  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+  
+  // 既に保存された目標があればそれを使用
+  const currentDataStr = localStorage.getItem(getMonthStorageKey());
+  if (currentDataStr) {
+    const currentData = JSON.parse(currentDataStr);
+    if (currentData.goals && currentData.goals.bp && currentData.goals.weight) {
+      document.getElementById('goal-bp').value = currentData.goals.bp;
+      document.getElementById('goal-weight').value = currentData.goals.weight;
+      return;
+    }
+  }
+  
+  // 前月のデータを確認
+  const previousMonth = currentMonth - 1;
+  let bpSum = { systolic: 0, diastolic: 0, count: 0 };
+  let weightSum = { total: 0, count: 0 };
+  const prevDaysInMonth = new Date(currentYear, previousMonth + 1, 0).getDate();
+  
+  // 前月の実績データを集計
+  for (let day = 1; day <= prevDaysInMonth; day++) {
+    const prevKey = `training_${currentYear}_${previousMonth}_${day}`;
+    const dayDataStr = localStorage.getItem(prevKey);
+    if (dayDataStr) {
+      const dayData = JSON.parse(dayDataStr);
+      if (dayData.bloodPressure) {
+        bpSum.systolic += dayData.bloodPressure.systolic;
+        bpSum.diastolic += dayData.bloodPressure.diastolic;
+        bpSum.count++;
+      }
+      if (dayData.weight) {
+        weightSum.total += dayData.weight;
+        weightSum.count++;
+      }
+    }
+  }
+  
+  // 前月にデータがない場合は目標を空欄にする
+  if (bpSum.count === 0 && weightSum.count === 0) {
+    document.getElementById('goal-bp').value = '';
+    document.getElementById('goal-weight').value = '';
+    return;
+  }
+  
+  // 前月の実績から目標を計算
+  if (bpSum.count > 0) {
+    const avgSys = Math.round(bpSum.systolic / bpSum.count);
+    const avgDia = Math.round(bpSum.diastolic / bpSum.count);
+    let targetSys = Math.round(avgSys * 0.98);
+    let targetDia = Math.round(avgDia * 0.98);
+    targetSys = Math.max(targetSys, 110);
+    targetDia = Math.max(targetDia, 70);
+    document.getElementById('goal-bp').value = `${targetSys}/${targetDia} mmHg`;
+  } else {
+    document.getElementById('goal-bp').value = '';
+  }
+  
+  if (weightSum.count > 0) {
+    const avgWeight = weightSum.total / weightSum.count;
+    let targetWeight = avgWeight * 0.98;
+    targetWeight = Math.max(targetWeight, 55);
+    document.getElementById('goal-weight').value = `${targetWeight.toFixed(1)} kg`;
+  } else {
+    document.getElementById('goal-weight').value = '';
+  }
+}
+
+function updateNextMonthGoals() {
+  if (currentMonth >= 11) return;
+  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+  const nextMonth = currentMonth + 1;
+  const nextStorageKey = `${monthNames[nextMonth]}${currentYear}_data`;
+  let bpSum = { systolic: 0, diastolic: 0, count: 0 };
+  let weightSum = { total: 0, count: 0 };
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  for (let day = 1; day <= daysInMonth; day++) {
+    const data = loadDayData(day);
+    if (data) {
+      if (data.bloodPressure) {
+        bpSum.systolic += data.bloodPressure.systolic;
+        bpSum.diastolic += data.bloodPressure.diastolic;
+        bpSum.count++;
+      }
+      if (data.weight) {
+        weightSum.total += data.weight;
+        weightSum.count++;
+      }
+    }
+  }
+  let nextData = { goals: {} };
+  const nextDataStr = localStorage.getItem(nextStorageKey);
+  if (nextDataStr) {
+    nextData = JSON.parse(nextDataStr);
+    if (!nextData.goals) nextData.goals = {};
+  }
+  if (bpSum.count > 0) {
+    const avgSys = Math.round(bpSum.systolic / bpSum.count);
+    const avgDia = Math.round(bpSum.diastolic / bpSum.count);
+    let targetSys = Math.round(avgSys * 0.98);
+    let targetDia = Math.round(avgDia * 0.98);
+    targetSys = Math.max(targetSys, 110);
+    targetDia = Math.max(targetDia, 70);
+    nextData.goals.bp = `${targetSys}/${targetDia} mmHg`;
+  } else {
+    nextData.goals.bp = '';
+  }
+  if (weightSum.count > 0) {
+    const avgWeight = weightSum.total / weightSum.count;
+    let targetWeight = avgWeight * 0.98;
+    targetWeight = Math.max(targetWeight, 55);
+    nextData.goals.weight = `${targetWeight.toFixed(1)} kg`;
+  } else {
+    nextData.goals.weight = '';
+  }
+  localStorage.setItem(nextStorageKey, JSON.stringify(nextData));
+}
+
+document.getElementById('month-select').addEventListener('change', function() {
+  currentMonth = parseInt(this.value);
+  generateCalendar();
+});
+
+// 月選択ドロップダウンを現在の月に設定
+document.getElementById('month-select').value = currentMonth;
+
+generateCalendar();
+</script>
+
+</body>
+</html>

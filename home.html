@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トレーニング管理カレンダー 2025</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFE082 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #212121;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ヒーローセクション */
+.hero-section {
+  text-align: center;
+  padding: 60px 20px;
+  margin-bottom: 40px;
+}
+
+.hero-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero-title {
+  font-size: 2.5em;
+  font-weight: bold;
+  background: linear-gradient(135deg, #F57C00 0%, #FFB300 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 1.2em;
+  color: #616161;
+  margin-bottom: 30px;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 16px 48px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+}
+
+/* カード共通スタイル */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.card-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* プロフィール設定カード */
+.profile-setup-card {
+  background: linear-gradient(145deg, #FFFFFF, #FFFBF5);
+}
+
+.setup-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.setup-title {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 10px;
+}
+
+.setup-subtitle {
+  color: #616161;
+  font-size: 1em;
+}
+
+.form-group {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.form-hint {
+  font-size: 0.85em;
+  color: #9E9E9E;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1em;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #FFB300;
+  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.1);
+}
+
+.form-input.error {
+  border-color: #EF5350;
+}
+
+.error-message {
+  color: #EF5350;
+  font-size: 0.85em;
+  margin-top: 4px;
+  display: none;
+  text-align: center;
+}
+
+.error-message.show {
+  display: block;
+}
+
+/* ラジオボタン */
+.radio-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.radio-group.vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  cursor: pointer;
+  accent-color: #F57C00;
+}
+
+.radio-option label {
+  font-size: 0.95em;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 数値入力グループ */
+.input-with-unit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.input-with-unit .form-input {
+  flex: 1;
+  text-align: center;
+}
+
+.unit {
+  font-size: 0.95em;
+  color: #616161;
+  font-weight: 500;
+}
+
+/* ボタン */
+.btn {
+  padding: 14px 32px;
+  font-size: 1.1em;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 124, 0, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.skip-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  color: #9E9E9E;
+  text-decoration: none;
+  font-size: 0.95em;
+  transition: color 0.3s ease;
+}
+
+.skip-link:hover {
+  color: #616161;
+}
+
+/* プロフィール表示カード */
+.profile-display-card {
+  background: linear-gradient(145deg, #FFF9C4, #FFFFFF);
+  border: 2px solid #FFD54F;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.profile-name {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 8px;
+}
+
+.profile-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.profile-info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-info-label {
+  font-size: 0.85em;
+  color: #616161;
+  margin-bottom: 4px;
+}
+
+.profile-info-value {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #212121;
+}
+
+.bmi-low {
+  color: #42A5F5;
+}
+
+.bmi-normal {
+  color: #66BB6A;
+}
+
+.bmi-high {
+  color: #FFA726;
+}
+
+.bmi-very-high {
+  color: #EF5350;
+}
+
+.btn-edit {
+  background: white;
+  color: #F57C00;
+  border: 2px solid #F57C00;
+  width: 100%;
+}
+
+.btn-edit:hover {
+  background: #F57C00;
+  color: white;
+}
+
+/* ナビゲーションカード */
+.nav-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.nav-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  border-color: #FFD54F;
+}
+
+.nav-card-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-card-icon {
+  font-size: 2.5em;
+}
+
+.nav-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-card-title {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 4px;
+}
+
+.nav-card-subtitle {
+  font-size: 0.9em;
+  color: #616161;
+}
+
+.nav-card-arrow {
+  font-size: 1.5em;
+  color: #FFB300;
+  font-weight: bold;
+}
+
+/* ユーティリティクラス */
+.hidden {
+  display: none;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2em;
+  }
+
+  .hero-subtitle {
+    font-size: 1em;
+  }
+
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-card-content {
+    gap: 15px;
+  }
+
+  .nav-card-icon {
+    font-size: 2em;
+  }
+
+  .nav-card-title {
+    font-size: 1em;
+  }
+
+  .nav-card-subtitle {
+    font-size: 0.85em;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ヒーローセクション -->
+  <section class="hero-section">
+    <div class="hero-icon">🍁</div>
+    <h1 class="hero-title">トレーニング管理カレンダー</h1>
+    <p class="hero-subtitle">健康的な毎日をサポート</p>
+    <a href="calendar.html" class="hero-cta hidden" id="hero-cta">📅 カレンダーを開く</a>
+  </section>
+
+  <!-- プロフィール設定（初回のみ表示） -->
+  <div class="card profile-setup-card fade-in" id="profile-setup">
+    <div class="setup-header">
+      <h2 class="setup-title">👤 プロフィール設定</h2>
+      <p class="setup-subtitle">あなたの基本情報を入力してください</p>
+    </div>
+
+    <form id="profile-form">
+      <div class="form-group">
+        <label class="form-label">性別</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="gender-male" name="gender" value="male">
+            <label for="gender-male">男性</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="gender-female" name="gender" value="female">
+            <label for="gender-female">女性</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="gender-other" name="gender" value="other">
+            <label for="gender-other">その他</label>
+          </div>
+        </div>
+        <div class="error-message" id="error-gender"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="age">年齢</label>
+        <div class="input-with-unit">
+          <input type="number" id="age" class="form-input" placeholder="30" min="10" max="120">
+          <span class="unit">歳</span>
+        </div>
+        <div class="error-message" id="error-age"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="height">身長（任意）</label>
+        <div class="input-with-unit">
+          <input type="number" id="height" class="form-input" placeholder="170" min="100" max="250">
+          <span class="unit">cm</span>
+        </div>
+        <p class="form-hint">BMI計算に使用されます</p>
+        <div class="error-message" id="error-height"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="weight">体重</label>
+        <div class="input-with-unit">
+          <input type="number" id="weight" class="form-input" placeholder="65" min="30" max="200" step="0.1">
+          <span class="unit">kg</span>
+        </div>
+        <div class="error-message" id="error-weight"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">活動レベル</label>
+        <div class="radio-group vertical">
+          <div class="radio-option">
+            <input type="radio" id="activity-sedentary" name="activityLevel" value="sedentary">
+            <label for="activity-sedentary">ほとんど運動しない</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="activity-light" name="activityLevel" value="light">
+            <label for="activity-light">軽い運動（週1-2回）</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="activity-moderate" name="activityLevel" value="moderate" checked>
+            <label for="activity-moderate">中程度の運動（週3-5回）</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="activity-intense" name="activityLevel" value="intense">
+            <label for="activity-intense">激しい運動（週6-7回）</label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">✅ 完了してカレンダーへ</button>
+      <a href="calendar.html" class="skip-link">スキップ →</a>
+    </form>
+  </div>
+
+  <!-- プロフィール表示（登録済みの場合） -->
+  <div class="card profile-display-card fade-in hidden" id="profile-display">
+    <div class="profile-header">
+      <div class="card-title">👤 あなたのプロフィール</div>
+      <div class="profile-name" id="profile-name">30歳・男性</div>
+    </div>
+
+    <div class="profile-info-grid">
+      <div class="profile-info-item">
+        <span class="profile-info-label">身長</span>
+        <span class="profile-info-value" id="display-height">170 cm</span>
+      </div>
+
+      <div class="profile-info-item">
+        <span class="profile-info-label">体重</span>
+        <span class="profile-info-value" id="display-weight">65 kg</span>
+      </div>
+
+      <div class="profile-info-item">
+        <span class="profile-info-label">活動レベル</span>
+        <span class="profile-info-value" id="display-activity">中程度の運動</span>
+      </div>
+
+      <div class="profile-info-item">
+        <span class="profile-info-label">性別</span>
+        <span class="profile-info-value" id="display-gender">男性</span>
+      </div>
+
+      <div class="profile-info-item">
+        <span class="profile-info-label">BMI</span>
+        <span class="profile-info-value" id="display-bmi">22.5 (標準)</span>
+      </div>
+
+      <div class="profile-info-item">
+        <span class="profile-info-label">基礎代謝</span>
+        <span class="profile-info-value" id="display-bmr">約1,650 kcal/日</span>
+      </div>
+    </div>
+
+    <button class="btn btn-edit" onclick="editProfile()">✏️ 編集</button>
+  </div>
+
+  <!-- メインナビゲーション（登録済みの場合） -->
+  <section class="fade-in hidden" id="main-navigation">
+    <a href="calendar.html" class="nav-card">
+      <div class="nav-card-content">
+        <div class="nav-card-icon">📅</div>
+        <div class="nav-card-text">
+          <div class="nav-card-title">カレンダーを開く</div>
+          <div class="nav-card-subtitle">月別の記録を確認・入力</div>
+        </div>
+      </div>
+      <div class="nav-card-arrow">→</div>
+    </a>
+
+    <a href="yearly-summary.html" class="nav-card">
+      <div class="nav-card-content">
+        <div class="nav-card-icon">📊</div>
+        <div class="nav-card-text">
+          <div class="nav-card-title">年間サマリーを見る</div>
+          <div class="nav-card-subtitle">1年間のデータを分析</div>
+        </div>
+      </div>
+      <div class="nav-card-arrow">→</div>
+    </a>
+
+    <a href="features.html" class="nav-card">
+      <div class="nav-card-content">
+        <div class="nav-card-icon">📖</div>
+        <div class="nav-card-text">
+          <div class="nav-card-title">使い方ガイド</div>
+          <div class="nav-card-subtitle">機能の詳しい説明</div>
+        </div>
+      </div>
+      <div class="nav-card-arrow">→</div>
+    </a>
+
+    <a href="#settings" class="nav-card" onclick="alert('設定画面は今後実装予定です'); return false;">
+      <div class="nav-card-content">
+        <div class="nav-card-icon">⚙️</div>
+        <div class="nav-card-text">
+          <div class="nav-card-title">設定とデータ管理</div>
+          <div class="nav-card-subtitle">バックアップ・目標設定</div>
+        </div>
+      </div>
+      <div class="nav-card-arrow">→</div>
+    </a>
+  </section>
+</div>
+
+<script>
+// プロフィールデータのキー
+const PROFILE_KEY = 'user_profile';
+
+// 月別のアイコンと色設定
+const monthThemes = {
+  0: { icon: '❄️', bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #90CAF9 100%)' },  // 1月: 雪
+  1: { icon: '💗', bg: 'linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 50%, #F48FB1 100%)' },  // 2月: ハート
+  2: { icon: '🌸', bg: 'linear-gradient(135deg, #F1F8E9 0%, #DCEDC8 50%, #C5E1A5 100%)' },  // 3月: 桜
+  3: { icon: '🌷', bg: 'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 50%, #FFCC80 100%)' },  // 4月: チューリップ
+  4: { icon: '🌿', bg: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #A5D6A7 100%)' },  // 5月: 新緑
+  5: { icon: '🌈', bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%)' },  // 6月: 虹（梅雨）
+  6: { icon: '🌊', bg: 'linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 50%, #81D4FA 100%)' },  // 7月: 海
+  7: { icon: '🌻', bg: 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 50%, #EF9A9A 100%)' },  // 8月: ひまわり
+  8: { icon: '🍂', bg: 'linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 50%, #80CBC4 100%)' },  // 9月: 紅葉始まり
+  9: { icon: '🍁', bg: 'linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFE082 100%)' },  // 10月: 紅葉
+  10: { icon: '🍄', bg: 'linear-gradient(135deg, #EFEBE9 0%, #D7CCC8 50%, #BCAAA4 100%)' }, // 11月: きのこ
+  11: { icon: '⛄', bg: 'linear-gradient(135deg, #ECEFF1 0%, #CFD8DC 50%, #B0BEC5 100%)' }  // 12月: 雪だるま
+};
+
+// 現在の月を取得
+function getCurrentMonth() {
+  return new Date().getMonth();
+}
+
+// 月別テーマの適用
+function applyMonthTheme() {
+  const currentMonth = getCurrentMonth();
+  const theme = monthThemes[currentMonth];
+  
+  // 背景色の変更
+  document.body.style.background = theme.bg;
+  
+  // アイコンの変更
+  document.querySelector('.hero-icon').textContent = theme.icon;
+}
+
+// 活動レベルの表示名
+const activityLabels = {
+  sedentary: 'ほとんど運動しない',
+  light: '軽い運動（週1-2回）',
+  moderate: '中程度の運動（週3-5回）',
+  intense: '激しい運動（週6-7回）'
+};
+
+// 性別の表示名
+const genderLabels = {
+  male: '男性',
+  female: '女性',
+  other: 'その他'
+};
+
+// 活動レベルの係数
+const activityMultipliers = {
+  sedentary: 1.2,
+  light: 1.375,
+  moderate: 1.55,
+  intense: 1.725
+};
+
+// BMI計算
+function calculateBMI(weight, height) {
+  if (!height || height === 0) return null;
+  const heightM = height / 100;
+  return (weight / (heightM * heightM)).toFixed(1);
+}
+
+// BMI判定
+function getBMIStatus(bmi) {
+  if (!bmi) return { class: '', text: '' };
+  if (bmi < 18.5) return { class: 'bmi-low', text: '低体重' };
+  if (bmi < 25) return { class: 'bmi-normal', text: '標準' };
+  if (bmi < 30) return { class: 'bmi-high', text: '肥満（1度）' };
+  return { class: 'bmi-very-high', text: '肥満（2度以上）' };
+}
+
+// 基礎代謝計算（Harris-Benedict式）
+function calculateBMR(gender, weight, height, age) {
+  if (!weight || !age) return null;
+  
+  if (gender === 'male') {
+    if (!height) {
+      // 身長がない場合の簡易計算
+      return Math.round(66.47 + (13.75 * weight) - (6.76 * age));
+    }
+    return Math.round(66.47 + (13.75 * weight) + (5.00 * height) - (6.76 * age));
+  } else if (gender === 'female') {
+    if (!height) {
+      return Math.round(655.10 + (9.56 * weight) - (4.68 * age));
+    }
+    return Math.round(655.10 + (9.56 * weight) + (1.85 * height) - (4.68 * age));
+  } else {
+    // その他の性別の場合は平均を使用
+    if (!height) {
+      const male = 66.47 + (13.75 * weight) - (6.76 * age);
+      const female = 655.10 + (9.56 * weight) - (4.68 * age);
+      return Math.round((male + female) / 2);
+    }
+    const male = 66.47 + (13.75 * weight) + (5.00 * height) - (6.76 * age);
+    const female = 655.10 + (9.56 * weight) + (1.85 * height) - (4.68 * age);
+    return Math.round((male + female) / 2);
+  }
+}
+
+// プロフィールデータの読み込み
+function loadProfile() {
+  const profileStr = localStorage.getItem(PROFILE_KEY);
+  if (profileStr) {
+    return JSON.parse(profileStr);
+  }
+  return null;
+}
+
+// プロフィールデータの保存
+function saveProfile(profile) {
+  profile.updatedAt = new Date().toISOString();
+  if (!profile.createdAt) {
+    profile.createdAt = profile.updatedAt;
+  }
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+}
+
+// プロフィール表示の更新
+function updateProfileDisplay(profile) {
+  // 名前表示（年齢と性別）
+  const genderText = genderLabels[profile.gender] || '---';
+  document.getElementById('profile-name').textContent = 
+    `${profile.age}歳・${genderText}`;
+
+  // 基本情報
+  document.getElementById('display-height').textContent = 
+    profile.height ? `${profile.height} cm` : '未入力';
+  document.getElementById('display-weight').textContent = 
+    profile.weight ? `${profile.weight} kg` : '---';
+  document.getElementById('display-activity').textContent = 
+    activityLabels[profile.activityLevel] || '未設定';
+  document.getElementById('display-gender').textContent = genderText;
+
+  // BMI計算と表示
+  const bmi = calculateBMI(profile.weight, profile.height);
+  const bmiDisplay = document.getElementById('display-bmi');
+  if (bmi) {
+    const status = getBMIStatus(parseFloat(bmi));
+    bmiDisplay.innerHTML = `<span class="${status.class}">${bmi}</span> <span style="font-size: 0.8em;">(${status.text})</span>`;
+  } else {
+    bmiDisplay.innerHTML = '<span style="color: #9E9E9E;">身長を入力すると<br>計算されます</span>';
+  }
+
+  // 基礎代謝計算と表示
+  const bmr = calculateBMR(profile.gender, profile.weight, profile.height, profile.age);
+  const bmrDisplay = document.getElementById('display-bmr');
+  if (bmr) {
+    bmrDisplay.textContent = `約${bmr.toLocaleString()} kcal/日`;
+  } else {
+    bmrDisplay.textContent = '---';
+  }
+}
+
+// バリデーション
+function validateProfile(profile) {
+  const errors = [];
+  
+  // 性別
+  if (!profile.gender) {
+    errors.push({ field: 'gender', message: '性別を選択してください' });
+  }
+  
+  // 年齢
+  if (!profile.age || profile.age < 10 || profile.age > 120) {
+    errors.push({ field: 'age', message: '10歳から120歳の範囲で入力してください' });
+  }
+  
+  // 体重
+  if (!profile.weight || profile.weight < 30 || profile.weight > 200) {
+    errors.push({ field: 'weight', message: '30kgから200kgの範囲で入力してください' });
+  }
+  
+  // 身長（入力がある場合のみ）
+  if (profile.height && (profile.height < 100 || profile.height > 250)) {
+    errors.push({ field: 'height', message: '100cmから250cmの範囲で入力してください' });
+  }
+  
+  return errors;
+}
+
+// エラー表示
+function showErrors(errors) {
+  // すべてのエラーをクリア
+  document.querySelectorAll('.error-message').forEach(el => {
+    el.classList.remove('show');
+  });
+  document.querySelectorAll('.form-input').forEach(el => {
+    el.classList.remove('error');
+  });
+  
+  // エラーを表示
+  errors.forEach(error => {
+    const errorEl = document.getElementById(`error-${error.field}`);
+    const inputEl = document.getElementById(error.field);
+    
+    if (errorEl) {
+      errorEl.classList.add('show');
+      errorEl.textContent = error.message;
+    }
+    
+    if (inputEl) {
+      inputEl.classList.add('error');
+    }
+  });
+}
+
+// フォーム送信
+document.getElementById('profile-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  // データ取得
+  const profile = {
+    gender: document.querySelector('input[name="gender"]:checked')?.value,
+    age: parseInt(document.getElementById('age').value) || null,
+    height: parseInt(document.getElementById('height').value) || null,
+    weight: parseFloat(document.getElementById('weight').value) || null,
+    activityLevel: document.querySelector('input[name="activityLevel"]:checked')?.value || 'moderate'
+  };
+  
+  // バリデーション
+  const errors = validateProfile(profile);
+  
+  if (errors.length > 0) {
+    showErrors(errors);
+    return;
+  }
+  
+  // 保存
+  saveProfile(profile);
+  
+  // カレンダーページへ遷移
+  window.location.href = 'calendar.html';
+});
+
+// 編集ボタン
+function editProfile() {
+  const profile = loadProfile();
+  if (!profile) return;
+  
+  // フォームに値を設定
+  if (profile.gender) {
+    document.getElementById(`gender-${profile.gender}`).checked = true;
+  }
+  if (profile.age) {
+    document.getElementById('age').value = profile.age;
+  }
+  if (profile.height) {
+    document.getElementById('height').value = profile.height;
+  }
+  if (profile.weight) {
+    document.getElementById('weight').value = profile.weight;
+  }
+  if (profile.activityLevel) {
+    document.getElementById(`activity-${profile.activityLevel}`).checked = true;
+  }
+  
+  // 表示切り替え
+  document.getElementById('profile-display').classList.add('hidden');
+  document.getElementById('main-navigation').classList.add('hidden');
+  document.getElementById('profile-setup').classList.remove('hidden');
+  document.getElementById('hero-cta').classList.add('hidden');
+  
+  // スクロール
+  document.getElementById('profile-setup').scrollIntoView({ behavior: 'smooth' });
+}
+
+// 初期化
+window.addEventListener('DOMContentLoaded', function() {
+  // 月別テーマの適用
+  applyMonthTheme();
+  
+  const profile = loadProfile();
+  
+  if (profile) {
+    // プロフィール登録済み
+    document.getElementById('hero-cta').classList.remove('hidden');
+    document.getElementById('profile-setup').classList.add('hidden');
+    document.getElementById('profile-display').classList.remove('hidden');
+    document.getElementById('main-navigation').classList.remove('hidden');
+    
+    updateProfileDisplay(profile);
+  } else {
+    // 初回訪問
+    document.getElementById('hero-cta').classList.add('hidden');
+    document.getElementById('profile-setup').classList.remove('hidden');
+    document.getElementById('profile-display').classList.add('hidden');
+    document.getElementById('main-navigation').classList.add('hidden');
+  }
+});
+</script>
+
+</body>
+</html>
