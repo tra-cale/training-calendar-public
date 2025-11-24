@@ -1582,6 +1582,10 @@ function selectGoalMethod(method) {
     document.getElementById('modal-header-title').textContent = '🤖 自動設定';
   } else if (method === 'custom') {
     // カスタム設定の場合：第2段階-B（個別入力）を表示
+    // グローバル変数をクリア（カスタム設定のため）
+    window.selectedGoalType = 'custom';
+    window.selectedGoalPattern = null;
+    
     document.getElementById('goal-step1').style.display = 'none';
     document.getElementById('goal-step2-auto').style.display = 'none';
     document.getElementById('goal-step2-custom').style.display = 'block';
@@ -1595,6 +1599,10 @@ function selectGoalMethod(method) {
 function applyAutoGoals() {
   const pattern = document.querySelector('input[name="goal-pattern"]:checked').value;
   const previousMonthData = getPreviousMonthData();
+  
+  // 選択されたパターンをグローバル変数に保存（保存時に使用）
+  window.selectedGoalType = 'auto';
+  window.selectedGoalPattern = pattern;
   
   if (!previousMonthData.hasData) {
     // 前月データがない場合はデフォルト値を使用
@@ -2021,12 +2029,16 @@ function saveCustomGoals() {
                      'july', 'august', 'september', 'october', 'november', 'december'];
   const key = `${monthNames[currentMonth]}${currentYear}_goals`;
   
+  // 自動設定から来た場合はtypeとpatternを保存
+  const goalType = window.selectedGoalType || 'custom';
+  const goalPattern = window.selectedGoalPattern || null;
+  
   const goals = {
     month: currentMonth,
     year: currentYear,
     setAt: new Date().toISOString(),
-    type: 'custom',
-    pattern: null,
+    type: goalType,
+    pattern: goalPattern,
     goals: {
       bloodPressure: {
         systolic: parseInt(document.getElementById('goal-systolic').value) || null,
@@ -2040,6 +2052,10 @@ function saveCustomGoals() {
   };
   
   localStorage.setItem(key, JSON.stringify(goals));
+  
+  // グローバル変数をクリア
+  window.selectedGoalType = null;
+  window.selectedGoalPattern = null;
   
   closeGoalModal();
   updateGoalDisplay();
@@ -2134,6 +2150,9 @@ window.addEventListener('DOMContentLoaded', function() {
     
     updateProfileDisplay(profile);
     updateGoalDisplay();
+    
+    // 月間目標が未設定かチェック
+    checkAndShowGoalModal();
   } else {
     // 初回訪問
     document.getElementById('hero-cta').classList.add('hidden');
@@ -2143,6 +2162,24 @@ window.addEventListener('DOMContentLoaded', function() {
     document.getElementById('main-navigation').classList.add('hidden');
   }
 });
+
+// 月間目標未設定時にモーダルを表示
+function checkAndShowGoalModal() {
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
+                     'july', 'august', 'september', 'october', 'november', 'december'];
+  const key = `${monthNames[currentMonth]}${currentYear}_goals`;
+  
+  const goalsStr = localStorage.getItem(key);
+  
+  if (!goalsStr) {
+    // 目標が未設定の場合、モーダルを自動表示
+    setTimeout(() => {
+      openGoalModal();
+    }, 500); // 0.5秒遅延させて自然な表示
+  }
+}
 </script>
 
 </body>
