@@ -753,6 +753,93 @@ h1 {
   color: #F57C00;
 }
 
+/* 目標未設定メッセージ */
+.goal-setup-prompt {
+  background: linear-gradient(145deg, #FFF9C4, #FFECB3);
+  border: 3px solid #FFD54F;
+  border-radius: 16px;
+  padding: 40px;
+  margin-bottom: 30px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(255, 179, 0, 0.2);
+}
+
+.prompt-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.prompt-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #F57C00;
+  margin-bottom: 15px;
+}
+
+.prompt-description {
+  font-size: 1.1em;
+  color: #616161;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.btn-setup-goal {
+  display: inline-block;
+  padding: 16px 48px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+}
+
+.btn-setup-goal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+}
+
+/* プログレスバー */
+.progress-bar-container {
+  width: 100%;
+  height: 24px;
+  background: #E0E0E0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 8px;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.5s ease, background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.progress-bar.low {
+  background: linear-gradient(90deg, #EF5350, #F44336);
+}
+
+.progress-bar.medium {
+  background: linear-gradient(90deg, #FFA726, #FF9800);
+}
+
+.progress-bar.high {
+  background: linear-gradient(90deg, #66BB6A, #4CAF50);
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .container {
@@ -1026,6 +1113,19 @@ h1 {
 
   <div class="monthly-view active">
     <div class="calendar" id="calendar"></div>
+
+    <!-- 目標未設定メッセージ -->
+    <div class="goal-setup-prompt" id="goal-setup-prompt" style="display: none;">
+      <div class="prompt-icon">📌</div>
+      <div class="prompt-content">
+        <h3 class="prompt-title">月間目標が未設定です</h3>
+        <p class="prompt-description">
+          目標を設定すると、達成度を確認しながらトレーニングを進められます。<br>
+          ホーム画面から今月の目標を設定しましょう。
+        </p>
+        <a href="home.html?openGoals=true" class="btn-setup-goal">🎯 目標を設定する</a>
+      </div>
+    </div>
 
     <div class="summary-section">
       <h2 class="summary-title">📊 月間目標・サマリー・達成度</h2>
@@ -1366,6 +1466,115 @@ h1 {
 </div>
 
 <script>
+// ===== 月間目標管理（home.htmlと連携） =====
+
+// 月別目標のキーを生成
+function getGoalsKey(year, month) {
+  const monthStr = String(month + 1).padStart(2, '0');
+  return `monthly_goals_${year}_${monthStr}`;
+}
+
+// 月間目標を読み込む
+function loadMonthlyGoals(year, month) {
+  const key = getGoalsKey(year, month);
+  const goalsStr = localStorage.getItem(key);
+  if (goalsStr) {
+    return JSON.parse(goalsStr);
+  }
+  return null;
+}
+
+// 目標未設定メッセージを表示/非表示
+function toggleGoalSetupPrompt(show) {
+  const prompt = document.getElementById('goal-setup-prompt');
+  if (prompt) {
+    prompt.style.display = show ? 'block' : 'none';
+  }
+}
+
+// 目標を月間サマリーに表示
+function displayGoalsInSummary() {
+  const goals = loadMonthlyGoals(currentYear, currentMonth);
+  
+  if (!goals) {
+    // 目標未設定の場合
+    toggleGoalSetupPrompt(true);
+    // 目標欄をクリア
+    document.getElementById('goal-bp').value = '';
+    document.getElementById('goal-weight').value = '';
+    document.getElementById('goal-days').value = '';
+    document.getElementById('goal-time').value = '';
+    document.getElementById('goal-calories').value = '';
+    return;
+  }
+  
+  // 目標設定済みの場合はメッセージを非表示
+  toggleGoalSetupPrompt(false);
+  
+  // 血圧目標
+  if (goals.bloodPressure) {
+    document.getElementById('goal-bp').value = 
+      `${goals.bloodPressure.systolic}/${goals.bloodPressure.diastolic} mmHg`;
+  }
+  
+  // 体重目標
+  if (goals.weight) {
+    document.getElementById('goal-weight').value = `${goals.weight} kg`;
+  }
+  
+  // トレーニング日数目標
+  if (goals.trainingDays) {
+    document.getElementById('goal-days').value = `${goals.trainingDays} 日`;
+  }
+  
+  // 総運動時間目標
+  if (goals.totalTime) {
+    document.getElementById('goal-time').value = `${goals.totalTime} 分`;
+  }
+  
+  // 総消費カロリー目標
+  if (goals.totalCalories) {
+    document.getElementById('goal-calories').value = `${goals.totalCalories} kcal`;
+  }
+}
+
+// プログレスバーを作成・更新
+function createProgressBar(containerId, percentage) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  // 既存のプログレスバーを削除
+  const existingBar = container.querySelector('.progress-bar-container');
+  if (existingBar) {
+    existingBar.remove();
+  }
+  
+  // 新しいプログレスバーを作成
+  const barContainer = document.createElement('div');
+  barContainer.className = 'progress-bar-container';
+  
+  const bar = document.createElement('div');
+  bar.className = 'progress-bar';
+  
+  // パーセンテージに応じて色を変更
+  const percent = Math.min(Math.max(percentage, 0), 100);
+  if (percent < 50) {
+    bar.classList.add('low');
+  } else if (percent < 80) {
+    bar.classList.add('medium');
+  } else {
+    bar.classList.add('high');
+  }
+  
+  bar.style.width = `${percent}%`;
+  bar.textContent = `${percent}%`;
+  
+  barContainer.appendChild(bar);
+  container.appendChild(barContainer);
+}
+
+// ===== 既存のコード =====
+
 // 現在の日付を取得して初期表示月を設定
 const today = new Date();
 let currentMonth = today.getMonth();
@@ -1933,7 +2142,7 @@ function loadDayData(day) {
 function updateMonthlySummary() {
   let totalSystolic = 0, totalDiastolic = 0, bpCount = 0;
   let totalWeight = 0, weightCount = 0;
-  let trainingDays = 0, goalDays = 0;
+  let trainingDays = 0;
   let totalTime = 0;
   let totalCalories = 0;
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -1949,9 +2158,6 @@ function updateMonthlySummary() {
         totalWeight += data.weight;
         weightCount++;
       }
-      if (data.status === 'scheduled' || data.status === 'done' || data.status === 'skipped') {
-        goalDays++;
-      }
       if (data.exercises && data.exercises.length > 0) {
         trainingDays++;
       }
@@ -1963,6 +2169,8 @@ function updateMonthlySummary() {
       }
     }
   }
+  
+  // 実績を表示
   document.getElementById('avg-bp').innerHTML = bpCount > 0 
     ? `${Math.round(totalSystolic / bpCount)}/${Math.round(totalDiastolic / bpCount)} <span class="unit">mmHg</span>`
     : `--/-- <span class="unit">mmHg</span>`;
@@ -1972,11 +2180,21 @@ function updateMonthlySummary() {
   document.getElementById('training-days').innerHTML = `${trainingDays} <span class="unit">日</span>`;
   document.getElementById('total-time').innerHTML = `${totalTime} <span class="unit">分</span>`;
   document.getElementById('total-calories').innerHTML = `${totalCalories} <span class="unit">kcal</span>`;
-  const goalTime = goalDays * 60;
-  const goalCalories = (goalTime / 60) * 300;
-  document.getElementById('goal-days').value = goalDays > 0 ? `${goalDays} 日` : '';
-  document.getElementById('goal-time').value = goalTime > 0 ? `${goalTime} 分` : '';
-  document.getElementById('goal-calories').value = goalCalories > 0 ? `${goalCalories} kcal` : '';
+  
+  // home.htmlから目標データを読み込む
+  displayGoalsInSummary();
+  
+  // 目標データを取得（達成度計算用）
+  const goals = loadMonthlyGoals(currentYear, currentMonth);
+  let goalDays = 0, goalTime = 0, goalCalories = 0;
+  
+  if (goals) {
+    goalDays = goals.trainingDays || 0;
+    goalTime = goals.totalTime || 0;
+    goalCalories = goals.totalCalories || 0;
+  }
+  
+  // 達成度を更新
   updateAchievements(
     bpCount > 0 ? Math.round(totalSystolic / bpCount) : 0,
     bpCount > 0 ? Math.round(totalDiastolic / bpCount) : 0,
@@ -1986,6 +2204,7 @@ function updateMonthlySummary() {
 }
 
 function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories) {
+  // 血圧の達成度
   const goalBp = document.getElementById('goal-bp').value;
   const achievementBp = document.getElementById('achievement-bp');
   if (goalBp && goalBp.includes('/') && avgSys > 0) {
@@ -2001,6 +2220,8 @@ function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, 
     achievementBp.textContent = '-';
     achievementBp.className = 'achievement-value';
   }
+  
+  // 体重の達成度
   const goalWeightStr = document.getElementById('goal-weight').value;
   const goalWeight = goalWeightStr ? parseFloat(goalWeightStr.replace(/[^\d.]/g, '')) : 0;
   const achievementWeight = document.getElementById('achievement-weight');
@@ -2016,24 +2237,33 @@ function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, 
     achievementWeight.textContent = '-';
     achievementWeight.className = 'achievement-value';
   }
+  
+  // トレーニング日数の達成度（プログレスバー付き）
   const achievementDaysEl = document.getElementById('achievement-days');
   if (goalDays > 0) {
     const percentage = Math.round((trainingDays / goalDays) * 100);
     achievementDaysEl.textContent = `${percentage}%`;
+    createProgressBar('achievement-days', percentage);
   } else {
     achievementDaysEl.textContent = '0%';
   }
+  
+  // 総運動時間の達成度（プログレスバー付き）
   const achievementTimeEl = document.getElementById('achievement-time');
   if (goalTime > 0) {
     const percentage = Math.round((totalTime / goalTime) * 100);
     achievementTimeEl.textContent = `${percentage}%`;
+    createProgressBar('achievement-time', percentage);
   } else {
     achievementTimeEl.textContent = '0%';
   }
+  
+  // 総消費カロリーの達成度（プログレスバー付き）
   const achievementCaloriesEl = document.getElementById('achievement-calories');
   if (goalCalories > 0) {
     const percentage = Math.round((totalCalories / goalCalories) * 100);
     achievementCaloriesEl.textContent = `${percentage}%`;
+    createProgressBar('achievement-calories', percentage);
   } else {
     achievementCaloriesEl.textContent = '0%';
   }
