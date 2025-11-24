@@ -475,18 +475,6 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .goal-method-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .goal-method-card {
-    padding: 30px 20px;
-  }
-
-  .goal-method-icon {
-    font-size: 3em;
-  }
-
   .nav-card-content {
     gap: 15px;
   }
@@ -535,7 +523,7 @@ body {
 }
 
 .goal-modal-header {
-  background: linear-gradient(135deg, #66BB6A, #43A047);
+  background: linear-gradient(135deg, #F57C00, #FFB300);
   color: white;
   padding: 20px 30px;
   border-radius: 20px 20px 0 0;
@@ -546,7 +534,9 @@ body {
 
 .goal-modal-header h2 {
   font-size: 1.5em;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .goal-close-btn {
@@ -568,161 +558,6 @@ body {
 
 .goal-modal-body {
   padding: 30px;
-}
-
-/* 設定方法選択画面 */
-.goal-step {
-  min-height: 300px;
-}
-
-.goal-method-title {
-  font-size: 1.3em;
-  font-weight: 600;
-  color: #212121;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.goal-method-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.goal-method-card {
-  background: linear-gradient(145deg, #FFFFFF, #F5F5F5);
-  border: 3px solid #E0E0E0;
-  border-radius: 16px;
-  padding: 40px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.goal-method-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  border-color: #66BB6A;
-}
-
-.goal-method-icon {
-  font-size: 4em;
-  margin-bottom: 15px;
-}
-
-.goal-method-name {
-  font-size: 1.3em;
-  font-weight: 600;
-  color: #212121;
-  margin-bottom: 10px;
-}
-
-.goal-method-desc {
-  font-size: 0.95em;
-  color: #616161;
-}
-
-/* 改善レベル選択画面 */
-.goal-pattern-title {
-  font-size: 1.3em;
-  font-weight: 600;
-  color: #212121;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.goal-pattern-options {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.goal-pattern-option {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  background: white;
-  border: 3px solid #E0E0E0;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.goal-pattern-option:hover {
-  border-color: #66BB6A;
-  background: #F1F8E9;
-}
-
-.goal-pattern-option input[type="radio"] {
-  width: 24px;
-  height: 24px;
-  margin-right: 20px;
-  cursor: pointer;
-  accent-color: #66BB6A;
-}
-
-.goal-pattern-content {
-  flex: 1;
-}
-
-.goal-pattern-name {
-  font-size: 1.2em;
-  font-weight: 600;
-  color: #212121;
-  margin-bottom: 5px;
-}
-
-.goal-pattern-desc {
-  font-size: 0.9em;
-  color: #616161;
-}
-
-/* ステップボタン */
-.goal-step-buttons {
-  display: flex;
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.btn-goal-back {
-  flex: 1;
-  padding: 15px;
-  background: white;
-  color: #616161;
-  border: 2px solid #E0E0E0;
-  border-radius: 10px;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.btn-goal-back:hover {
-  background: #F5F5F5;
-  border-color: #BDBDBD;
-}
-
-.btn-goal-apply,
-.btn-goal-save {
-  flex: 2;
-  padding: 15px;
-  background: linear-gradient(135deg, #66BB6A, #43A047);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.btn-goal-apply:hover,
-.btn-goal-save:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 187, 106, 0.4);
-}
 }
 
 .goal-section {
@@ -1120,155 +955,93 @@ body {
 <div class="goal-modal" id="goalModal">
   <div class="goal-modal-content">
     <div class="goal-modal-header">
-      <h2 id="modal-header-title">🎯 月間目標設定</h2>
+      <h2>🎯 月間目標設定</h2>
       <button class="goal-close-btn" onclick="closeGoalModal()">&times;</button>
     </div>
     <div class="goal-modal-body">
       
-      <!-- 第1段階: 設定方法の選択 -->
-      <div id="goal-step1" class="goal-step">
-        <div class="goal-method-title">設定方法を選択してください</div>
-        
-        <div class="goal-method-cards">
-          <div class="goal-method-card" onclick="selectGoalMethod('auto')">
-            <div class="goal-method-icon">🤖</div>
-            <div class="goal-method-name">自動設定</div>
-            <div class="goal-method-desc">前月実績から自動計算</div>
+      <!-- 血圧目標 -->
+      <div class="goal-section">
+        <h3 class="goal-section-title">💉 血圧目標</h3>
+        <div class="goal-current-info" id="current-bp-info" style="display: none;">
+          <div class="goal-current-title">📊 現在の平均血圧</div>
+          <div class="goal-current-value" id="current-bp-value">--/-- mmHg</div>
+        </div>
+        <div class="goal-input-row">
+          <div class="goal-input-group">
+            <label>収縮期血圧（最高）</label>
+            <input type="number" id="goal-systolic" min="100" max="139" placeholder="120">
+            <div class="goal-error-message" id="error-systolic"></div>
           </div>
-          
-          <div class="goal-method-card" onclick="selectGoalMethod('custom')">
-            <div class="goal-method-icon">✏️</div>
-            <div class="goal-method-name">自分でカスタム</div>
-            <div class="goal-method-desc">すべて手動で設定</div>
+          <div class="goal-input-group">
+            <label>拡張期血圧（最低）</label>
+            <input type="number" id="goal-diastolic" min="70" max="89" placeholder="80">
+            <div class="goal-error-message" id="error-diastolic"></div>
           </div>
+        </div>
+        <div class="goal-hint">
+          <span class="goal-hint-icon">💡</span>
+          <span>健康管理のため、100-139 / 70-89 mmHgの範囲で設定してください</span>
         </div>
       </div>
-      
-      <!-- 第2段階-A: 自動設定（改善レベル選択） -->
-      <div id="goal-step2-auto" class="goal-step" style="display: none;">
-        <div class="goal-pattern-title">改善レベルを選択してください</div>
-        
-        <div class="goal-pattern-options">
-          <label class="goal-pattern-option">
-            <input type="radio" name="goal-pattern" value="maintain" checked>
-            <div class="goal-pattern-content">
-              <div class="goal-pattern-name">📊 現状維持</div>
-              <div class="goal-pattern-desc">前月と同じ目標</div>
-            </div>
-          </label>
-          
-          <label class="goal-pattern-option">
-            <input type="radio" name="goal-pattern" value="moderate">
-            <div class="goal-pattern-content">
-              <div class="goal-pattern-name">🎯 軽い改善</div>
-              <div class="goal-pattern-desc">血圧-2%, 体重-1%, 運動+5%</div>
-            </div>
-          </label>
-          
-          <label class="goal-pattern-option">
-            <input type="radio" name="goal-pattern" value="aggressive">
-            <div class="goal-pattern-content">
-              <div class="goal-pattern-name">🔥 積極的改善</div>
-              <div class="goal-pattern-desc">血圧-5%, 体重-3%, 運動+15%</div>
-            </div>
-          </label>
+
+      <!-- 体重目標 -->
+      <div class="goal-section">
+        <h3 class="goal-section-title">⚖️ 体重目標</h3>
+        <div class="goal-current-info" id="current-weight-info" style="display: none;">
+          <div class="goal-current-title">📊 現在の平均体重</div>
+          <div class="goal-current-value" id="current-weight-value">-- kg (BMI: --)</div>
         </div>
-        
-        <div class="goal-step-buttons">
-          <button class="btn-goal-back" onclick="goBackToStep1()">← 前の画面</button>
-          <button class="btn-goal-apply" onclick="applyAutoGoals()">この内容で設定</button>
+        <div class="goal-input-row">
+          <div class="goal-input-group">
+            <label>目標体重（kg）</label>
+            <input type="number" id="goal-weight" step="0.1" placeholder="65.0">
+            <div class="goal-error-message" id="error-goal-weight"></div>
+          </div>
+        </div>
+        <div class="goal-hint">
+          <span class="goal-hint-icon">💡</span>
+          <span id="weight-hint">健康管理のため、BMI 18.5-30の範囲で設定してください</span>
         </div>
       </div>
-      
-      <!-- 第2段階-B: カスタム設定（個別入力） -->
-      <div id="goal-step2-custom" class="goal-step" style="display: none;">
-      <!-- 第2段階-B: カスタム設定（個別入力） -->
-      <div id="goal-step2-custom" class="goal-step" style="display: none;">
-        
-        <!-- 血圧目標 -->
-        <div class="goal-section">
-          <h3 class="goal-section-title">💉 血圧目標</h3>
-          <div class="goal-current-info" id="current-bp-info" style="display: none;">
-            <div class="goal-current-title">📊 現在の平均血圧</div>
-            <div class="goal-current-value" id="current-bp-value">--/-- mmHg</div>
-          </div>
-          <div class="goal-input-row">
-            <div class="goal-input-group">
-              <label>収縮期血圧（最高）</label>
-              <input type="number" id="goal-systolic" min="100" max="139" placeholder="120">
-              <div class="goal-error-message" id="error-systolic"></div>
-            </div>
-            <div class="goal-input-group">
-              <label>拡張期血圧（最低）</label>
-              <input type="number" id="goal-diastolic" min="70" max="89" placeholder="80">
-              <div class="goal-error-message" id="error-diastolic"></div>
-            </div>
-          </div>
-          <div class="goal-hint">
-            <span class="goal-hint-icon">💡</span>
-            <span>健康管理のため、100-139 / 70-89 mmHgの範囲で設定してください</span>
+
+      <!-- トレーニング目標 -->
+      <div class="goal-section">
+        <h3 class="goal-section-title">🏃 トレーニング目標</h3>
+        <div class="goal-current-info" id="current-training-info" style="display: none;">
+          <div class="goal-current-title">📊 今月の実績</div>
+          <div class="goal-current-value" id="current-training-value">
+            -- 日 / -- 分 / -- kcal
           </div>
         </div>
-
-        <!-- 体重目標 -->
-        <div class="goal-section">
-          <h3 class="goal-section-title">⚖️ 体重目標</h3>
-          <div class="goal-current-info" id="current-weight-info" style="display: none;">
-            <div class="goal-current-title">📊 現在の平均体重</div>
-            <div class="goal-current-value" id="current-weight-value">-- kg (BMI: --)</div>
+        <div class="goal-input-row">
+          <div class="goal-input-group">
+            <label>トレーニング日数（日）</label>
+            <input type="number" id="goal-days" min="1" max="31" placeholder="12">
+            <div class="goal-error-message" id="error-days"></div>
           </div>
-          <div class="goal-input-row">
-            <div class="goal-input-group">
-              <label>目標体重（kg）</label>
-              <input type="number" id="goal-weight" step="0.1" placeholder="65.0">
-              <div class="goal-error-message" id="error-goal-weight"></div>
-            </div>
+          <div class="goal-input-group">
+            <label>総運動時間（分）</label>
+            <input type="number" id="goal-time" min="30" max="3000" placeholder="600">
+            <div class="goal-error-message" id="error-time"></div>
           </div>
-          <div class="goal-hint">
-            <span class="goal-hint-icon">💡</span>
-            <span id="weight-hint">健康管理のため、BMI 18.5-30の範囲で設定してください</span>
+          <div class="goal-input-group">
+            <label>総消費カロリー（kcal）</label>
+            <input type="number" id="goal-calories" min="100" max="15000" placeholder="3000">
+            <div class="goal-error-message" id="error-calories"></div>
           </div>
         </div>
-
-        <!-- トレーニング目標 -->
-        <div class="goal-section">
-          <h3 class="goal-section-title">🏃 トレーニング目標</h3>
-          <div class="goal-current-info" id="current-training-info" style="display: none;">
-            <div class="goal-current-title">📊 今月の実績</div>
-            <div class="goal-current-value" id="current-training-value">
-              -- 日 / -- 分 / -- kcal
-            </div>
-          </div>
-          <div class="goal-input-row">
-            <div class="goal-input-group">
-              <label>トレーニング日数（日）</label>
-              <input type="number" id="goal-days" min="1" max="31" placeholder="12">
-              <div class="goal-error-message" id="error-days"></div>
-            </div>
-            <div class="goal-input-group">
-              <label>総運動時間（分）</label>
-              <input type="number" id="goal-time" min="30" max="3000" placeholder="600">
-              <div class="goal-error-message" id="error-time"></div>
-            </div>
-            <div class="goal-input-group">
-              <label>総消費カロリー（kcal）</label>
-              <input type="number" id="goal-calories" min="100" max="15000" placeholder="3000">
-              <div class="goal-error-message" id="error-calories"></div>
-            </div>
-          </div>
-          <div class="goal-hint">
-            <span class="goal-hint-icon">💡</span>
-            <span>無理のない目標から始めましょう。達成できたら少しずつ上げていけます</span>
-          </div>
-        </div>
-
-        <!-- ボタン -->
-        <div class="goal-step-buttons">
-          <button class="btn-goal-back" onclick="goBackToStep1()">← 前の画面</button>
-          <button class="btn-goal-save" onclick="saveCustomGoals()">💾 目標を保存</button>
+        <div class="goal-hint">
+          <span class="goal-hint-icon">💡</span>
+          <span>無理のない目標から始めましょう。達成できたら少しずつ上げていけます</span>
         </div>
       </div>
-      
+
+      <!-- ボタン -->
+      <div class="goal-buttons">
+        <button class="btn-goal-save" onclick="saveGoals()">💾 目標を保存</button>
+        <button class="btn-goal-cancel" onclick="closeGoalModal()">キャンセル</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1547,274 +1320,16 @@ function editProfile() {
 // 月間目標設定機能
 function openGoalModal() {
   document.getElementById('goalModal').classList.add('active');
-  showStep1();
+  loadCurrentMonthData();
+  loadSavedGoals();
 }
 
 function closeGoalModal() {
   document.getElementById('goalModal').classList.remove('active');
   clearGoalErrors();
-  // すべてのステップを非表示に
-  document.getElementById('goal-step1').style.display = 'block';
-  document.getElementById('goal-step2-auto').style.display = 'none';
-  document.getElementById('goal-step2-custom').style.display = 'none';
 }
 
-// 第1段階を表示
-function showStep1() {
-  document.getElementById('goal-step1').style.display = 'block';
-  document.getElementById('goal-step2-auto').style.display = 'none';
-  document.getElementById('goal-step2-custom').style.display = 'none';
-  document.getElementById('modal-header-title').textContent = '🎯 月間目標設定';
-}
-
-// 第1段階に戻る
-function goBackToStep1() {
-  showStep1();
-}
-
-// 設定方法を選択
-function selectGoalMethod(method) {
-  if (method === 'auto') {
-    // 自動設定の場合：第2段階-A（改善レベル選択）を表示
-    document.getElementById('goal-step1').style.display = 'none';
-    document.getElementById('goal-step2-auto').style.display = 'block';
-    document.getElementById('goal-step2-custom').style.display = 'none';
-    document.getElementById('modal-header-title').textContent = '🤖 自動設定';
-  } else if (method === 'custom') {
-    // カスタム設定の場合：第2段階-B（個別入力）を表示
-    // グローバル変数をクリア（カスタム設定のため）
-    window.selectedGoalType = 'custom';
-    window.selectedGoalPattern = null;
-    
-    document.getElementById('goal-step1').style.display = 'none';
-    document.getElementById('goal-step2-auto').style.display = 'none';
-    document.getElementById('goal-step2-custom').style.display = 'block';
-    document.getElementById('modal-header-title').textContent = '✏️ カスタム設定';
-    loadCurrentMonthData();
-    loadSavedGoals();
-  }
-}
-
-// 自動設定を適用
-function applyAutoGoals() {
-  const pattern = document.querySelector('input[name="goal-pattern"]:checked').value;
-  const previousMonthData = getPreviousMonthData();
-  
-  // 選択されたパターンをグローバル変数に保存（保存時に使用）
-  window.selectedGoalType = 'auto';
-  window.selectedGoalPattern = pattern;
-  
-  if (!previousMonthData.hasData) {
-    // 前月データがない場合はデフォルト値を使用
-    setDefaultGoals();
-    alert('前月のデータがないため、デフォルト値を設定しました。\n必要に応じて調整してください。');
-  } else {
-    // 前月データをベースに計算
-    calculateGoalsFromPrevious(previousMonthData, pattern);
-  }
-  
-  // 自動設定完了後、カスタム設定画面に遷移（確認・微調整可能）
-  document.getElementById('goal-step2-auto').style.display = 'none';
-  document.getElementById('goal-step2-custom').style.display = 'block';
-  document.getElementById('modal-header-title').textContent = '✏️ 目標の確認・調整';
-  loadCurrentMonthData();
-}
-
-// 前月データを取得
-function getPreviousMonthData() {
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  
-  // 前月の年月を計算
-  let prevMonth = currentMonth - 1;
-  let prevYear = currentYear;
-  if (prevMonth < 0) {
-    prevMonth = 11;
-    prevYear = currentYear - 1;
-  }
-  
-  let bpSum = { systolic: 0, diastolic: 0, count: 0 };
-  let weightSum = { total: 0, count: 0 };
-  let trainingDays = 0;
-  let totalTime = 0;
-  let totalCalories = 0;
-  
-  const daysInMonth = new Date(prevYear, prevMonth + 1, 0).getDate();
-  
-  for (let day = 1; day <= daysInMonth; day++) {
-    const key = `training_${prevYear}_${prevMonth}_${day}`;
-    const dataStr = localStorage.getItem(key);
-    if (dataStr) {
-      try {
-        const data = JSON.parse(dataStr);
-        
-        if (data.bloodPressure) {
-          bpSum.systolic += data.bloodPressure.systolic;
-          bpSum.diastolic += data.bloodPressure.diastolic;
-          bpSum.count++;
-        }
-        
-        if (data.weight) {
-          weightSum.total += data.weight;
-          weightSum.count++;
-        }
-        
-        if (data.exercises && data.exercises.length > 0) {
-          trainingDays++;
-        }
-        
-        if (data.totalTime) {
-          totalTime += data.totalTime;
-        }
-        
-        if (data.totalCalories) {
-          totalCalories += data.totalCalories;
-        }
-      } catch (e) {
-        console.error('Error parsing data:', e);
-      }
-    }
-  }
-  
-  return {
-    hasData: bpSum.count > 0 || weightSum.count > 0 || trainingDays > 0,
-    avgBP: bpSum.count > 0 ? {
-      systolic: Math.round(bpSum.systolic / bpSum.count),
-      diastolic: Math.round(bpSum.diastolic / bpSum.count)
-    } : null,
-    avgWeight: weightSum.count > 0 ? weightSum.total / weightSum.count : null,
-    trainingDays: trainingDays,
-    totalTime: totalTime,
-    totalCalories: totalCalories
-  };
-}
-
-// 前月データから目標を計算
-function calculateGoalsFromPrevious(prevData, pattern) {
-  const profile = loadProfile();
-  
-  // 血圧目標の計算
-  if (prevData.avgBP) {
-    let systolic, diastolic;
-    
-    if (pattern === 'maintain') {
-      // 現状維持
-      systolic = prevData.avgBP.systolic;
-      diastolic = prevData.avgBP.diastolic;
-    } else if (pattern === 'moderate') {
-      // 軽い改善（2%減）
-      systolic = Math.round(prevData.avgBP.systolic * 0.98);
-      diastolic = Math.round(prevData.avgBP.diastolic * 0.98);
-    } else if (pattern === 'aggressive') {
-      // 積極的改善（5%減）
-      systolic = Math.round(prevData.avgBP.systolic * 0.95);
-      diastolic = Math.round(prevData.avgBP.diastolic * 0.95);
-    }
-    
-    // 範囲内に調整
-    systolic = Math.max(100, Math.min(139, systolic));
-    diastolic = Math.max(70, Math.min(89, diastolic));
-    
-    document.getElementById('goal-systolic').value = systolic;
-    document.getElementById('goal-diastolic').value = diastolic;
-  } else {
-    // デフォルト値
-    document.getElementById('goal-systolic').value = 120;
-    document.getElementById('goal-diastolic').value = 80;
-  }
-  
-  // 体重目標の計算
-  if (prevData.avgWeight) {
-    let weight;
-    
-    if (pattern === 'maintain') {
-      weight = prevData.avgWeight;
-    } else if (pattern === 'moderate') {
-      // 軽い改善（1%減）
-      weight = prevData.avgWeight * 0.99;
-    } else if (pattern === 'aggressive') {
-      // 積極的改善（3%減）
-      weight = prevData.avgWeight * 0.97;
-    }
-    
-    // BMI範囲内に調整
-    if (profile && profile.height) {
-      const heightM = profile.height / 100;
-      const minWeight = 18.5 * heightM * heightM;
-      const maxWeight = 30 * heightM * heightM;
-      weight = Math.max(minWeight, Math.min(maxWeight, weight));
-    }
-    
-    document.getElementById('goal-weight').value = weight.toFixed(1);
-  } else {
-    // デフォルト値
-    if (profile && profile.height) {
-      const heightM = profile.height / 100;
-      const targetWeight = (22 * heightM * heightM).toFixed(1);
-      document.getElementById('goal-weight').value = targetWeight;
-    } else {
-      document.getElementById('goal-weight').value = 65.0;
-    }
-  }
-  
-  // トレーニング目標の計算
-  if (prevData.trainingDays > 0) {
-    let days, time, calories;
-    
-    if (pattern === 'maintain') {
-      days = prevData.trainingDays;
-      time = prevData.totalTime;
-      calories = prevData.totalCalories;
-    } else if (pattern === 'moderate') {
-      // 軽い改善（5%増）
-      days = Math.ceil(prevData.trainingDays * 1.05);
-      time = Math.ceil(prevData.totalTime * 1.05);
-      calories = Math.ceil(prevData.totalCalories * 1.05);
-    } else if (pattern === 'aggressive') {
-      // 積極的改善（15%増）
-      days = Math.ceil(prevData.trainingDays * 1.15);
-      time = Math.ceil(prevData.totalTime * 1.15);
-      calories = Math.ceil(prevData.totalCalories * 1.15);
-    }
-    
-    // 範囲内に調整
-    days = Math.max(1, Math.min(31, days));
-    time = Math.max(30, Math.min(3000, time));
-    calories = Math.max(100, Math.min(15000, calories));
-    
-    document.getElementById('goal-days').value = days;
-    document.getElementById('goal-time').value = time;
-    document.getElementById('goal-calories').value = calories;
-  } else {
-    // デフォルト値
-    document.getElementById('goal-days').value = 12;
-    document.getElementById('goal-time').value = 600;
-    document.getElementById('goal-calories').value = 3000;
-  }
-}
-
-// デフォルト値を設定
-function setDefaultGoals() {
-  const profile = loadProfile();
-  
-  // 血圧デフォルト値
-  document.getElementById('goal-systolic').value = 120;
-  document.getElementById('goal-diastolic').value = 80;
-  
-  // 体重デフォルト値（BMI 22基準）
-  if (profile && profile.height) {
-    const heightM = profile.height / 100;
-    const targetWeight = (22 * heightM * heightM).toFixed(1);
-    document.getElementById('goal-weight').value = targetWeight;
-  } else {
-    document.getElementById('goal-weight').value = 65.0;
-  }
-  
-  // トレーニングデフォルト値
-  document.getElementById('goal-days').value = 12;
-  document.getElementById('goal-time').value = 600;
-  document.getElementById('goal-calories').value = 3000;
-}
+function clearGoalErrors() {
   document.querySelectorAll('.goal-error-message').forEach(el => {
     el.classList.remove('show');
   });
@@ -1908,12 +1423,11 @@ function loadSavedGoals() {
   
   const goalsStr = localStorage.getItem(key);
   if (goalsStr) {
-    const data = JSON.parse(goalsStr);
-    const goals = data.goals || data; // 新旧両方の構造に対応
+    const goals = JSON.parse(goalsStr);
     
     if (goals.bloodPressure) {
-      document.getElementById('goal-systolic').value = goals.bloodPressure.systolic || '';
-      document.getElementById('goal-diastolic').value = goals.bloodPressure.diastolic || '';
+      document.getElementById('goal-systolic').value = goals.bloodPressure.systolic;
+      document.getElementById('goal-diastolic').value = goals.bloodPressure.diastolic;
     }
     
     if (goals.weight) {
@@ -1933,7 +1447,20 @@ function loadSavedGoals() {
     }
   } else {
     // デフォルト値を設定
-    setDefaultGoals();
+    document.getElementById('goal-systolic').value = 120;
+    document.getElementById('goal-diastolic').value = 80;
+    document.getElementById('goal-days').value = 12;
+    document.getElementById('goal-time').value = 600;
+    document.getElementById('goal-calories').value = 3000;
+    
+    // 体重目標はプロフィールのBMI 22から計算
+    const profile = loadProfile();
+    if (profile && profile.height) {
+      const targetBMI = 22;
+      const heightM = profile.height / 100;
+      const targetWeight = (targetBMI * heightM * heightM).toFixed(1);
+      document.getElementById('goal-weight').value = targetWeight;
+    }
   }
 }
 
@@ -2017,8 +1544,7 @@ function validateGoals() {
   return errors.length === 0;
 }
 
-// カスタム設定を保存
-function saveCustomGoals() {
+function saveGoals() {
   if (!validateGoals()) {
     return;
   }
@@ -2029,33 +1555,19 @@ function saveCustomGoals() {
                      'july', 'august', 'september', 'october', 'november', 'december'];
   const key = `${monthNames[currentMonth]}${currentYear}_goals`;
   
-  // 自動設定から来た場合はtypeとpatternを保存
-  const goalType = window.selectedGoalType || 'custom';
-  const goalPattern = window.selectedGoalPattern || null;
-  
   const goals = {
-    month: currentMonth,
-    year: currentYear,
-    setAt: new Date().toISOString(),
-    type: goalType,
-    pattern: goalPattern,
-    goals: {
-      bloodPressure: {
-        systolic: parseInt(document.getElementById('goal-systolic').value) || null,
-        diastolic: parseInt(document.getElementById('goal-diastolic').value) || null
-      },
-      weight: parseFloat(document.getElementById('goal-weight').value) || null,
-      trainingDays: parseInt(document.getElementById('goal-days').value) || null,
-      totalTime: parseInt(document.getElementById('goal-time').value) || null,
-      totalCalories: parseInt(document.getElementById('goal-calories').value) || null
-    }
+    bloodPressure: {
+      systolic: parseInt(document.getElementById('goal-systolic').value) || null,
+      diastolic: parseInt(document.getElementById('goal-diastolic').value) || null
+    },
+    weight: parseFloat(document.getElementById('goal-weight').value) || null,
+    trainingDays: parseInt(document.getElementById('goal-days').value) || null,
+    totalTime: parseInt(document.getElementById('goal-time').value) || null,
+    totalCalories: parseInt(document.getElementById('goal-calories').value) || null,
+    savedAt: new Date().toISOString()
   };
   
   localStorage.setItem(key, JSON.stringify(goals));
-  
-  // グローバル変数をクリア
-  window.selectedGoalType = null;
-  window.selectedGoalPattern = null;
   
   closeGoalModal();
   updateGoalDisplay();
@@ -2073,8 +1585,7 @@ function updateGoalDisplay() {
   const goalsStr = localStorage.getItem(key);
   
   if (goalsStr) {
-    const data = JSON.parse(goalsStr);
-    const goals = data.goals || data; // 新旧両方の構造に対応
+    const goals = JSON.parse(goalsStr);
     
     // 血圧目標
     if (goals.bloodPressure && goals.bloodPressure.systolic && goals.bloodPressure.diastolic) {
@@ -2150,9 +1661,6 @@ window.addEventListener('DOMContentLoaded', function() {
     
     updateProfileDisplay(profile);
     updateGoalDisplay();
-    
-    // 月間目標が未設定かチェック
-    checkAndShowGoalModal();
   } else {
     // 初回訪問
     document.getElementById('hero-cta').classList.add('hidden');
@@ -2162,24 +1670,6 @@ window.addEventListener('DOMContentLoaded', function() {
     document.getElementById('main-navigation').classList.add('hidden');
   }
 });
-
-// 月間目標未設定時にモーダルを表示
-function checkAndShowGoalModal() {
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
-                     'july', 'august', 'september', 'october', 'november', 'december'];
-  const key = `${monthNames[currentMonth]}${currentYear}_goals`;
-  
-  const goalsStr = localStorage.getItem(key);
-  
-  if (!goalsStr) {
-    // 目標が未設定の場合、モーダルを自動表示
-    setTimeout(() => {
-      openGoalModal();
-    }, 500); // 0.5秒遅延させて自然な表示
-  }
-}
 </script>
 
 </body>
