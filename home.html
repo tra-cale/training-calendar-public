@@ -604,6 +604,72 @@ body {
   font-weight: 700;
 }
 
+/* 月選択 */
+.goal-month-selector {
+  margin-bottom: 25px;
+  padding: 16px;
+  background: linear-gradient(145deg, #E3F2FD, #FFFFFF);
+  border-radius: 12px;
+  border: 2px solid #42A5F5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.goal-month-selector label {
+  font-size: 1em;
+  font-weight: 600;
+  color: #1976D2;
+  flex-shrink: 0;
+}
+
+.goal-month-dropdown {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid #90CAF9;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  color: #1565C0;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.goal-month-dropdown:hover {
+  border-color: #42A5F5;
+  background: #E3F2FD;
+}
+
+.goal-month-dropdown:focus {
+  outline: none;
+  border-color: #1976D2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+/* 前月の目標表示 */
+.previous-month-goal {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #F5F5F5;
+  border-radius: 6px;
+  border-left: 3px solid #9E9E9E;
+  font-size: 0.85em;
+  color: #616161;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.previous-month-goal .label {
+  font-weight: 600;
+}
+
+.previous-month-goal .value {
+  color: #424242;
+  font-weight: 500;
+}
+
 /* 目標セクション */
 .goal-section {
   margin-bottom: 30px;
@@ -748,6 +814,121 @@ body {
 .btn-goal-cancel:hover {
   background: #F5F5F5;
   border-color: #BDBDBD;
+}
+
+/* 確認モーダル */
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+  animation: fadeIn 0.3s ease;
+}
+
+.confirm-modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.confirm-modal-header {
+  padding: 24px;
+  border-bottom: 2px solid #FFB300;
+  background: linear-gradient(145deg, #FFF9C4, #FFFFFF);
+}
+
+.confirm-modal-header h3 {
+  margin: 0;
+  font-size: 1.4em;
+  color: #F57C00;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.confirm-modal-body {
+  padding: 24px;
+  line-height: 1.8;
+}
+
+.confirm-modal-body p {
+  margin-bottom: 12px;
+  color: #424242;
+  font-size: 0.95em;
+}
+
+.confirm-modal-body strong {
+  color: #D84315;
+  font-weight: 600;
+}
+
+.confirm-modal-body #confirm-month-name {
+  color: #1976D2;
+  font-weight: 600;
+}
+
+.confirm-modal-buttons {
+  padding: 20px 24px;
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid #E0E0E0;
+}
+
+.btn-confirm-yes {
+  flex: 1;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #66BB6A, #81C784);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-confirm-yes:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4);
+}
+
+.btn-confirm-no {
+  flex: 1;
+  padding: 14px 24px;
+  background: white;
+  color: #616161;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-confirm-no:hover {
+  background: #F5F5F5;
+  border-color: #BDBDBD;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ユーティリティクラス */
@@ -1176,6 +1357,14 @@ body {
     </div>
     <div class="goal-modal-body">
       
+      <!-- 月選択 -->
+      <div class="goal-month-selector">
+        <label for="goal-month-select">表示月:</label>
+        <select id="goal-month-select" class="goal-month-dropdown" onchange="onGoalMonthChange()">
+          <!-- JavaScriptで動的に生成 -->
+        </select>
+      </div>
+      
       <!-- モード選択 -->
       <div class="goal-mode-selector">
         <button type="button" class="goal-mode-btn" data-mode="maintain" onclick="selectGoalMode('maintain')">
@@ -1216,11 +1405,19 @@ body {
           <div class="goal-input-group">
             <label>収縮期血圧（最高）</label>
             <input type="number" id="goal-systolic" min="100" max="139" placeholder="120">
+            <div class="previous-month-goal" id="prev-systolic" style="display: none;">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-systolic-value">--</span>
+            </div>
             <div class="goal-error-message" id="error-systolic"></div>
           </div>
           <div class="goal-input-group">
             <label>拡張期血圧（最低）</label>
             <input type="number" id="goal-diastolic" min="70" max="89" placeholder="80">
+            <div class="previous-month-goal" id="prev-diastolic" style="display: none;">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-diastolic-value">--</span>
+            </div>
             <div class="goal-error-message" id="error-diastolic"></div>
           </div>
         </div>
@@ -1241,6 +1438,10 @@ body {
           <div class="goal-input-group">
             <label>目標体重（kg）</label>
             <input type="number" id="goal-weight" step="0.1" placeholder="65.0">
+            <div class="previous-month-goal" id="prev-weight" style="display: none;">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-weight-value">--</span>
+            </div>
             <div class="goal-error-message" id="error-goal-weight"></div>
           </div>
           <div class="goal-input-group">
@@ -1268,16 +1469,28 @@ body {
           <div class="goal-input-group">
             <label>トレーニング日数（日）</label>
             <input type="number" id="goal-days" min="1" max="25" placeholder="12">
+            <div class="previous-month-goal" id="prev-days" style="display: none;">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-days-value">--</span>
+            </div>
             <div class="goal-error-message" id="error-days"></div>
           </div>
           <div class="goal-input-group">
             <label>総運動時間（分）</label>
             <input type="number" id="goal-time" min="30" max="3000" placeholder="600">
+            <div class="previous-month-goal" id="prev-time" style="display: none;">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-time-value">--</span>
+            </div>
             <div class="goal-error-message" id="error-time"></div>
           </div>
           <div class="goal-input-group">
             <label>総消費カロリー（kcal）</label>
             <input type="number" id="goal-calories" min="100" max="15000" placeholder="3000">
+            <div class="previous-month-goal" id="prev-calories" style="display: none;">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-calories-value">--</span>
+            </div>
             <div class="goal-error-message" id="error-calories"></div>
           </div>
         </div>
@@ -1296,15 +1509,43 @@ body {
   </div>
 </div>
 
+<!-- 前月編集確認モーダル -->
+<div class="confirm-modal" id="confirmEditPreviousMonth" style="display: none;">
+  <div class="confirm-modal-content">
+    <div class="confirm-modal-header">
+      <h3>⚠️ 前月の目標を編集しますか？</h3>
+    </div>
+    <div class="confirm-modal-body">
+      <p>前月（<span id="confirm-month-name"></span>）の目標を編集しようとしています。</p>
+      <p><strong>編集した内容は保存されますが、過去の実績との整合性が取れなくなる可能性があります。</strong></p>
+      <p>本当に編集してもよろしいですか？</p>
+    </div>
+    <div class="confirm-modal-buttons">
+      <button class="btn-confirm-yes" onclick="confirmEditPreviousMonth(true)">✅ 編集する</button>
+      <button class="btn-confirm-no" onclick="confirmEditPreviousMonth(false)">キャンセル</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // プロフィールデータのキー
 const PROFILE_KEY = 'user_profile';
+
+// 選択中の年月（目標設定用）
+let selectedGoalYear = new Date().getFullYear();
+let selectedGoalMonth = new Date().getMonth() + 1; // 1-12
+
 // 月間目標のキー（月別に保存）
-function getGoalsKey() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  return `monthly_goals_${year}_${month}`;
+function getGoalsKey(year = null, month = null) {
+  const targetYear = year || new Date().getFullYear();
+  const targetMonth = month || (new Date().getMonth() + 1);
+  const monthStr = String(targetMonth).padStart(2, '0');
+  return `monthly_goals_${targetYear}_${monthStr}`;
+}
+
+// 選択中の月の目標キーを取得
+function getSelectedGoalsKey() {
+  return getGoalsKey(selectedGoalYear, selectedGoalMonth);
 }
 
 // 月別のアイコンと色設定
@@ -1542,12 +1783,12 @@ function saveGoalsData(goals) {
     goals.createdAt = goals.updatedAt;
   }
   
-  // 年月情報も保存
-  const now = new Date();
-  goals.year = now.getFullYear();
-  goals.month = now.getMonth() + 1; // 1-12
+  // 選択中の年月情報を保存
+  goals.year = selectedGoalYear;
+  goals.month = selectedGoalMonth;
   
-  localStorage.setItem(getGoalsKey(), JSON.stringify(goals));
+  // 選択中の月のキーで保存
+  localStorage.setItem(getSelectedGoalsKey(), JSON.stringify(goals));
 }
 
 // 目標表示の更新
@@ -1600,9 +1841,106 @@ function updateGoalDisplay() {
 
 // 目標モーダルを開く
 function openGoalModal() {
+  // 選択中の年月を現在にリセット
+  const now = new Date();
+  selectedGoalYear = now.getFullYear();
+  selectedGoalMonth = now.getMonth() + 1;
+  
+  // 月選択ドロップダウンを初期化
+  initializeGoalMonthSelector();
+  
   document.getElementById('goalModal').classList.add('active');
   loadGoalsToModal();
 }
+
+// 月選択ドロップダウンを初期化（今月・前月のみ）
+function initializeGoalMonthSelector() {
+  const selector = document.getElementById('goal-month-select');
+  selector.innerHTML = '';
+  
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1; // 1-12
+  
+  // 今月
+  const currentOption = document.createElement('option');
+  currentOption.value = `${currentYear}-${currentMonth}`;
+  currentOption.textContent = `${currentYear}年${currentMonth}月（今月）`;
+  currentOption.selected = true;
+  selector.appendChild(currentOption);
+  
+  // 前月
+  let prevYear = currentYear;
+  let prevMonth = currentMonth - 1;
+  if (prevMonth === 0) {
+    prevMonth = 12;
+    prevYear = currentYear - 1;
+  }
+  
+  const prevOption = document.createElement('option');
+  prevOption.value = `${prevYear}-${prevMonth}`;
+  prevOption.textContent = `${prevYear}年${prevMonth}月（前月）`;
+  selector.appendChild(prevOption);
+}
+
+// 月変更時のイベントハンドラ
+function onGoalMonthChange() {
+  const selector = document.getElementById('goal-month-select');
+  const selected = selector.value.split('-');
+  const newYear = parseInt(selected[0]);
+  const newMonth = parseInt(selected[1]);
+  
+  // 前月を選択した場合は確認モーダルを表示
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  
+  if (newYear !== currentYear || newMonth !== currentMonth) {
+    // 前月を選択
+    showConfirmEditPreviousMonth(newYear, newMonth);
+  } else {
+    // 今月を選択（通常フロー）
+    selectedGoalYear = newYear;
+    selectedGoalMonth = newMonth;
+    loadGoalsToModal();
+  }
+}
+
+// 前月編集の確認モーダルを表示
+function showConfirmEditPreviousMonth(year, month) {
+  const monthName = `${year}年${month}月`;
+  document.getElementById('confirm-month-name').textContent = monthName;
+  document.getElementById('confirmEditPreviousMonth').style.display = 'flex';
+  
+  // 一時的に選択を保持
+  window.tempSelectedYear = year;
+  window.tempSelectedMonth = month;
+}
+
+// 前月編集の確認結果
+function confirmEditPreviousMonth(confirmed) {
+  document.getElementById('confirmEditPreviousMonth').style.display = 'none';
+  
+  if (confirmed) {
+    // 編集を許可
+    selectedGoalYear = window.tempSelectedYear;
+    selectedGoalMonth = window.tempSelectedMonth;
+    loadGoalsToModal();
+  } else {
+    // キャンセル → 今月に戻す
+    const now = new Date();
+    selectedGoalYear = now.getFullYear();
+    selectedGoalMonth = now.getMonth() + 1;
+    
+    const selector = document.getElementById('goal-month-select');
+    selector.value = `${selectedGoalYear}-${selectedGoalMonth}`;
+  }
+  
+  // 一時変数をクリア
+  delete window.tempSelectedYear;
+  delete window.tempSelectedMonth;
+}
+
 
 // 目標モーダルを閉じる
 function closeGoalModal() {
@@ -1663,8 +2001,10 @@ function calculateGoalsFromMode(mode) {
   const profile = loadProfile();
   if (!profile) return;
   
-  // デフォルト値（前回目標があればそれを使用、なければデフォルト）
-  const currentGoals = loadGoals();
+  // デフォルト値（選択中の月の目標があればそれを使用、なければデフォルト）
+  const goalsStr = localStorage.getItem(getSelectedGoalsKey());
+  const currentGoals = goalsStr ? JSON.parse(goalsStr) : null;
+  
   let baseSystolic = currentGoals?.bloodPressure?.systolic || 120;
   let baseDiastolic = currentGoals?.bloodPressure?.diastolic || 80;
   let baseWeight = currentGoals?.weight || (profile.height ? (22 * Math.pow(profile.height / 100, 2)).toFixed(1) : 65);
@@ -1848,7 +2188,13 @@ function displayChanges(mode, changes) {
 }
 
 function loadGoalsToModal() {
-  const goals = loadGoals();
+  // 選択中の月の目標を読み込み
+  const goalsStr = localStorage.getItem(getSelectedGoalsKey());
+  const goals = goalsStr ? JSON.parse(goalsStr) : null;
+  
+  // 前月の目標を読み込み
+  loadPreviousMonthGoals();
+  
   if (goals) {
     if (goals.bloodPressure) {
       document.getElementById('goal-systolic').value = goals.bloodPressure.systolic;
@@ -1881,6 +2227,77 @@ function loadGoalsToModal() {
     selectGoalMode('light');
   }
 }
+
+// 前月の目標を読み込んで表示
+function loadPreviousMonthGoals() {
+  // 前月の年月を計算
+  let prevYear = selectedGoalYear;
+  let prevMonth = selectedGoalMonth - 1;
+  
+  if (prevMonth === 0) {
+    prevMonth = 12;
+    prevYear = selectedGoalYear - 1;
+  }
+  
+  // 前月の目標データを取得
+  const prevGoalsKey = getGoalsKey(prevYear, prevMonth);
+  const prevGoalsStr = localStorage.getItem(prevGoalsKey);
+  const prevGoals = prevGoalsStr ? JSON.parse(prevGoalsStr) : null;
+  
+  // 前月データの表示エリアを更新（データがない場合は「未設定」と表示）
+  
+  // 血圧 - 収縮期
+  if (prevGoals?.bloodPressure?.systolic) {
+    document.getElementById('prev-systolic-value').textContent = 
+      `${prevGoals.bloodPressure.systolic} mmHg`;
+  } else {
+    document.getElementById('prev-systolic-value').textContent = '未設定';
+  }
+  document.getElementById('prev-systolic').style.display = 'flex';
+  
+  // 血圧 - 拡張期
+  if (prevGoals?.bloodPressure?.diastolic) {
+    document.getElementById('prev-diastolic-value').textContent = 
+      `${prevGoals.bloodPressure.diastolic} mmHg`;
+  } else {
+    document.getElementById('prev-diastolic-value').textContent = '未設定';
+  }
+  document.getElementById('prev-diastolic').style.display = 'flex';
+  
+  // 体重
+  if (prevGoals?.weight) {
+    document.getElementById('prev-weight-value').textContent = `${prevGoals.weight} kg`;
+  } else {
+    document.getElementById('prev-weight-value').textContent = '未設定';
+  }
+  document.getElementById('prev-weight').style.display = 'flex';
+  
+  // トレーニング日数
+  if (prevGoals?.trainingDays) {
+    document.getElementById('prev-days-value').textContent = `${prevGoals.trainingDays} 日`;
+  } else {
+    document.getElementById('prev-days-value').textContent = '未設定';
+  }
+  document.getElementById('prev-days').style.display = 'flex';
+  
+  // 総運動時間
+  if (prevGoals?.totalTime) {
+    document.getElementById('prev-time-value').textContent = `${prevGoals.totalTime} 分`;
+  } else {
+    document.getElementById('prev-time-value').textContent = '未設定';
+  }
+  document.getElementById('prev-time').style.display = 'flex';
+  
+  // 総消費カロリー
+  if (prevGoals?.totalCalories) {
+    document.getElementById('prev-calories-value').textContent = 
+      `${prevGoals.totalCalories.toLocaleString()} kcal`;
+  } else {
+    document.getElementById('prev-calories-value').textContent = '未設定';
+  }
+  document.getElementById('prev-calories').style.display = 'flex';
+}
+
 
 // 目標を保存
 function saveGoals() {
