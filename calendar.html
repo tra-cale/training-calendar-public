@@ -53,6 +53,50 @@ h1 {
 .month-selector {
   margin: 10px 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.month-nav-button {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.month-nav-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
+  background: linear-gradient(135deg, #FF8F00, #FFC107);
+}
+
+.month-nav-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.month-nav-button:disabled {
+  background: linear-gradient(135deg, #BDBDBD, #E0E0E0);
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.month-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .month-select-dropdown {
@@ -868,6 +912,30 @@ h1 {
   .category-name {
     font-size: 0.75em;
   }
+  
+  /* 月選択UIのスマホ対応 */
+  .month-selector {
+    gap: 8px;
+  }
+  
+  .month-nav-button {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1em;
+  }
+  
+  .month-select-wrapper {
+    gap: 6px;
+  }
+  
+  .month-select-wrapper label {
+    font-size: 0.9em;
+  }
+  
+  .month-select-dropdown {
+    padding: 6px 10px;
+    font-size: 0.95em;
+  }
 }
 /* ホームボタン */
 .home-button {
@@ -1094,21 +1162,25 @@ h1 {
   </div>
 
   <div class="month-selector">
-    <label for="month-select">表示月:</label>
-    <select id="month-select" class="month-select-dropdown">
-      <option value="0">1月</option>
-      <option value="1">2月</option>
-      <option value="2">3月</option>
-      <option value="3">4月</option>
-      <option value="4">5月</option>
-      <option value="5">6月</option>
-      <option value="6">7月</option>
-      <option value="7">8月</option>
-      <option value="8">9月</option>
-      <option value="9">10月</option>
-      <option value="10">11月</option>
-      <option value="11">12月</option>
-    </select>
+    <button id="prev-month-btn" class="month-nav-button" title="前の月">‹</button>
+    <div class="month-select-wrapper">
+      <label for="month-select">表示月:</label>
+      <select id="month-select" class="month-select-dropdown">
+        <option value="0">1月</option>
+        <option value="1">2月</option>
+        <option value="2">3月</option>
+        <option value="3">4月</option>
+        <option value="4">5月</option>
+        <option value="5">6月</option>
+        <option value="6">7月</option>
+        <option value="7">8月</option>
+        <option value="8">9月</option>
+        <option value="9">10月</option>
+        <option value="10">11月</option>
+        <option value="11">12月</option>
+      </select>
+    </div>
+    <button id="next-month-btn" class="month-nav-button" title="次の月">›</button>
   </div>
 
   <div class="monthly-view active">
@@ -2388,10 +2460,44 @@ function updateNextMonthGoals() {
   localStorage.setItem(nextStorageKey, JSON.stringify(nextData));
 }
 
+// 月選択の変更イベント
 document.getElementById('month-select').addEventListener('change', function() {
   currentMonth = parseInt(this.value);
   generateCalendar();
+  updateMonthNavButtons();
 });
+
+// 前の月ボタン
+document.getElementById('prev-month-btn').addEventListener('click', function() {
+  if (currentMonth > 0) {
+    currentMonth--;
+    document.getElementById('month-select').value = currentMonth;
+    generateCalendar();
+    updateMonthNavButtons();
+  }
+});
+
+// 次の月ボタン
+document.getElementById('next-month-btn').addEventListener('click', function() {
+  if (currentMonth < 11) {
+    currentMonth++;
+    document.getElementById('month-select').value = currentMonth;
+    generateCalendar();
+    updateMonthNavButtons();
+  }
+});
+
+// 矢印ボタンの有効/無効状態を更新
+function updateMonthNavButtons() {
+  const prevBtn = document.getElementById('prev-month-btn');
+  const nextBtn = document.getElementById('next-month-btn');
+  
+  // 1月の場合は前月ボタンを無効化
+  prevBtn.disabled = (currentMonth === 0);
+  
+  // 12月の場合は次月ボタンを無効化
+  nextBtn.disabled = (currentMonth === 11);
+}
 
 document.getElementById('month-select').value = currentMonth;
 
@@ -2399,6 +2505,7 @@ document.getElementById('month-select').value = currentMonth;
 updateAddedExercisesList();
 updateExerciseSummary();
 generateCalendar();
+updateMonthNavButtons(); // 初期状態でボタンの有効/無効を設定
 </script>
 
 </body>
