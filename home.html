@@ -351,6 +351,45 @@ body {
 .goal-display-header {
   text-align: center;
   margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.goal-month-selector-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.goal-month-selector-home label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #616161;
+}
+
+.home-month-dropdown {
+  padding: 8px 16px;
+  border: 2px solid #66BB6A;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #2E7D32;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.home-month-dropdown:hover {
+  border-color: #4CAF50;
+  background: #E8F5E9;
+}
+
+.home-month-dropdown:focus {
+  outline: none;
+  border-color: #388E3C;
+  box-shadow: 0 0 0 3px rgba(56, 142, 60, 0.1);
 }
 
 .goal-display-grid {
@@ -369,6 +408,20 @@ body {
   border: 1px solid #E0E0E0;
 }
 
+.goal-display-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.goal-display-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .goal-display-label {
   font-size: 0.85em;
   color: #616161;
@@ -379,6 +432,16 @@ body {
   font-size: 1.1em;
   font-weight: 600;
   color: #212121;
+}
+
+.goal-display-previous {
+  font-size: 0.75em;
+  color: #9E9E9E;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 4px 8px;
+  background: #F5F5F5;
+  border-radius: 4px;
 }
 
 /* ナビゲーションカード */
@@ -649,16 +712,15 @@ body {
 
 /* 前月の目標表示 */
 .previous-month-goal {
-  margin-top: 8px;
-  padding: 8px 12px;
+  margin-left: 12px;
+  padding: 6px 10px;
   background: #F5F5F5;
   border-radius: 6px;
   border-left: 3px solid #9E9E9E;
-  font-size: 0.85em;
+  font-size: 0.8em;
   color: #616161;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  white-space: nowrap;
+  align-self: center;
 }
 
 .previous-month-goal .label {
@@ -668,6 +730,41 @@ body {
 .previous-month-goal .value {
   color: #424242;
   font-weight: 500;
+}
+
+/* 入力グループを横並びに */
+.goal-input-group {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.goal-input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.goal-input-wrapper label {
+  font-size: 0.9em;
+  color: #424242;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.goal-input-wrapper input {
+  padding: 12px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+.goal-input-wrapper input:focus {
+  outline: none;
+  border-color: #66BB6A;
+  box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.1);
 }
 
 /* 目標セクション */
@@ -1267,33 +1364,64 @@ body {
   <!-- 月間目標カード（登録済みの場合） -->
   <div class="card goal-display-card fade-in hidden" id="goal-display">
     <div class="goal-display-header">
-      <div class="card-title">🎯 今月の目標</div>
+      <div class="card-title">🎯 月間目標</div>
+      <div class="goal-month-selector-home">
+        <label for="home-month-select">表示月:</label>
+        <select id="home-month-select" class="home-month-dropdown" onchange="onHomeMonthChange()">
+          <!-- JavaScriptで動的に生成 -->
+        </select>
+      </div>
     </div>
 
     <div class="goal-display-grid" id="goal-display-content">
       <div class="goal-display-item">
-        <span class="goal-display-label">血圧目標</span>
-        <span class="goal-display-value" id="display-goal-bp">120/80 mmHg</span>
+        <div class="goal-display-content">
+          <div class="goal-display-main">
+            <span class="goal-display-label">血圧目標</span>
+            <span class="goal-display-value" id="display-goal-bp">120/80 mmHg</span>
+          </div>
+          <span class="goal-display-previous" id="display-prev-bp">前月: 未設定</span>
+        </div>
       </div>
 
       <div class="goal-display-item">
-        <span class="goal-display-label">体重目標</span>
-        <span class="goal-display-value" id="display-goal-weight">65.0 kg</span>
+        <div class="goal-display-content">
+          <div class="goal-display-main">
+            <span class="goal-display-label">体重目標</span>
+            <span class="goal-display-value" id="display-goal-weight">65.0 kg</span>
+          </div>
+          <span class="goal-display-previous" id="display-prev-weight">前月: 未設定</span>
+        </div>
       </div>
 
       <div class="goal-display-item">
-        <span class="goal-display-label">トレーニング日数</span>
-        <span class="goal-display-value" id="display-goal-days">12 日</span>
+        <div class="goal-display-content">
+          <div class="goal-display-main">
+            <span class="goal-display-label">トレーニング日数</span>
+            <span class="goal-display-value" id="display-goal-days">12 日</span>
+          </div>
+          <span class="goal-display-previous" id="display-prev-days">前月: 未設定</span>
+        </div>
       </div>
 
       <div class="goal-display-item">
-        <span class="goal-display-label">総運動時間</span>
-        <span class="goal-display-value" id="display-goal-time">600 分</span>
+        <div class="goal-display-content">
+          <div class="goal-display-main">
+            <span class="goal-display-label">総運動時間</span>
+            <span class="goal-display-value" id="display-goal-time">600 分</span>
+          </div>
+          <span class="goal-display-previous" id="display-prev-time">前月: 未設定</span>
+        </div>
       </div>
 
       <div class="goal-display-item">
-        <span class="goal-display-label">総消費カロリー</span>
-        <span class="goal-display-value" id="display-goal-calories">3,000 kcal</span>
+        <div class="goal-display-content">
+          <div class="goal-display-main">
+            <span class="goal-display-label">総消費カロリー</span>
+            <span class="goal-display-value" id="display-goal-calories">3,000 kcal</span>
+          </div>
+          <span class="goal-display-previous" id="display-prev-calories">前月: 未設定</span>
+        </div>
       </div>
     </div>
 
@@ -1403,22 +1531,26 @@ body {
         </div>
         <div class="goal-input-row">
           <div class="goal-input-group">
-            <label>収縮期血圧（最高）</label>
-            <input type="number" id="goal-systolic" min="100" max="139" placeholder="120">
-            <div class="previous-month-goal" id="prev-systolic" style="display: none;">
-              <span class="label">前月:</span>
-              <span class="value" id="prev-systolic-value">--</span>
+            <div class="goal-input-wrapper">
+              <label>収縮期血圧（最高）</label>
+              <input type="number" id="goal-systolic" min="100" max="139" placeholder="120">
+              <div class="goal-error-message" id="error-systolic"></div>
             </div>
-            <div class="goal-error-message" id="error-systolic"></div>
+            <div class="previous-month-goal" id="prev-systolic">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-systolic-value">読み込み中...</span>
+            </div>
           </div>
           <div class="goal-input-group">
-            <label>拡張期血圧（最低）</label>
-            <input type="number" id="goal-diastolic" min="70" max="89" placeholder="80">
-            <div class="previous-month-goal" id="prev-diastolic" style="display: none;">
-              <span class="label">前月:</span>
-              <span class="value" id="prev-diastolic-value">--</span>
+            <div class="goal-input-wrapper">
+              <label>拡張期血圧（最低）</label>
+              <input type="number" id="goal-diastolic" min="70" max="89" placeholder="80">
+              <div class="goal-error-message" id="error-diastolic"></div>
             </div>
-            <div class="goal-error-message" id="error-diastolic"></div>
+            <div class="previous-month-goal" id="prev-diastolic">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-diastolic-value">読み込み中...</span>
+            </div>
           </div>
         </div>
         <div class="goal-hint">
@@ -1436,13 +1568,15 @@ body {
         </div>
         <div class="goal-input-row">
           <div class="goal-input-group">
-            <label>目標体重（kg）</label>
-            <input type="number" id="goal-weight" step="0.1" placeholder="65.0">
-            <div class="previous-month-goal" id="prev-weight" style="display: none;">
-              <span class="label">前月:</span>
-              <span class="value" id="prev-weight-value">--</span>
+            <div class="goal-input-wrapper">
+              <label>目標体重（kg）</label>
+              <input type="number" id="goal-weight" step="0.1" placeholder="65.0">
+              <div class="goal-error-message" id="error-goal-weight"></div>
             </div>
-            <div class="goal-error-message" id="error-goal-weight"></div>
+            <div class="previous-month-goal" id="prev-weight">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-weight-value">読み込み中...</span>
+            </div>
           </div>
           <div class="goal-input-group">
             <label>目標BMI</label>
@@ -1467,31 +1601,37 @@ body {
         </div>
         <div class="goal-input-row">
           <div class="goal-input-group">
-            <label>トレーニング日数（日）</label>
-            <input type="number" id="goal-days" min="1" max="25" placeholder="12">
-            <div class="previous-month-goal" id="prev-days" style="display: none;">
-              <span class="label">前月:</span>
-              <span class="value" id="prev-days-value">--</span>
+            <div class="goal-input-wrapper">
+              <label>トレーニング日数（日）</label>
+              <input type="number" id="goal-days" min="1" max="25" placeholder="12">
+              <div class="goal-error-message" id="error-days"></div>
             </div>
-            <div class="goal-error-message" id="error-days"></div>
+            <div class="previous-month-goal" id="prev-days">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-days-value">読み込み中...</span>
+            </div>
           </div>
           <div class="goal-input-group">
-            <label>総運動時間（分）</label>
-            <input type="number" id="goal-time" min="30" max="3000" placeholder="600">
-            <div class="previous-month-goal" id="prev-time" style="display: none;">
-              <span class="label">前月:</span>
-              <span class="value" id="prev-time-value">--</span>
+            <div class="goal-input-wrapper">
+              <label>総運動時間（分）</label>
+              <input type="number" id="goal-time" min="30" max="3000" placeholder="600">
+              <div class="goal-error-message" id="error-time"></div>
             </div>
-            <div class="goal-error-message" id="error-time"></div>
+            <div class="previous-month-goal" id="prev-time">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-time-value">読み込み中...</span>
+            </div>
           </div>
           <div class="goal-input-group">
-            <label>総消費カロリー（kcal）</label>
-            <input type="number" id="goal-calories" min="100" max="15000" placeholder="3000">
-            <div class="previous-month-goal" id="prev-calories" style="display: none;">
-              <span class="label">前月:</span>
-              <span class="value" id="prev-calories-value">--</span>
+            <div class="goal-input-wrapper">
+              <label>総消費カロリー（kcal）</label>
+              <input type="number" id="goal-calories" min="100" max="15000" placeholder="3000">
+              <div class="goal-error-message" id="error-calories"></div>
             </div>
-            <div class="goal-error-message" id="error-calories"></div>
+            <div class="previous-month-goal" id="prev-calories">
+              <span class="label">前月:</span>
+              <span class="value" id="prev-calories-value">読み込み中...</span>
+            </div>
           </div>
         </div>
         <div class="goal-hint">
@@ -1534,6 +1674,10 @@ const PROFILE_KEY = 'user_profile';
 // 選択中の年月（目標設定用）
 let selectedGoalYear = new Date().getFullYear();
 let selectedGoalMonth = new Date().getMonth() + 1; // 1-12
+
+// ホーム画面で選択中の年月（表示用）
+let homeDisplayYear = new Date().getFullYear();
+let homeDisplayMonth = new Date().getMonth() + 1; // 1-12
 
 // 月間目標のキー（月別に保存）
 function getGoalsKey(year = null, month = null) {
@@ -1792,14 +1936,75 @@ function saveGoalsData(goals) {
 }
 
 // 目標表示の更新
+// ホーム画面の月選択ドロップダウンを初期化
+function initializeHomeMonthSelector() {
+  const selector = document.getElementById('home-month-select');
+  if (!selector) return;
+  
+  selector.innerHTML = '';
+  
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  
+  // 過去12ヶ月分を生成
+  for (let i = 0; i < 12; i++) {
+    let year = currentYear;
+    let month = currentMonth - i;
+    
+    if (month <= 0) {
+      month += 12;
+      year -= 1;
+    }
+    
+    const option = document.createElement('option');
+    option.value = `${year}-${month}`;
+    option.textContent = `${year}年${month}月`;
+    
+    // 現在選択中の月を選択状態に
+    if (year === homeDisplayYear && month === homeDisplayMonth) {
+      option.selected = true;
+    }
+    
+    selector.appendChild(option);
+  }
+}
+
+// ホーム画面で月変更時
+function onHomeMonthChange() {
+  const selector = document.getElementById('home-month-select');
+  const selected = selector.value.split('-');
+  homeDisplayYear = parseInt(selected[0]);
+  homeDisplayMonth = parseInt(selected[1]);
+  
+  // 表示を更新
+  updateGoalDisplay();
+}
+
 function updateGoalDisplay() {
-  const goals = loadGoals();
+  // 選択中の月の目標を取得
+  const goalsKey = getGoalsKey(homeDisplayYear, homeDisplayMonth);
+  const goalsStr = localStorage.getItem(goalsKey);
+  const goals = goalsStr ? JSON.parse(goalsStr) : null;
+  
+  // 前月のデータを取得
+  let prevYear = homeDisplayYear;
+  let prevMonth = homeDisplayMonth - 1;
+  if (prevMonth === 0) {
+    prevMonth = 12;
+    prevYear = prevYear - 1;
+  }
+  const prevGoalsKey = getGoalsKey(prevYear, prevMonth);
+  const prevGoalsStr = localStorage.getItem(prevGoalsKey);
+  const prevGoals = prevGoalsStr ? JSON.parse(prevGoalsStr) : null;
+  
+  // 今月の目標を表示
   if (goals) {
     if (goals.bloodPressure) {
       document.getElementById('display-goal-bp').textContent = 
         `${goals.bloodPressure.systolic}/${goals.bloodPressure.diastolic} mmHg`;
     } else {
-      document.getElementById('display-goal-bp').textContent = '120/80 mmHg';
+      document.getElementById('display-goal-bp').textContent = '未設定';
     }
     if (goals.weight) {
       document.getElementById('display-goal-weight').textContent = `${goals.weight} kg`;
@@ -1823,19 +2028,59 @@ function updateGoalDisplay() {
       document.getElementById('display-goal-calories').textContent = '未設定';
     }
   } else {
-    document.getElementById('display-goal-bp').textContent = '120/80 mmHg';
-    const profile = loadProfile();
-    if (profile && profile.height) {
-      const targetBMI = 22;
-      const heightM = profile.height / 100;
-      const targetWeight = (targetBMI * heightM * heightM).toFixed(1);
-      document.getElementById('display-goal-weight').textContent = `${targetWeight} kg`;
+    // 目標が未設定の月の場合、すべて「未設定」と表示
+    document.getElementById('display-goal-bp').textContent = '未設定';
+    document.getElementById('display-goal-weight').textContent = '未設定';
+    document.getElementById('display-goal-days').textContent = '未設定';
+    document.getElementById('display-goal-time').textContent = '未設定';
+    document.getElementById('display-goal-calories').textContent = '未設定';
+  }
+  
+  // 前月の目標を表示
+  if (prevGoals) {
+    // 血圧
+    if (prevGoals.bloodPressure) {
+      document.getElementById('display-prev-bp').textContent = 
+        `前月: ${prevGoals.bloodPressure.systolic}/${prevGoals.bloodPressure.diastolic} mmHg`;
     } else {
-      document.getElementById('display-goal-weight').textContent = '65.0 kg';
+      document.getElementById('display-prev-bp').textContent = '前月: 未設定';
     }
-    document.getElementById('display-goal-days').textContent = '12 日';
-    document.getElementById('display-goal-time').textContent = '600 分';
-    document.getElementById('display-goal-calories').textContent = '3,000 kcal';
+    
+    // 体重
+    if (prevGoals.weight) {
+      document.getElementById('display-prev-weight').textContent = `前月: ${prevGoals.weight} kg`;
+    } else {
+      document.getElementById('display-prev-weight').textContent = '前月: 未設定';
+    }
+    
+    // トレーニング日数
+    if (prevGoals.trainingDays) {
+      document.getElementById('display-prev-days').textContent = `前月: ${prevGoals.trainingDays} 日`;
+    } else {
+      document.getElementById('display-prev-days').textContent = '前月: 未設定';
+    }
+    
+    // 総運動時間
+    if (prevGoals.totalTime) {
+      document.getElementById('display-prev-time').textContent = `前月: ${prevGoals.totalTime} 分`;
+    } else {
+      document.getElementById('display-prev-time').textContent = '前月: 未設定';
+    }
+    
+    // 総消費カロリー
+    if (prevGoals.totalCalories) {
+      document.getElementById('display-prev-calories').textContent = 
+        `前月: ${prevGoals.totalCalories.toLocaleString()} kcal`;
+    } else {
+      document.getElementById('display-prev-calories').textContent = '前月: 未設定';
+    }
+  } else {
+    // 前月のデータがない場合
+    document.getElementById('display-prev-bp').textContent = '前月: 未設定';
+    document.getElementById('display-prev-weight').textContent = '前月: 未設定';
+    document.getElementById('display-prev-days').textContent = '前月: 未設定';
+    document.getElementById('display-prev-time').textContent = '前月: 未設定';
+    document.getElementById('display-prev-calories').textContent = '前月: 未設定';
   }
 }
 
@@ -2244,7 +2489,7 @@ function loadPreviousMonthGoals() {
   const prevGoalsStr = localStorage.getItem(prevGoalsKey);
   const prevGoals = prevGoalsStr ? JSON.parse(prevGoalsStr) : null;
   
-  // 前月データの表示エリアを更新（データがない場合は「未設定」と表示）
+  // 前月データの表示を更新（データがない場合は「未設定」と表示）
   
   // 血圧 - 収縮期
   if (prevGoals?.bloodPressure?.systolic) {
@@ -2253,7 +2498,6 @@ function loadPreviousMonthGoals() {
   } else {
     document.getElementById('prev-systolic-value').textContent = '未設定';
   }
-  document.getElementById('prev-systolic').style.display = 'flex';
   
   // 血圧 - 拡張期
   if (prevGoals?.bloodPressure?.diastolic) {
@@ -2262,7 +2506,6 @@ function loadPreviousMonthGoals() {
   } else {
     document.getElementById('prev-diastolic-value').textContent = '未設定';
   }
-  document.getElementById('prev-diastolic').style.display = 'flex';
   
   // 体重
   if (prevGoals?.weight) {
@@ -2270,7 +2513,6 @@ function loadPreviousMonthGoals() {
   } else {
     document.getElementById('prev-weight-value').textContent = '未設定';
   }
-  document.getElementById('prev-weight').style.display = 'flex';
   
   // トレーニング日数
   if (prevGoals?.trainingDays) {
@@ -2278,7 +2520,6 @@ function loadPreviousMonthGoals() {
   } else {
     document.getElementById('prev-days-value').textContent = '未設定';
   }
-  document.getElementById('prev-days').style.display = 'flex';
   
   // 総運動時間
   if (prevGoals?.totalTime) {
@@ -2286,7 +2527,6 @@ function loadPreviousMonthGoals() {
   } else {
     document.getElementById('prev-time-value').textContent = '未設定';
   }
-  document.getElementById('prev-time').style.display = 'flex';
   
   // 総消費カロリー
   if (prevGoals?.totalCalories) {
@@ -2295,7 +2535,6 @@ function loadPreviousMonthGoals() {
   } else {
     document.getElementById('prev-calories-value').textContent = '未設定';
   }
-  document.getElementById('prev-calories').style.display = 'flex';
 }
 
 
@@ -2383,6 +2622,10 @@ window.addEventListener('DOMContentLoaded', function() {
     document.getElementById('goal-display').classList.remove('hidden');
     document.getElementById('main-navigation').classList.remove('hidden');
     updateProfileDisplay(profile);
+    
+    // ホーム画面の月選択を初期化
+    initializeHomeMonthSelector();
+    
     updateGoalDisplay();
     
     // URLパラメータで目標設定モーダルを開く
