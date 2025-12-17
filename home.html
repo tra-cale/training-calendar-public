@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>トレーニング管理カレンダー 2025</title>
+<title>トレーニング管理カレンダー</title>
 <style>
 * { 
   margin: 0; 
@@ -1947,12 +1947,17 @@ function initializeHomeMonthSelector() {
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   
-  // 過去12ヶ月分を生成
-  for (let i = 0; i < 12; i++) {
+  // 未来2ヶ月 + 現在月 + 過去12ヶ月 = 合計15ヶ月分
+  for (let i = 2; i >= -12; i--) {
     let year = currentYear;
-    let month = currentMonth - i;
+    let month = currentMonth + i;
     
-    if (month <= 0) {
+    // 月の正規化
+    while (month > 12) {
+      month -= 12;
+      year += 1;
+    }
+    while (month < 1) {
       month += 12;
       year -= 1;
     }
@@ -2098,7 +2103,7 @@ function openGoalModal() {
   loadGoalsToModal();
 }
 
-// 月選択ドロップダウンを初期化（今月・前月のみ）
+// 月選択ドロップダウンを初期化（過去12ヶ月+未来2ヶ月）
 function initializeGoalMonthSelector() {
   const selector = document.getElementById('goal-month-select');
   selector.innerHTML = '';
@@ -2107,25 +2112,40 @@ function initializeGoalMonthSelector() {
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1; // 1-12
   
-  // 今月
-  const currentOption = document.createElement('option');
-  currentOption.value = `${currentYear}-${currentMonth}`;
-  currentOption.textContent = `${currentYear}年${currentMonth}月（今月）`;
-  currentOption.selected = true;
-  selector.appendChild(currentOption);
-  
-  // 前月
-  let prevYear = currentYear;
-  let prevMonth = currentMonth - 1;
-  if (prevMonth === 0) {
-    prevMonth = 12;
-    prevYear = currentYear - 1;
+  // 未来2ヶ月 + 現在月 + 過去12ヶ月 = 合計15ヶ月分
+  for (let i = 2; i >= -12; i--) {
+    let year = currentYear;
+    let month = currentMonth + i;
+    
+    // 月の正規化
+    while (month > 12) {
+      month -= 12;
+      year += 1;
+    }
+    while (month < 1) {
+      month += 12;
+      year -= 1;
+    }
+    
+    const option = document.createElement('option');
+    option.value = `${year}-${month}`;
+    
+    // ラベルを付ける
+    if (i === 2) {
+      option.textContent = `${year}年${month}月（再来月）`;
+    } else if (i === 1) {
+      option.textContent = `${year}年${month}月（来月）`;
+    } else if (i === 0) {
+      option.textContent = `${year}年${month}月（今月）`;
+      option.selected = true;
+    } else if (i === -1) {
+      option.textContent = `${year}年${month}月（先月）`;
+    } else {
+      option.textContent = `${year}年${month}月`;
+    }
+    
+    selector.appendChild(option);
   }
-  
-  const prevOption = document.createElement('option');
-  prevOption.value = `${prevYear}-${prevMonth}`;
-  prevOption.textContent = `${prevYear}年${prevMonth}月（前月）`;
-  selector.appendChild(prevOption);
 }
 
 // 月変更時のイベントハンドラ
@@ -2135,16 +2155,19 @@ function onGoalMonthChange() {
   const newYear = parseInt(selected[0]);
   const newMonth = parseInt(selected[1]);
   
-  // 前月を選択した場合は確認モーダルを表示
+  // 過去月を選択した場合は確認モーダルを表示
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   
-  if (newYear !== currentYear || newMonth !== currentMonth) {
-    // 前月を選択
+  // 選択した年月が過去かどうか判定
+  const isPastMonth = (newYear < currentYear) || (newYear === currentYear && newMonth < currentMonth);
+  
+  if (isPastMonth) {
+    // 過去月を選択
     showConfirmEditPreviousMonth(newYear, newMonth);
   } else {
-    // 今月を選択（通常フロー）
+    // 今月または未来月を選択（通常フロー）
     selectedGoalYear = newYear;
     selectedGoalMonth = newMonth;
     loadGoalsToModal();

@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>年間サマリー - トレーニング管理カレンダー 2025</title>
+<title>年間サマリー - トレーニング管理カレンダー</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <style>
 * { 
@@ -54,6 +55,56 @@ body {
   color: #616161;
   font-size: 1.1em;
   margin-top: 10px;
+}
+
+/* 年選択 */
+.year-selector {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.year-dropdown {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 2px solid #FFD54F;
+  font-size: 1.1em;
+  cursor: pointer;
+  background: white;
+  font-weight: 600;
+  color: #F57C00;
+}
+
+.year-btn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+}
+
+.year-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
+  background: linear-gradient(135deg, #FF8F00, #FFC107);
+}
+
+.year-btn:disabled {
+  background: #BDBDBD;
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.year-btn:disabled:hover {
+  transform: none;
 }
 
 /* ナビゲーションボタン */
@@ -248,8 +299,19 @@ body {
 <div class="container">
   <!-- ヘッダー -->
   <div class="header">
-    <h1>📊 <span class="title-text">2025年 年間サマリー</span></h1>
+    <h1>📊 <span class="title-text"><span id="display-year">2025</span>年 年間サマリー</span></h1>
     <p class="subtitle">あなたのトレーニング実績を振り返りましょう</p>
+    
+    <!-- 年選択 -->
+    <div class="year-selector">
+      <button id="prev-year" class="year-btn" onclick="changeYear(-1)">‹ 前年</button>
+      <select id="year-select" class="year-dropdown" onchange="onYearChange()">
+        <option value="2024">2024年</option>
+        <option value="2025" selected>2025年</option>
+        <option value="2026">2026年</option>
+      </select>
+      <button id="next-year" class="year-btn" onclick="changeYear(1)">次年 ›</button>
+    </div>
   </div>
 
   <!-- ナビゲーションボタン -->
@@ -334,12 +396,49 @@ body {
 </div>
 
 <script>
-// 現在の年
-const currentYear = new Date().getFullYear();
+// 選択中の年（初期値は現在の年）
+let selectedYear = new Date().getFullYear();
 
 // 月名の配列
 const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
                    'july', 'august', 'september', 'october', 'november', 'december'];
+
+// 年選択を初期化
+function initializeYearSelector() {
+  document.getElementById('year-select').value = selectedYear;
+  document.getElementById('display-year').textContent = selectedYear;
+  updateYearButtons();
+}
+
+// 年選択変更時
+function onYearChange() {
+  const yearSelect = document.getElementById('year-select');
+  selectedYear = parseInt(yearSelect.value);
+  document.getElementById('display-year').textContent = selectedYear;
+  updateYearButtons();
+  loadYearlyData();
+}
+
+// 年変更ボタン
+function changeYear(delta) {
+  const newYear = selectedYear + delta;
+  if (newYear >= 2024 && newYear <= 2026) {
+    selectedYear = newYear;
+    document.getElementById('year-select').value = selectedYear;
+    document.getElementById('display-year').textContent = selectedYear;
+    updateYearButtons();
+    loadYearlyData();
+  }
+}
+
+// 年ボタンの有効/無効を更新
+function updateYearButtons() {
+  const prevBtn = document.getElementById('prev-year');
+  const nextBtn = document.getElementById('next-year');
+  
+  prevBtn.disabled = (selectedYear <= 2024);
+  nextBtn.disabled = (selectedYear >= 2026);
+}
 
 // 全月のデータを取得
 function getAllMonthsData() {
@@ -349,7 +448,7 @@ function getAllMonthsData() {
     const monthData = {};
     
     // 方法1: 月別データキー（november2025_data形式）を確認
-    const monthKey = `${monthNames[month]}${currentYear}_data`;
+    const monthKey = `${monthNames[month]}${selectedYear}_data`;
     const monthDataStr = localStorage.getItem(monthKey);
     
     if (monthDataStr) {
@@ -365,9 +464,9 @@ function getAllMonthsData() {
     }
     
     // 方法2: 日別データキー（training_2025_10_4形式）を確認
-    const daysInMonth = new Date(currentYear, month + 1, 0).getDate();
+    const daysInMonth = new Date(selectedYear, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
-      const dayKey = `training_${currentYear}_${month}_${day}`;
+      const dayKey = `training_${selectedYear}_${month}_${day}`;
       const dayDataStr = localStorage.getItem(dayKey);
       
       if (dayDataStr) {
@@ -817,29 +916,29 @@ function displayMonthlyDetails(allData) {
   }
 }
 
-// 初期化
-window.addEventListener('DOMContentLoaded', function() {
+// データ読み込みと表示を更新する関数
+function loadYearlyData() {
   const allData = getAllMonthsData();
   const yearlyStats = calculateYearlyStats(allData);
   
   // データが存在するかチェック
   if (Object.keys(allData).length === 0) {
-    document.querySelector('.container').innerHTML = `
-      <div class="header">
-        <h1>📊 <span class="title-text">2025年 年間サマリー</span></h1>
-      </div>
-      <div class="no-data-message">
-        <div class="no-data-icon">📭</div>
-        <p>まだトレーニングデータがありません。</p>
-        <p>カレンダーからデータを入力してください。</p>
-        <div style="margin-top: 30px;">
-          <a href="calendar.html" class="nav-btn">
-            <span>📅</span>
-            <span>カレンダーへ移動</span>
-          </a>
-        </div>
-      </div>
-    `;
+    document.getElementById('yearly-avg-bp').textContent = '--/--';
+    document.getElementById('yearly-avg-weight').textContent = '-- kg';
+    document.getElementById('yearly-total-days').textContent = '0 日';
+    document.getElementById('yearly-total-calories').textContent = '0 kcal';
+    document.getElementById('yearly-total-time').textContent = '0 分';
+    
+    // グラフをクリア
+    if (window.bpChart) window.bpChart.destroy();
+    if (window.weightChart) window.weightChart.destroy();
+    if (window.daysChart) window.daysChart.destroy();
+    if (window.caloriesChart) window.caloriesChart.destroy();
+    
+    // 月別詳細をクリア
+    const container = document.getElementById('monthly-details');
+    container.innerHTML = '<div style="text-align: center; color: #9E9E9E; padding: 40px;">この年のデータはまだありません</div>';
+    
     return;
   }
   
@@ -851,6 +950,12 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // 月別詳細の表示
   displayMonthlyDetails(allData);
+}
+
+// 初期化
+window.addEventListener('DOMContentLoaded', function() {
+  initializeYearSelector();
+  loadYearlyData();
 });
 </script>
 

@@ -50,13 +50,50 @@ h1 {
   font-size: 0.9em;
 }
 
-.month-selector {
-  margin: 10px 0;
+.year-selector {
+  margin: 15px 0 5px 0;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
+}
+
+.month-selector {
+  margin: 5px 0 10px 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.current-month-container {
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.current-nav-button {
+  background: linear-gradient(135deg, #43A047, #66BB6A);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
+  font-weight: 600;
+}
+
+.current-nav-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 160, 71, 0.4);
+  background: linear-gradient(135deg, #388E3C, #43A047);
+}
+
+.current-nav-button:active {
+  transform: translateY(0);
 }
 
 .month-nav-button {
@@ -1103,6 +1140,36 @@ h1 {
   .subtitle {
     font-size: 0.8em;
   }
+  
+  .year-selector,
+  .month-selector {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .month-nav-button {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1em;
+  }
+  
+  .month-select-wrapper {
+    gap: 6px;
+  }
+  
+  .month-select-wrapper label {
+    font-size: 0.85em;
+  }
+  
+  .month-select-dropdown {
+    padding: 6px 10px;
+    font-size: 0.9em;
+  }
+  
+  .current-nav-button {
+    padding: 6px 12px;
+    font-size: 0.85em;
+  }
 }
 
 .yearly-summary-button {
@@ -1157,10 +1224,25 @@ h1 {
   </a>
   
   <div class="header">
-    <h1><span id="title-icon">🍂</span> <span class="title-text">2025年 トレーニング記録</span></h1>
+    <h1><span id="title-icon">🍂</span> <span class="title-text"><span id="year-title">2025</span>年 トレーニング記録</span></h1>
     <p class="subtitle">血圧・体重・トレーニング実績管理カレンダー</p>
   </div>
 
+  <!-- 年選択 -->
+  <div class="year-selector">
+    <button id="prev-year-btn" class="month-nav-button" title="前の年">‹</button>
+    <div class="month-select-wrapper">
+      <label for="year-select">表示年:</label>
+      <select id="year-select" class="month-select-dropdown">
+        <option value="2024">2024年</option>
+        <option value="2025">2025年</option>
+        <option value="2026">2026年</option>
+      </select>
+    </div>
+    <button id="next-year-btn" class="month-nav-button" title="次の年">›</button>
+  </div>
+
+  <!-- 月選択 -->
   <div class="month-selector">
     <button id="prev-month-btn" class="month-nav-button" title="前の月">‹</button>
     <div class="month-select-wrapper">
@@ -1181,6 +1263,11 @@ h1 {
       </select>
     </div>
     <button id="next-month-btn" class="month-nav-button" title="次の月">›</button>
+  </div>
+
+  <!-- 今月ボタン -->
+  <div class="current-month-container">
+    <button id="current-month-btn" class="current-nav-button" title="今月に戻る">今月</button>
   </div>
 
   <div class="monthly-view active">
@@ -1700,6 +1787,57 @@ const holidays2025 = {
   11: []
 };
 
+// 2026年の日本の祝日
+const holidays2026 = {
+  0: [
+    {day: 1, name: '元日'},
+    {day: 12, name: '成人の日'}
+  ],
+  1: [
+    {day: 11, name: '建国記念の日'},
+    {day: 23, name: '天皇誕生日'}
+  ],
+  2: [
+    {day: 20, name: '春分の日'}
+  ],
+  3: [
+    {day: 29, name: '昭和の日'}
+  ],
+  4: [
+    {day: 3, name: '憲法記念日'},
+    {day: 4, name: 'みどりの日'},
+    {day: 5, name: 'こどもの日'},
+    {day: 6, name: '振替休日'}
+  ],
+  5: [],
+  6: [
+    {day: 20, name: '海の日'}
+  ],
+  7: [
+    {day: 11, name: '山の日'}
+  ],
+  8: [
+    {day: 21, name: '敬老の日'},
+    {day: 22, name: '国民の休日'},
+    {day: 23, name: '秋分の日'}
+  ],
+  9: [
+    {day: 12, name: 'スポーツの日'}
+  ],
+  10: [
+    {day: 3, name: '文化の日'},
+    {day: 23, name: '勤労感謝の日'}
+  ],
+  11: []
+};
+
+// 年に応じた祝日データを取得
+function getHolidaysForYear(year) {
+  if (year === 2026) return holidays2026;
+  if (year === 2025) return holidays2025;
+  return {}; // 2024年やその他の年はデータなし
+}
+
 const monthColors = {
   0: { bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #BBDEFB 100%)', header: 'linear-gradient(135deg, #BBDEFB, #E3F2FD)', border: '#64B5F6', title: 'linear-gradient(135deg, #1976D2 0%, #42A5F5 100%)', icon: '❄️' },
   1: { bg: 'linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 50%, #F8BBD0 100%)', header: 'linear-gradient(135deg, #F8BBD0, #FCE4EC)', border: '#EC407A', title: 'linear-gradient(135deg, #C2185B 0%, #EC407A 100%)', icon: '💗' },
@@ -1999,8 +2137,9 @@ function generateCalendar() {
     const dayCell = document.createElement('div');
     const dayOfWeek = (firstDay + day - 1) % 7;
     
-    const holidayInfo = holidays2025[currentMonth] && holidays2025[currentMonth].length > 0 ? 
-      holidays2025[currentMonth].find(h => h.day === day) : null;
+    const currentYearHolidays = getHolidaysForYear(currentYear);
+    const holidayInfo = currentYearHolidays[currentMonth] && currentYearHolidays[currentMonth].length > 0 ? 
+      currentYearHolidays[currentMonth].find(h => h.day === day) : null;
     const isHoliday = holidayInfo !== null && holidayInfo !== undefined;
     
     let classes = ['day-cell'];
@@ -2078,7 +2217,7 @@ function selectStatus(status) {
 function openModal(day) {
   selectedDate = day;
   document.getElementById('inputModal').classList.add('active');
-  document.getElementById('modal-title').textContent = `📅 ${currentMonth + 1}月${day}日のデータ入力`;
+  document.getElementById('modal-title').textContent = `📅 ${currentYear}年${currentMonth + 1}月${day}日のデータ入力`;
   loadModalData(day);
 }
 
@@ -2460,6 +2599,56 @@ function updateNextMonthGoals() {
   localStorage.setItem(nextStorageKey, JSON.stringify(nextData));
 }
 
+// 年選択の変更イベント
+document.getElementById('year-select').addEventListener('change', function() {
+  currentYear = parseInt(this.value);
+  updateYearTitle();
+  generateCalendar();
+  updateMonthNavButtons();
+  updateYearNavButtons();
+});
+
+// 前の年ボタン
+document.getElementById('prev-year-btn').addEventListener('click', function() {
+  const yearSelect = document.getElementById('year-select');
+  const currentValue = parseInt(yearSelect.value);
+  if (currentValue > 2024) {
+    currentYear = currentValue - 1;
+    yearSelect.value = currentYear;
+    updateYearTitle();
+    generateCalendar();
+    updateMonthNavButtons();
+    updateYearNavButtons();
+  }
+});
+
+// 次の年ボタン
+document.getElementById('next-year-btn').addEventListener('click', function() {
+  const yearSelect = document.getElementById('year-select');
+  const currentValue = parseInt(yearSelect.value);
+  if (currentValue < 2026) {
+    currentYear = currentValue + 1;
+    yearSelect.value = currentYear;
+    updateYearTitle();
+    generateCalendar();
+    updateMonthNavButtons();
+    updateYearNavButtons();
+  }
+});
+
+// 今月ボタン（年と月の両方を今日の日付に移動）
+document.getElementById('current-month-btn').addEventListener('click', function() {
+  const today = new Date();
+  currentYear = today.getFullYear();
+  currentMonth = today.getMonth();
+  document.getElementById('year-select').value = currentYear;
+  document.getElementById('month-select').value = currentMonth;
+  updateYearTitle();
+  generateCalendar();
+  updateMonthNavButtons();
+  updateYearNavButtons();
+});
+
 // 月選択の変更イベント
 document.getElementById('month-select').addEventListener('change', function() {
   currentMonth = parseInt(this.value);
@@ -2469,22 +2658,32 @@ document.getElementById('month-select').addEventListener('change', function() {
 
 // 前の月ボタン
 document.getElementById('prev-month-btn').addEventListener('click', function() {
-  if (currentMonth > 0) {
-    currentMonth--;
-    document.getElementById('month-select').value = currentMonth;
-    generateCalendar();
-    updateMonthNavButtons();
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+    document.getElementById('year-select').value = currentYear;
+    updateYearTitle();
+    updateYearNavButtons();
   }
+  document.getElementById('month-select').value = currentMonth;
+  generateCalendar();
+  updateMonthNavButtons();
 });
 
 // 次の月ボタン
 document.getElementById('next-month-btn').addEventListener('click', function() {
-  if (currentMonth < 11) {
-    currentMonth++;
-    document.getElementById('month-select').value = currentMonth;
-    generateCalendar();
-    updateMonthNavButtons();
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+    document.getElementById('year-select').value = currentYear;
+    updateYearTitle();
+    updateYearNavButtons();
   }
+  document.getElementById('month-select').value = currentMonth;
+  generateCalendar();
+  updateMonthNavButtons();
 });
 
 // 矢印ボタンの有効/無効状態を更新
@@ -2492,13 +2691,29 @@ function updateMonthNavButtons() {
   const prevBtn = document.getElementById('prev-month-btn');
   const nextBtn = document.getElementById('next-month-btn');
   
-  // 1月の場合は前月ボタンを無効化
-  prevBtn.disabled = (currentMonth === 0);
-  
-  // 12月の場合は次月ボタンを無効化
-  nextBtn.disabled = (currentMonth === 11);
+  // 年をまたぐ移動が可能なので、常に有効
+  prevBtn.disabled = false;
+  nextBtn.disabled = false;
 }
 
+// 年選択ボタンの有効/無効状態を更新
+function updateYearNavButtons() {
+  const prevBtn = document.getElementById('prev-year-btn');
+  const nextBtn = document.getElementById('next-year-btn');
+  
+  // 2024年の場合は前年ボタンを無効化
+  prevBtn.disabled = (currentYear === 2024);
+  
+  // 2026年の場合は次年ボタンを無効化
+  nextBtn.disabled = (currentYear === 2026);
+}
+
+// 年タイトルを更新
+function updateYearTitle() {
+  document.getElementById('year-title').textContent = currentYear;
+}
+
+document.getElementById('year-select').value = currentYear;
 document.getElementById('month-select').value = currentMonth;
 
 // 初期化
@@ -2506,6 +2721,7 @@ updateAddedExercisesList();
 updateExerciseSummary();
 generateCalendar();
 updateMonthNavButtons(); // 初期状態でボタンの有効/無効を設定
+updateYearNavButtons(); // 初期状態で年ボタンの有効/無効を設定
 </script>
 
 </body>
