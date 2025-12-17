@@ -191,10 +191,9 @@ h1 {
 
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(7, 1fr);
   gap: 6px;
   margin-bottom: 25px;
-  width: 100%;
 }
 
 .day-header {
@@ -265,11 +264,9 @@ h1 {
   color: #212121;
   margin-bottom: 4px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 4px;
   flex-wrap: wrap;
-  width: 100%;
-  overflow: hidden;
 }
 
 .holiday-name {
@@ -279,10 +276,7 @@ h1 {
   background: #FFEBEE;
   padding: 2px 6px;
   border-radius: 4px;
-  white-space: normal;
-  word-break: break-all;
-  line-height: 1.2;
-  max-width: 100%;
+  white-space: nowrap;
 }
 
 .day-cell.today .day-number::after {
@@ -627,6 +621,60 @@ h1 {
 
 .exercise-item.expanded .exercise-input {
   display: block;
+}
+
+/* 入力モード切り替えボタン */
+.input-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: #FFFFFF;
+  padding: 4px;
+  border-radius: 8px;
+  border: 2px solid #E0E0E0;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #757575;
+  transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+  background: #F5F5F5;
+  color: #424242;
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+}
+
+/* 計算された時間表示 */
+.calculated-time {
+  margin-top: 8px;
+  padding: 8px;
+  background: #E8F5E9;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.calculated-time small {
+  color: #2E7D32;
+  font-weight: 600;
+}
+
+.calc-time-value {
+  font-weight: bold;
+  color: #1B5E20;
 }
 
 .exercise-select,
@@ -1220,30 +1268,6 @@ h1 {
     padding: 6px 12px;
     font-size: 0.85em;
   }
-  
-  /* カレンダーセルのモバイル対応 */
-  .calendar {
-    gap: 4px;
-  }
-  
-  .day-cell {
-    min-height: 80px;
-    padding: 6px;
-  }
-  
-  .day-number {
-    font-size: 0.95em;
-    margin-bottom: 3px;
-  }
-  
-  .holiday-name {
-    font-size: 0.5em;
-    padding: 1px 4px;
-  }
-  
-  .day-summary {
-    font-size: 0.6em;
-  }
 }
 
 .yearly-summary-button {
@@ -1518,6 +1542,10 @@ h1 {
               <button type="button" class="exercise-toggle">+</button>
             </div>
             <div class="exercise-input">
+              <div class="input-mode-toggle">
+                <button type="button" class="mode-btn active" data-mode="time" data-exercise-type="walking">⏱️ 時間</button>
+                <button type="button" class="mode-btn" data-mode="distance" data-exercise-type="walking">📏 距離</button>
+              </div>
               <div class="input-group">
                 <label>速さ</label>
                 <select class="exercise-select" data-field="speed">
@@ -1526,9 +1554,16 @@ h1 {
                   <option value="fast">速歩 (5-6km/h)</option>
                 </select>
               </div>
-              <div class="input-group">
+              <div class="input-group time-input">
                 <label>時間（分）</label>
                 <input type="number" class="exercise-number" data-field="duration" min="1" max="300" placeholder="30">
+              </div>
+              <div class="input-group distance-input" style="display: none;">
+                <label>距離（km）</label>
+                <input type="number" class="exercise-number" data-field="distance" min="0.1" max="50" step="0.1" placeholder="3.0">
+              </div>
+              <div class="calculated-time" style="display: none;">
+                <small>推定時間: <span class="calc-time-value">0</span>分</small>
               </div>
               <button type="button" class="btn-add-exercise" data-exercise="walking">追加</button>
             </div>
@@ -1541,19 +1576,34 @@ h1 {
               <button type="button" class="exercise-toggle">+</button>
             </div>
             <div class="exercise-input">
+              <div class="input-mode-toggle">
+                <button type="button" class="mode-btn active" data-mode="time" data-exercise-type="running">⏱️ 時間</button>
+                <button type="button" class="mode-btn" data-mode="distance" data-exercise-type="running">📏 距離</button>
+              </div>
               <div class="input-group">
                 <label>速度 (km/h)</label>
                 <select class="exercise-select" data-field="speed">
                   <option value="4">4 km/h (軽いジョギング)</option>
+                  <option value="5">5 km/h</option>
                   <option value="6">6 km/h (ジョギング)</option>
+                  <option value="7">7 km/h</option>
                   <option value="8" selected>8 km/h (ランニング)</option>
+                  <option value="9">9 km/h</option>
                   <option value="10">10 km/h (速いランニング)</option>
+                  <option value="11">11 km/h</option>
                   <option value="12">12 km/h (とても速い)</option>
                 </select>
               </div>
-              <div class="input-group">
+              <div class="input-group time-input">
                 <label>時間（分）</label>
                 <input type="number" class="exercise-number" data-field="duration" min="1" max="180" placeholder="30">
+              </div>
+              <div class="input-group distance-input" style="display: none;">
+                <label>距離（km）</label>
+                <input type="number" class="exercise-number" data-field="distance" min="0.1" max="50" step="0.1" placeholder="5.0">
+              </div>
+              <div class="calculated-time" style="display: none;">
+                <small>推定時間: <span class="calc-time-value">0</span>分</small>
               </div>
               <button type="button" class="btn-add-exercise" data-exercise="running">追加</button>
             </div>
@@ -1566,17 +1616,41 @@ h1 {
               <button type="button" class="exercise-toggle">+</button>
             </div>
             <div class="exercise-input">
-              <div class="input-group">
-                <label>強度</label>
-                <select class="exercise-select" data-field="intensity">
-                  <option value="light">軽い（ゆっくり）</option>
-                  <option value="moderate" selected>普通</option>
-                  <option value="vigorous">激しい（速い）</option>
-                </select>
+              <div class="input-mode-toggle">
+                <button type="button" class="mode-btn active" data-mode="time" data-exercise-type="cycling">⏱️ 時間</button>
+                <button type="button" class="mode-btn" data-mode="distance" data-exercise-type="cycling">📏 距離</button>
               </div>
               <div class="input-group">
+                <label>速度 (km/h)</label>
+                <select class="exercise-select" data-field="speed">
+                  <option value="5">5 km/h (とてもゆっくり)</option>
+                  <option value="6">6 km/h</option>
+                  <option value="7">7 km/h</option>
+                  <option value="8">8 km/h</option>
+                  <option value="9">9 km/h</option>
+                  <option value="10">10 km/h (軽い)</option>
+                  <option value="11">11 km/h</option>
+                  <option value="12">12 km/h</option>
+                  <option value="13">13 km/h</option>
+                  <option value="14">14 km/h</option>
+                  <option value="15" selected>15 km/h (普通)</option>
+                  <option value="16">16 km/h</option>
+                  <option value="17">17 km/h</option>
+                  <option value="18">18 km/h</option>
+                  <option value="19">19 km/h</option>
+                  <option value="20">20 km/h (速い)</option>
+                </select>
+              </div>
+              <div class="input-group time-input">
                 <label>時間（分）</label>
                 <input type="number" class="exercise-number" data-field="duration" min="1" max="180" placeholder="30">
+              </div>
+              <div class="input-group distance-input" style="display: none;">
+                <label>距離（km）</label>
+                <input type="number" class="exercise-number" data-field="distance" min="0.1" max="100" step="0.1" placeholder="10.0">
+              </div>
+              <div class="calculated-time" style="display: none;">
+                <small>推定時間: <span class="calc-time-value">0</span>分</small>
               </div>
               <button type="button" class="btn-add-exercise" data-exercise="cycling">追加</button>
             </div>
@@ -1607,9 +1681,20 @@ h1 {
               <button type="button" class="exercise-toggle">+</button>
             </div>
             <div class="exercise-input">
-              <div class="input-group">
+              <div class="input-mode-toggle">
+                <button type="button" class="mode-btn" data-mode="time" data-exercise-type="swimming">⏱️ 時間</button>
+                <button type="button" class="mode-btn active" data-mode="distance" data-exercise-type="swimming">📏 距離</button>
+              </div>
+              <div class="input-group time-input" style="display: none;">
+                <label>時間（分）</label>
+                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
+              </div>
+              <div class="input-group distance-input">
                 <label>距離（m）</label>
                 <input type="number" class="exercise-number" data-field="distance" min="25" max="10000" step="25" placeholder="500">
+              </div>
+              <div class="calculated-time" style="display: block;">
+                <small>推定時間: <span class="calc-time-value">0</span>分（50m/分で計算）</small>
               </div>
               <button type="button" class="btn-add-exercise" data-exercise="swimming">追加</button>
             </div>
@@ -1951,9 +2036,13 @@ const exerciseDatabase = {
     icon: '🏃',
     mets: {
       4: 6.0,
+      5: 7.0,
       6: 8.3,
+      7: 9.0,
       8: 9.8,
+      9: 10.5,
       10: 11.0,
+      11: 11.5,
       12: 12.3
     }
   },
@@ -1961,14 +2050,22 @@ const exerciseDatabase = {
     name: 'サイクリング',
     icon: '🚴',
     mets: {
-      light: 4.0,
-      moderate: 8.0,
-      vigorous: 10.0
-    },
-    intensityLabels: {
-      light: '軽い（ゆっくり）',
-      moderate: '普通',
-      vigorous: '激しい（速い）'
+      5: 3.0,
+      6: 3.5,
+      7: 4.0,
+      8: 4.5,
+      9: 5.0,
+      10: 5.5,
+      11: 6.0,
+      12: 6.5,
+      13: 7.0,
+      14: 7.5,
+      15: 8.0,
+      16: 8.5,
+      17: 9.0,
+      18: 9.5,
+      19: 10.0,
+      20: 10.5
     }
   },
   
@@ -2028,6 +2125,93 @@ document.querySelectorAll('.exercise-header').forEach(header => {
   });
 });
 
+// ===== 入力モード切り替え（時間/距離） =====
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const exerciseType = this.dataset.exerciseType;
+    const mode = this.dataset.mode;
+    const exerciseItem = this.closest('.exercise-item');
+    
+    // ボタンのアクティブ状態を切り替え
+    exerciseItem.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    // 入力フィールドの表示/非表示を切り替え
+    const timeInput = exerciseItem.querySelector('.time-input');
+    const distanceInput = exerciseItem.querySelector('.distance-input');
+    const calculatedTime = exerciseItem.querySelector('.calculated-time');
+    
+    if (mode === 'time') {
+      timeInput.style.display = 'block';
+      distanceInput.style.display = 'none';
+      if (calculatedTime) calculatedTime.style.display = 'none';
+      // 距離入力フィールドをクリア
+      const distanceField = distanceInput.querySelector('input');
+      if (distanceField) distanceField.value = '';
+    } else {
+      timeInput.style.display = 'none';
+      distanceInput.style.display = 'block';
+      if (calculatedTime) calculatedTime.style.display = 'block';
+      // 時間入力フィールドをクリア
+      const durationField = timeInput.querySelector('input');
+      if (durationField) durationField.value = '';
+    }
+  });
+});
+
+// ===== 距離入力時の時間自動計算 =====
+document.querySelectorAll('.distance-input input').forEach(input => {
+  input.addEventListener('input', function() {
+    const exerciseItem = this.closest('.exercise-item');
+    const exerciseType = exerciseItem.dataset.exercise;
+    const distance = parseFloat(this.value) || 0;
+    
+    if (distance > 0) {
+      let estimatedTime = 0;
+      
+      switch(exerciseType) {
+        case 'walking':
+          const walkSpeed = exerciseItem.querySelector('select[data-field="speed"]').value;
+          const walkSpeedKmh = walkSpeed === 'slow' ? 3 : walkSpeed === 'normal' ? 4 : 5.5;
+          estimatedTime = Math.round((distance / walkSpeedKmh) * 60);
+          break;
+          
+        case 'running':
+          const runSpeed = parseInt(exerciseItem.querySelector('select[data-field="speed"]').value);
+          estimatedTime = Math.round((distance / runSpeed) * 60);
+          break;
+          
+        case 'cycling':
+          const cyclingSpeed = parseInt(exerciseItem.querySelector('select[data-field="speed"]').value);
+          estimatedTime = Math.round((distance / cyclingSpeed) * 60);
+          break;
+          
+        case 'swimming':
+          // 50m/分 = 3km/h の速度で計算
+          estimatedTime = Math.round(distance / 50);
+          break;
+      }
+      
+      const calcTimeValue = exerciseItem.querySelector('.calc-time-value');
+      if (calcTimeValue) {
+        calcTimeValue.textContent = estimatedTime;
+      }
+    }
+  });
+});
+
+// ===== 速度/強度変更時の時間再計算 =====
+document.querySelectorAll('.exercise-select').forEach(select => {
+  select.addEventListener('change', function() {
+    const exerciseItem = this.closest('.exercise-item');
+    const distanceInput = exerciseItem.querySelector('.distance-input input');
+    if (distanceInput && distanceInput.value) {
+      // input イベントをトリガーして再計算
+      distanceInput.dispatchEvent(new Event('input'));
+    }
+  });
+});
+
 // ===== 運動追加ボタン =====
 document.querySelectorAll('.btn-add-exercise').forEach(btn => {
   btn.addEventListener('click', function() {
@@ -2066,20 +2250,53 @@ function createExerciseData(type, inputData) {
   switch(type) {
     case 'walking':
       mets = exerciseInfo.mets[inputData.speed] || exerciseInfo.mets.normal;
-      duration = parseInt(inputData.duration);
-      details = exerciseInfo.speedLabels[inputData.speed];
+      
+      // 距離入力の場合
+      if (inputData.distance && inputData.distance.trim() !== '') {
+        const distance = parseFloat(inputData.distance);
+        const walkSpeedKmh = inputData.speed === 'slow' ? 3 : inputData.speed === 'normal' ? 4 : 5.5;
+        duration = Math.round((distance / walkSpeedKmh) * 60);
+        details = `${exerciseInfo.speedLabels[inputData.speed]} · ${distance}km`;
+      }
+      // 時間入力の場合
+      else {
+        duration = parseInt(inputData.duration);
+        details = exerciseInfo.speedLabels[inputData.speed];
+      }
       break;
       
     case 'running':
       mets = exerciseInfo.mets[inputData.speed] || 8.3;
-      duration = parseInt(inputData.duration);
-      details = `${inputData.speed} km/h`;
+      
+      // 距離入力の場合
+      if (inputData.distance && inputData.distance.trim() !== '') {
+        const distance = parseFloat(inputData.distance);
+        const runSpeed = parseInt(inputData.speed);
+        duration = Math.round((distance / runSpeed) * 60);
+        details = `${inputData.speed} km/h · ${distance}km`;
+      }
+      // 時間入力の場合
+      else {
+        duration = parseInt(inputData.duration);
+        details = `${inputData.speed} km/h`;
+      }
       break;
       
     case 'cycling':
-      mets = exerciseInfo.mets[inputData.intensity] || exerciseInfo.mets.moderate;
-      duration = parseInt(inputData.duration);
-      details = exerciseInfo.intensityLabels[inputData.intensity];
+      const cyclingSpeed = parseInt(inputData.speed);
+      mets = exerciseInfo.mets[cyclingSpeed] || 8.0;
+      
+      // 距離入力の場合
+      if (inputData.distance && inputData.distance.trim() !== '') {
+        const distance = parseFloat(inputData.distance);
+        duration = Math.round((distance / cyclingSpeed) * 60);
+        details = `${cyclingSpeed} km/h · ${distance}km`;
+      }
+      // 時間入力の場合
+      else {
+        duration = parseInt(inputData.duration);
+        details = `${cyclingSpeed} km/h`;
+      }
       break;
       
     case 'water-walking':
@@ -2090,9 +2307,18 @@ function createExerciseData(type, inputData) {
       
     case 'swimming':
       mets = exerciseInfo.mets;
-      const distance = parseInt(inputData.distance);
-      duration = Math.round(distance / 50);
-      details = `${distance}m`;
+      
+      // 距離入力の場合
+      if (inputData.distance && inputData.distance.trim() !== '') {
+        const distance = parseInt(inputData.distance);
+        duration = Math.round(distance / 50);
+        details = `${distance}m`;
+      }
+      // 時間入力の場合
+      else {
+        duration = parseInt(inputData.duration);
+        details = `${duration}分`;
+      }
       break;
       
     default:
