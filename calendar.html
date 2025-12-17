@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -190,9 +191,10 @@ h1 {
 
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px;
   margin-bottom: 25px;
+  width: 100%;
 }
 
 .day-header {
@@ -263,9 +265,11 @@ h1 {
   color: #212121;
   margin-bottom: 4px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
   flex-wrap: wrap;
+  width: 100%;
+  overflow: hidden;
 }
 
 .holiday-name {
@@ -275,7 +279,10 @@ h1 {
   background: #FFEBEE;
   padding: 2px 6px;
   border-radius: 4px;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 1.2;
+  max-width: 100%;
 }
 
 .day-cell.today .day-number::after {
@@ -1212,6 +1219,30 @@ h1 {
   .current-nav-button {
     padding: 6px 12px;
     font-size: 0.85em;
+  }
+  
+  /* カレンダーセルのモバイル対応 */
+  .calendar {
+    gap: 4px;
+  }
+  
+  .day-cell {
+    min-height: 80px;
+    padding: 6px;
+  }
+  
+  .day-number {
+    font-size: 0.95em;
+    margin-bottom: 3px;
+  }
+  
+  .holiday-name {
+    font-size: 0.5em;
+    padding: 1px 4px;
+  }
+  
+  .day-summary {
+    font-size: 0.6em;
   }
 }
 
