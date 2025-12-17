@@ -708,13 +708,19 @@ function createCharts(allData) {
     }
   }
 
+  // 既存のグラフを破棄
+  if (window.bpChart) window.bpChart.destroy();
+  if (window.weightChart) window.weightChart.destroy();
+  if (window.daysChart) window.daysChart.destroy();
+  if (window.caloriesChart) window.caloriesChart.destroy();
+
   // 血圧グラフ
   const bpData = {
     systolic: monthlyStats.map(stat => stat.avgBP ? stat.avgBP.systolic : null),
     diastolic: monthlyStats.map(stat => stat.avgBP ? stat.avgBP.diastolic : null)
   };
 
-  new Chart(document.getElementById('bp-chart'), {
+  window.bpChart = new Chart(document.getElementById('bp-chart'), {
     type: 'line',
     data: {
       labels: monthLabels,
@@ -761,7 +767,7 @@ function createCharts(allData) {
   // 体重グラフ
   const weightData = monthlyStats.map(stat => stat.avgWeight ? parseFloat(stat.avgWeight) : null);
 
-  new Chart(document.getElementById('weight-chart'), {
+  window.weightChart = new Chart(document.getElementById('weight-chart'), {
     type: 'line',
     data: {
       labels: monthLabels,
@@ -798,7 +804,7 @@ function createCharts(allData) {
   // トレーニング日数グラフ
   const daysData = monthlyStats.map(stat => stat.trainingDays);
 
-  new Chart(document.getElementById('days-chart'), {
+  window.daysChart = new Chart(document.getElementById('days-chart'), {
     type: 'bar',
     data: {
       labels: monthLabels,
@@ -834,7 +840,7 @@ function createCharts(allData) {
   // カロリーグラフ
   const caloriesData = monthlyStats.map(stat => stat.totalCalories);
 
-  new Chart(document.getElementById('calories-chart'), {
+  window.caloriesChart = new Chart(document.getElementById('calories-chart'), {
     type: 'bar',
     data: {
       labels: monthLabels,
