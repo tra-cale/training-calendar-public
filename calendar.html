@@ -70,7 +70,11 @@ h1 {
 
 .current-month-container {
   margin: 0 0 20px 0;
+  position: relative;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .current-nav-button {
@@ -94,6 +98,45 @@ h1 {
 
 .current-nav-button:active {
   transform: translateY(0);
+}
+
+.clear-month-button {
+  position: absolute;
+  right: 0;
+  background: linear-gradient(135deg, #EF5350, #E53935);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.75em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(239, 83, 80, 0.3);
+  font-weight: 600;
+}
+
+.clear-month-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.4);
+  background: linear-gradient(135deg, #E53935, #C62828);
+}
+
+.clear-month-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .clear-month-button {
+    position: static;
+    margin-top: 10px;
+    width: auto;
+    max-width: 200px;
+  }
+  
+  .current-month-container {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 .month-nav-button {
@@ -247,40 +290,6 @@ h1 {
   color: #C62828;
 }
 
-.training-status {
-  margin-top: auto;
-  padding: 4px 6px;
-  border-radius: 6px;
-  font-size: 0.7em;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 4px;
-}
-
-.status-scheduled {
-  background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-  color: #E65100;
-  border: 1px solid #FFB300;
-}
-
-.status-done {
-  background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
-  color: #2E7D32;
-  border: 1px solid #66BB6A;
-}
-
-.status-unplanned {
-  background: linear-gradient(135deg, #E8EAF6, #C5CAE9);
-  color: #3F51B5;
-  border: 1px solid #5C6BC0;
-}
-
-.status-skipped {
-  background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
-  color: #C62828;
-  border: 1px solid #EF5350;
-}
-
 .day-summary {
   font-size: 0.7em;
   color: #666;
@@ -401,32 +410,6 @@ h1 {
   box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.1);
 }
 
-.status-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.status-option {
-  padding: 10px;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-align: center;
-  font-weight: 500;
-  font-size: 0.9em;
-}
-
-.status-option:hover {
-  border-color: #FFB300;
-}
-
-.status-option.selected {
-  border-color: #FFB300;
-  background: #FFF8E1;
-}
-
 .save-btn {
   width: 100%;
   padding: 15px;
@@ -445,7 +428,47 @@ h1 {
   box-shadow: 0 10px 20px rgba(245, 124, 0, 0.3);
 }
 
+.reset-btn {
+  flex: 1;
+  padding: 15px;
+  background: linear-gradient(135deg, #757575, #9E9E9E);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.reset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(117, 117, 117, 0.3);
+  background: linear-gradient(135deg, #616161, #757575);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.quick-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
 .quick-fill-btn {
+  flex: 1;
   padding: 8px 15px;
   background: #6c757d;
   color: white;
@@ -453,12 +476,32 @@ h1 {
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9em;
-  margin-bottom: 10px;
   transition: all 0.3s;
+  min-width: 140px;
 }
 
 .quick-fill-btn:hover {
   background: #5a6268;
+}
+
+.quick-reset-btn {
+  flex: 1;
+  padding: 8px 15px;
+  background: linear-gradient(135deg, #EF5350, #E53935);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.3s;
+  min-width: 140px;
+  font-weight: 600;
+}
+
+.quick-reset-btn:hover {
+  background: linear-gradient(135deg, #E53935, #C62828);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(239, 83, 80, 0.3);
 }
 
 /* カテゴリー選択ボタン */
@@ -1268,6 +1311,7 @@ h1 {
   <!-- 今月ボタン -->
   <div class="current-month-container">
     <button id="current-month-btn" class="current-nav-button" title="今月に戻る">今月</button>
+    <button id="clear-month-btn" class="clear-month-button" onclick="clearMonthData()" title="この月のデータをすべて削除">🗑️ 今月のデータを削除</button>
   </div>
 
   <div class="monthly-view active">
@@ -1386,7 +1430,10 @@ h1 {
       <!-- 基本情報 -->
       <div class="input-section">
         <h3>💪 基本情報</h3>
-        <button class="quick-fill-btn" onclick="fillPreviousData()">前回の値を入力</button>
+        <div class="quick-actions">
+          <button class="quick-fill-btn" onclick="fillPreviousData()">前回の値を入力</button>
+          <button class="quick-reset-btn" onclick="resetData()">🔄 データをリセット</button>
+        </div>
         <div class="input-row">
           <div class="input-group">
             <label>最高血圧 (mmHg)</label>
@@ -1407,20 +1454,8 @@ h1 {
         </div>
       </div>
 
-      <!-- トレーニングステータス -->
-      <div class="input-section">
-        <h3>📋 トレーニングステータス</h3>
-        <div class="status-selector" id="status-selector">
-          <div class="status-option" data-status="none" onclick="selectStatus('none')">記録なし</div>
-          <div class="status-option" data-status="scheduled" onclick="selectStatus('scheduled')">予定 🗓️</div>
-          <div class="status-option" data-status="done" onclick="selectStatus('done')">実行 ✅</div>
-          <div class="status-option" data-status="unplanned" onclick="selectStatus('unplanned')">予定外実行 💪</div>
-          <div class="status-option" data-status="skipped" onclick="selectStatus('skipped')">不実行 ❌</div>
-        </div>
-      </div>
-
       <!-- トレーニング内容 -->
-      <div class="input-section" id="training-section" style="display: none;">
+      <div class="input-section" id="training-section">
         <h3>🏃 トレーニング内容</h3>
         
         <!-- カテゴリー選択 -->
@@ -1740,7 +1775,6 @@ let currentMonth = today.getMonth();
 let currentYear = today.getFullYear();
 let selectedDate = null;
 let weight = null;
-let currentStatus = 'none';
 
 // 2025年の日本の祝日
 const holidays2025 = {
@@ -2177,13 +2211,11 @@ function updateDaySummary(day) {
   const summaryEl = document.getElementById(`summary-${day}`);
   const statusEl = document.getElementById(`status-${day}`);
   if (!summaryEl || !statusEl) return;
+  
   if (data) {
-    if (data.status && data.status !== 'none') {
-      const statusLabels = { scheduled: '予定', done: '実行', unplanned: '予定外', skipped: '不実行' };
-      statusEl.innerHTML = `<div class="training-status status-${data.status}">${statusLabels[data.status]}</div>`;
-    } else {
-      statusEl.innerHTML = '';
-    }
+    // status表示は削除
+    statusEl.innerHTML = '';
+    
     let summary = '';
     if (data.bloodPressure) {
       summary += `<span class="data-icon">💉</span>${data.bloodPressure.systolic}/${data.bloodPressure.diastolic}<br>`;
@@ -2201,19 +2233,6 @@ function updateDaySummary(day) {
   }
 }
 
-function selectStatus(status) {
-  currentStatus = status;
-  const options = document.querySelectorAll('.status-option');
-  options.forEach(opt => opt.classList.remove('selected'));
-  document.querySelector(`[data-status="${status}"]`).classList.add('selected');
-  const trainingSection = document.getElementById('training-section');
-  if (status === 'done' || status === 'unplanned') {
-    trainingSection.style.display = 'block';
-  } else {
-    trainingSection.style.display = 'none';
-  }
-}
-
 function openModal(day) {
   selectedDate = day;
   document.getElementById('inputModal').classList.add('active');
@@ -2224,7 +2243,6 @@ function openModal(day) {
 function closeModal() {
   document.getElementById('inputModal').classList.remove('active');
   selectedDate = null;
-  currentStatus = 'none';
   addedExercises = [];
   updateAddedExercisesList();
   updateExerciseSummary();
@@ -2247,7 +2265,7 @@ function loadModalData(day) {
       document.getElementById('input-weight').value = '';
       weight = findPreviousWeight(day);
     }
-    selectStatus(data.status || 'none');
+    // 運動データがあれば表示
     if (data.exercises && data.exercises.length > 0) {
       addedExercises = data.exercises.map(ex => ({...ex}));
       updateAddedExercisesList();
@@ -2287,7 +2305,6 @@ function resetModalInputs() {
   document.getElementById('input-systolic').value = '';
   document.getElementById('input-diastolic').value = '';
   document.getElementById('input-weight').value = '';
-  selectStatus('none');
   addedExercises = [];
   updateAddedExercisesList();
   updateExerciseSummary();
@@ -2317,7 +2334,6 @@ function saveData() {
   const weightValue = document.getElementById('input-weight').value;
   const data = {
     date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`,
-    status: currentStatus,
     bloodPressure: systolic && diastolic ? { systolic: parseInt(systolic), diastolic: parseInt(diastolic) } : null,
     weight: weightValue ? parseFloat(weightValue) : null,
     totalTime: addedExercises.reduce((sum, ex) => sum + ex.duration, 0),
@@ -2330,6 +2346,75 @@ function saveData() {
   updateNextMonthGoals();
   closeModal();
   alert('✅ データを保存しました!');
+}
+
+function resetData() {
+  if (!selectedDate) {
+    console.error('resetData: selectedDate is null');
+    return;
+  }
+  
+  const confirmMessage = `${currentYear}年${currentMonth + 1}月${selectedDate}日のデータをリセットしますか？\nこの操作は取り消せません。`;
+  if (!confirm(confirmMessage)) {
+    return;
+  }
+  
+  // LocalStorageからデータを削除
+  const key = getStorageKey(selectedDate);
+  console.log('Deleting key:', key);
+  console.log('Data before delete:', localStorage.getItem(key));
+  
+  localStorage.removeItem(key);
+  
+  console.log('Data after delete:', localStorage.getItem(key));
+  
+  // モーダルの入力フォームをリセット
+  resetModalInputs();
+  
+  // カレンダー表示を更新
+  updateDaySummary(selectedDate);
+  updateMonthlySummary();
+  
+  alert('🔄 データをリセットしました');
+}
+
+function clearMonthData() {
+  const monthName = `${currentYear}年${currentMonth + 1}月`;
+  const confirmMessage = `【警告】\n${monthName}のすべてのデータを削除しますか？\n\nこの操作は取り消せません。\n削除されるデータ:\n・血圧記録\n・体重記録\n・運動記録\n・月間目標\n\n本当に削除しますか？`;
+  
+  if (!confirm(confirmMessage)) {
+    return;
+  }
+  
+  // 二重確認
+  const doubleConfirm = confirm(`本当に${monthName}のすべてのデータを削除してもよろしいですか？\n\nこれが最後の確認です。`);
+  if (!doubleConfirm) {
+    return;
+  }
+  
+  let deletedCount = 0;
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  
+  // 日別データを削除
+  for (let day = 1; day <= daysInMonth; day++) {
+    const key = getStorageKey(day);
+    if (localStorage.getItem(key)) {
+      localStorage.removeItem(key);
+      deletedCount++;
+    }
+  }
+  
+  // 月間目標を削除
+  const goalsKey = getGoalsKey(currentYear, currentMonth);
+  if (localStorage.getItem(goalsKey)) {
+    localStorage.removeItem(goalsKey);
+  }
+  
+  // カレンダー表示を更新
+  renderCalendar();
+  updateMonthlySummary();
+  
+  alert(`✅ ${monthName}のデータを削除しました\n削除した日数: ${deletedCount}日`);
 }
 
 function getStorageKey(day) {
