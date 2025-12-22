@@ -2501,14 +2501,31 @@ function generateCalendar() {
     
     // 祝日セルにタップイベントを追加（モバイル専用）
     if (isHoliday && holidayInfo && holidayInfo.name) {
-      dayCell.addEventListener('touchstart', function(e) {
-        // モーダルを開く前にツールチップを表示
-        e.stopPropagation();
-        showHolidayTooltip(e, holidayInfo.name);
-      }, { passive: true });
+      let tooltipShown = false;
+      
+      dayCell.addEventListener('touchend', function(e) {
+        e.preventDefault(); // クリックイベントの発火を防ぐ
+        
+        if (!tooltipShown) {
+          // 1回目のタップ：ツールチップ表示
+          showHolidayTooltip(e, holidayInfo.name);
+          tooltipShown = true;
+          
+          // 3秒後にリセット
+          setTimeout(() => {
+            tooltipShown = false;
+          }, 3000);
+        } else {
+          // 2回目のタップ：モーダルを開く
+          hideHolidayTooltip();
+          openModal(day);
+          tooltipShown = false;
+        }
+      });
+    } else {
+      // 通常セルは従来通りクリックでモーダルを開く
+      dayCell.onclick = () => openModal(day);
     }
-    
-    dayCell.onclick = () => openModal(day);
     calendar.appendChild(dayCell);
     updateDaySummary(day);
   }
@@ -3124,8 +3141,8 @@ function showHolidayTooltip(event, holidayName) {
   tooltip.textContent = holidayName;
   document.body.appendChild(tooltip);
   
-  // タッチ位置の取得
-  const touch = event.touches ? event.touches[0] : event;
+  // タッチ位置の取得（touchendではchangedTouchesを使用）
+  const touch = event.changedTouches ? event.changedTouches[0] : event.touches ? event.touches[0] : event;
   const x = touch.clientX;
   const y = touch.clientY;
   
