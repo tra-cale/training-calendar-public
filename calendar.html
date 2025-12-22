@@ -2499,12 +2499,15 @@ function generateCalendar() {
     
     dayCell.innerHTML = `${dayNumberHTML}<div id="status-${day}"></div><div class="day-summary" id="summary-${day}"></div>`;
     
-    // 祝日セルにタップイベントを追加（モバイル専用）
+    // 祝日セルのイベント設定
     if (isHoliday && holidayInfo && holidayInfo.name) {
       let tooltipShown = false;
+      let touchHandled = false; // タッチイベントが処理されたかを追跡
       
+      // モバイル用：タッチイベント（2段階タップ）
       dayCell.addEventListener('touchend', function(e) {
         e.preventDefault(); // クリックイベントの発火を防ぐ
+        touchHandled = true;
         
         if (!tooltipShown) {
           // 1回目のタップ：ツールチップ表示
@@ -2521,7 +2524,20 @@ function generateCalendar() {
           openModal(day);
           tooltipShown = false;
         }
+        
+        // 100ms後にtouchHandledをリセット
+        setTimeout(() => {
+          touchHandled = false;
+        }, 100);
       });
+      
+      // PC・タブレット用：クリックイベント（1回クリックでモーダル）
+      dayCell.onclick = function(e) {
+        // タッチイベントが処理された場合はクリックイベントをスキップ
+        if (!touchHandled) {
+          openModal(day);
+        }
+      };
     } else {
       // 通常セルは従来通りクリックでモーダルを開く
       dayCell.onclick = () => openModal(day);
