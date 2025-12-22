@@ -279,6 +279,49 @@ h1 {
   white-space: nowrap;
 }
 
+/* モバイル表示時は祝日名を非表示 */
+@media (max-width: 768px) {
+  .holiday-name {
+    display: none;
+  }
+}
+
+/* ツールチップ用スタイル */
+.holiday-tooltip {
+  position: fixed;
+  background: rgba(198, 40, 40, 0.95);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.holiday-tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.holiday-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(198, 40, 40, 0.95);
+}
+
 .day-cell.today .day-number::after {
   content: " (今日)";
   font-size: 0.65em;
@@ -2455,6 +2498,16 @@ function generateCalendar() {
     dayNumberHTML += `</div>`;
     
     dayCell.innerHTML = `${dayNumberHTML}<div id="status-${day}"></div><div class="day-summary" id="summary-${day}"></div>`;
+    
+    // 祝日セルにタップイベントを追加（モバイル専用）
+    if (isHoliday && holidayInfo && holidayInfo.name) {
+      dayCell.addEventListener('touchstart', function(e) {
+        // モーダルを開く前にツールチップを表示
+        e.stopPropagation();
+        showHolidayTooltip(e, holidayInfo.name);
+      }, { passive: true });
+    }
+    
     dayCell.onclick = () => openModal(day);
     calendar.appendChild(dayCell);
     updateDaySummary(day);
@@ -3057,6 +3110,69 @@ function updateYearTitle() {
 
 document.getElementById('year-select').value = currentYear;
 document.getElementById('month-select').value = currentMonth;
+
+// 祝日ツールチップ機能
+let currentTooltip = null;
+
+function showHolidayTooltip(event, holidayName) {
+  // 既存のツールチップを削除
+  hideHolidayTooltip();
+  
+  // 新しいツールチップを作成
+  const tooltip = document.createElement('div');
+  tooltip.className = 'holiday-tooltip';
+  tooltip.textContent = holidayName;
+  document.body.appendChild(tooltip);
+  
+  // タッチ位置の取得
+  const touch = event.touches ? event.touches[0] : event;
+  const x = touch.clientX;
+  const y = touch.clientY;
+  
+  // ツールチップの位置を設定（セルの上に表示）
+  tooltip.style.left = `${x}px`;
+  tooltip.style.top = `${y - 50}px`;
+  tooltip.style.transform = 'translateX(-50%)';
+  
+  // 画面外に出ないように調整
+  requestAnimationFrame(() => {
+    const rect = tooltip.getBoundingClientRect();
+    if (rect.left < 10) {
+      tooltip.style.left = '10px';
+      tooltip.style.transform = 'translateX(0)';
+    } else if (rect.right > window.innerWidth - 10) {
+      tooltip.style.left = `${window.innerWidth - rect.width - 10}px`;
+      tooltip.style.transform = 'translateX(0)';
+    }
+    
+    // アニメーション表示
+    setTimeout(() => tooltip.classList.add('show'), 10);
+  });
+  
+  currentTooltip = tooltip;
+  
+  // 2秒後に自動で消す
+  setTimeout(hideHolidayTooltip, 2000);
+}
+
+function hideHolidayTooltip() {
+  if (currentTooltip) {
+    currentTooltip.classList.remove('show');
+    setTimeout(() => {
+      if (currentTooltip && currentTooltip.parentNode) {
+        currentTooltip.parentNode.removeChild(currentTooltip);
+      }
+      currentTooltip = null;
+    }, 200);
+  }
+}
+
+// 画面タッチ時にツールチップを隠す
+document.addEventListener('touchstart', function(event) {
+  if (currentTooltip && !event.target.closest('.day-cell.holiday')) {
+    hideHolidayTooltip();
+  }
+});
 
 // 初期化
 updateAddedExercisesList();
