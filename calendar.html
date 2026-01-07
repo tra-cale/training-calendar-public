@@ -1,42 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>統合型トレーニング管理カレンダー</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<title>記録アイコン表示（修正版） - カレンダー</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #FFC107 0%, #FFD54F 50%, #FFECB3 100%);
   min-height: 100vh;
   padding: 20px;
-  transition: background 0.5s ease;
 }
 
 .container {
-  max-width: 1500px;
+  max-width: 1200px;
   margin: 0 auto;
   background: #FAFAFA;
   border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  padding: 20px;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
   border-bottom: 3px solid #FFD54F;
-  transition: border-color 0.5s ease;
 }
 
 h1 {
   color: #212121;
-  font-size: 1.8em;
-  margin-bottom: 8px;
+  font-size: 1.5em;
+  margin-bottom: 5px;
 }
 
 .title-text {
@@ -48,152 +44,15 @@ h1 {
 
 .subtitle {
   color: #616161;
-  font-size: 0.9em;
+  font-size: 0.85em;
 }
 
-.year-selector {
-  margin: 15px 0 5px 0;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-}
-
-.month-selector {
-  margin: 5px 0 10px 0;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-}
-
-.current-month-container {
-  margin: 0 0 20px 0;
-  position: relative;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.current-nav-button {
-  background: linear-gradient(135deg, #43A047, #66BB6A);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.9em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
-  font-weight: 600;
-}
-
-.current-nav-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(67, 160, 71, 0.4);
-  background: linear-gradient(135deg, #388E3C, #43A047);
-}
-
-.current-nav-button:active {
-  transform: translateY(0);
-}
-
-.clear-month-button {
-  position: absolute;
-  right: 0;
-  background: linear-gradient(135deg, #EF5350, #E53935);
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 0.75em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(239, 83, 80, 0.3);
-  font-weight: 600;
-}
-
-.clear-month-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.4);
-  background: linear-gradient(135deg, #E53935, #C62828);
-}
-
-.clear-month-button:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-  .clear-month-button {
-    position: static;
-    margin-top: 10px;
-    width: auto;
-    max-width: 200px;
-  }
-  
-  .current-month-container {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-.month-nav-button {
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 1.2em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-.month-nav-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
-  background: linear-gradient(135deg, #FF8F00, #FFC107);
-}
-
-.month-nav-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.month-nav-button:disabled {
-  background: linear-gradient(135deg, #BDBDBD, #E0E0E0);
-  cursor: not-allowed;
-  opacity: 0.5;
-  box-shadow: none;
-}
-
-.month-select-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.month-select-dropdown {
-  padding: 8px 15px;
-  border-radius: 8px;
-  border: 2px solid #FFD54F;
-  font-size: 1em;
-  cursor: pointer;
-  background: white;
-}
-
+/* カレンダー */
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-  margin-bottom: 25px;
+  gap: 5px;
+  margin: 15px 0;
 }
 
 .day-header {
@@ -204,7 +63,16 @@ h1 {
   background: linear-gradient(135deg, #FFD54F, #FFECB3);
   border-radius: 6px;
   font-size: 0.85em;
-  transition: background 0.5s ease;
+}
+
+.day-header.saturday {
+  background: linear-gradient(135deg, #90CAF9, #BBDEFB);
+  color: #1565C0;
+}
+
+.day-header.sunday {
+  background: linear-gradient(135deg, #EF9A9A, #FFCDD2);
+  color: #C62828;
 }
 
 .day-cell {
@@ -223,7 +91,6 @@ h1 {
 .day-cell:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-color: #FFD54F;
 }
 
 .day-cell.empty {
@@ -235,7 +102,6 @@ h1 {
 .day-cell.empty:hover {
   transform: none;
   box-shadow: none;
-  border-color: #E0E0E0;
 }
 
 .day-cell.has-data {
@@ -249,8 +115,12 @@ h1 {
   border-width: 3px;
 }
 
-.day-cell.weekend {
+.day-cell.saturday {
   background: #F0F8FF;
+}
+
+.day-cell.saturday.has-data {
+  background: linear-gradient(145deg, #E3F2FD, #F0F8FF);
 }
 
 .day-cell.sunday,
@@ -258,80 +128,16 @@ h1 {
   background: #FFF5F5;
 }
 
+.day-cell.sunday.has-data,
+.day-cell.holiday.has-data {
+  background: linear-gradient(145deg, #FFEBEE, #FFF5F5);
+}
+
 .day-number {
   font-size: 1.1em;
   font-weight: bold;
   color: #212121;
   margin-bottom: 4px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.holiday-name {
-  font-size: 0.6em;
-  font-weight: normal;
-  color: #C62828;
-  background: #FFEBEE;
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-
-/* モバイル表示時は祝日名を非表示 */
-@media (max-width: 768px) {
-  .holiday-name {
-    display: none;
-  }
-}
-
-/* ツールチップ用スタイル */
-.holiday-tooltip {
-  position: fixed;
-  background: rgba(198, 40, 40, 0.95);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.85em;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  z-index: 10000;
-  pointer-events: none;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(-5px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.holiday-tooltip.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.holiday-tooltip::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid rgba(198, 40, 40, 0.95);
-}
-
-.day-cell.today .day-number::after {
-  content: " (今日)";
-  font-size: 0.65em;
-  color: #F57C00;
-  font-weight: normal;
-}
-
-.day-cell.holiday .day-number,
-.day-cell.sunday .day-number {
-  color: #C62828;
 }
 
 .day-summary {
@@ -340,2879 +146,468 @@ h1 {
   line-height: 1.4;
 }
 
-.data-icon {
-  margin-right: 2px;
-}
-
-/* モーダル */
-.modal {
+/* 記録アイコン（PC版では非表示） */
+.record-icons {
   display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow-y: auto;
 }
 
-.modal.active {
-  display: flex;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 20px;
-  max-width: 800px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-.modal-header {
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  padding: 20px 30px;
-  border-radius: 20px 20px 0 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h2 {
-  font-size: 1.5em;
-}
-
-.close-btn {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  color: white;
-  font-size: 1.5em;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.close-btn:hover {
-  background: rgba(255,255,255,0.3);
-  transform: rotate(90deg);
-}
-
-.modal-body {
-  padding: 30px;
-}
-
-.input-section {
-  margin-bottom: 25px;
-}
-
-.input-section h3 {
-  color: #F57C00;
-  margin-bottom: 15px;
-  font-size: 1.2em;
-}
-
-.input-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group label {
-  font-size: 0.9em;
-  color: #666;
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-
-.input-group input,
-.input-group select {
-  padding: 12px;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  font-size: 1em;
-  transition: all 0.3s;
-}
-
-.input-group input:focus,
-.input-group select:focus {
-  outline: none;
-  border-color: #FFB300;
-  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.1);
-}
-
-.save-btn {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.save-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(245, 124, 0, 0.3);
-}
-
-.reset-btn {
-  flex: 1;
-  padding: 15px;
-  background: linear-gradient(135deg, #757575, #9E9E9E);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.reset-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(117, 117, 117, 0.3);
-  background: linear-gradient(135deg, #616161, #757575);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-@media (max-width: 768px) {
-  .modal-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-.quick-actions {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.quick-fill-btn {
-  flex: 1;
-  padding: 8px 15px;
-  background: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: all 0.3s;
-  min-width: 140px;
-}
-
-.quick-fill-btn:hover {
-  background: #5a6268;
-}
-
-.quick-reset-btn {
-  flex: 1;
-  padding: 8px 15px;
-  background: linear-gradient(135deg, #EF5350, #E53935);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: all 0.3s;
-  min-width: 140px;
-  font-weight: 600;
-}
-
-.quick-reset-btn:hover {
-  background: linear-gradient(135deg, #E53935, #C62828);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(239, 83, 80, 0.3);
-}
-
-/* カテゴリー選択ボタン */
-.exercise-category-selector {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.category-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 12px 16px;
-  background: white;
-  border: 2px solid #E0E0E0;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 90px;
-}
-
-.category-btn:hover {
-  border-color: #FFB300;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 179, 0, 0.2);
-}
-
-.category-btn.active {
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  border-color: #F57C00;
-  color: white;
-}
-
-.category-icon {
-  font-size: 1.8em;
-}
-
-.category-name {
-  font-size: 0.85em;
-  font-weight: 600;
-}
-
-/* 運動リスト */
-.exercise-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.exercise-item {
-  background: white;
-  border: 2px solid #E0E0E0;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.exercise-item:hover {
-  border-color: #FFD54F;
-}
-
-.exercise-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.exercise-icon {
-  font-size: 1.5em;
-  margin-right: 10px;
-}
-
-.exercise-name {
-  flex: 1;
-  font-weight: 600;
-  color: #212121;
-}
-
-.exercise-toggle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid #F57C00;
-  background: white;
-  color: #F57C00;
-  font-size: 1.2em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.exercise-toggle:hover {
-  background: #F57C00;
-  color: white;
-}
-
-.exercise-item.expanded .exercise-toggle {
-  transform: rotate(45deg);
-  background: #F57C00;
-  color: white;
-}
-
-.exercise-input {
-  display: none;
-  padding: 16px;
-  background: #FAFAFA;
-  border-top: 1px solid #E0E0E0;
-}
-
-.exercise-item.expanded .exercise-input {
-  display: block;
-}
-
-/* 入力モード切り替えボタン */
-.input-mode-toggle {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-  background: #FFFFFF;
-  padding: 4px;
-  border-radius: 8px;
-  border: 2px solid #E0E0E0;
-}
-
-.mode-btn {
-  flex: 1;
-  padding: 8px 12px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.95em;
-  font-weight: 600;
-  color: #757575;
-  transition: all 0.3s ease;
-}
-
-.mode-btn:hover {
-  background: #F5F5F5;
-  color: #424242;
-}
-
-.mode-btn.active {
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
-}
-
-/* 計算された時間表示 */
-.calculated-time {
-  margin-top: 8px;
-  padding: 8px;
-  background: #E8F5E9;
-  border-radius: 6px;
-  text-align: center;
-}
-
-.calculated-time small {
-  color: #2E7D32;
-  font-weight: 600;
-}
-
-.calc-time-value {
-  font-weight: bold;
-  color: #1B5E20;
-}
-
-.exercise-select,
-.exercise-number {
-  width: 100%;
-  padding: 10px 12px;
-  border: 2px solid #E0E0E0;
-  border-radius: 8px;
-  font-size: 1em;
-  transition: all 0.3s ease;
-}
-
-.exercise-select:focus,
-.exercise-number:focus {
-  outline: none;
-  border-color: #FFB300;
-  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.1);
-}
-
-.btn-add-exercise {
-  width: 100%;
-  padding: 10px;
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 8px;
-}
-
-.btn-add-exercise:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
-}
-
-/* 追加済み運動リスト */
-.added-exercises {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.added-exercise-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: linear-gradient(145deg, #FFF9C4, #FFECB3);
-  border-radius: 10px;
-  border: 2px solid #FFD54F;
-}
-
-.added-exercise-info {
-  flex: 1;
-}
-
-.added-exercise-name {
-  font-weight: 600;
-  color: #212121;
-  margin-bottom: 4px;
-}
-
-.added-exercise-details {
-  font-size: 0.85em;
-  color: #616161;
-}
-
-.added-exercise-calories {
-  font-weight: 600;
-  color: #F57C00;
-  margin-right: 12px;
-}
-
-.btn-remove-exercise {
-  padding: 6px 12px;
-  background: #EF5350;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: all 0.3s ease;
-}
-
-.btn-remove-exercise:hover {
-  background: #D32F2F;
-}
-
-/* 運動サマリー */
-.exercise-summary {
-  display: flex;
-  justify-content: space-around;
-  padding: 20px;
-  background: linear-gradient(145deg, #FFFFFF, #FFFBF5);
-  border-radius: 12px;
-  border: 2px solid #FFD54F;
-  margin-top: 20px;
-}
-
-.summary-item {
-  text-align: center;
-}
-
-.summary-label {
-  display: block;
-  font-size: 0.9em;
-  color: #616161;
-  margin-bottom: 8px;
-}
-
-.summary-value {
-  display: block;
-  font-size: 1.5em;
-  font-weight: bold;
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* 月間サマリー */
-.summary-section {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  border: 2px solid #E0E0E0;
-  margin-bottom: 15px;
-}
-
-.summary-title {
-  font-size: 1.2em;
-  color: #212121;
-  margin-bottom: 15px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-}
-
-@media (max-width: 1200px) {
-  .summary-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.summary-card {
-  padding: 12px;
-  background: linear-gradient(145deg, #FFFFFF, #F5F5F5);
-  border-radius: 10px;
-  border: 1px solid #E0E0E0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.summary-label {
-  color: #616161;
-  font-size: 0.75em;
-  font-weight: 600;
-  text-align: center;
-  border-bottom: 1px solid #E0E0E0;
-  padding-bottom: 6px;
-}
-
-.goal-input-wrapper {
-  text-align: center;
-  background: #FFF9C4;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #FFD54F;
-}
-
-.goal-label {
-  color: #F57C00;
-  font-size: 0.7em;
-  margin-bottom: 4px;
-  font-weight: 600;
-}
-
-.goal-input {
-  width: 100%;
-  padding: 4px 6px;
-  border: 1px solid #FFD54F;
-  border-radius: 4px;
-  background: #FFF9C4;
-  font-size: 0.85em;
-  text-align: center;
-  font-weight: 600;
-}
-
-.summary-value-wrapper {
-  text-align: center;
-  background: #E3F2FD;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #90CAF9;
-}
-
-.summary-value-label {
-  color: #1976D2;
-  font-size: 0.7em;
-  margin-bottom: 4px;
-  font-weight: 600;
-}
-
-.unit {
-  font-size: 0.8em;
-}
-
-.achievement-wrapper {
-  text-align: center;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #E0E0E0;
-}
-
-.achievement-label {
-  color: #616161;
-  font-size: 0.7em;
-  margin-bottom: 4px;
-  font-weight: 600;
-}
-
-.achievement-value {
-  font-size: 1em;
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.achievement-success {
-  background: #C8E6C9;
-  color: #2E7D32;
-}
-
-.achievement-fail {
-  background: #FFCDD2;
-  color: #C62828;
-}
-
-.achievement-percent {
-  color: #F57C00;
-}
-
-/* 目標未設定メッセージ */
-.goal-setup-prompt {
-  background: linear-gradient(145deg, #FFF9C4, #FFECB3);
-  border: 3px solid #FFD54F;
-  border-radius: 16px;
-  padding: 40px;
-  margin-bottom: 30px;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(255, 179, 0, 0.2);
-}
-
-.prompt-icon {
-  font-size: 4em;
-  margin-bottom: 20px;
-}
-
-.prompt-title {
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #F57C00;
-  margin-bottom: 15px;
-}
-
-.prompt-description {
-  font-size: 1.1em;
-  color: #616161;
-  line-height: 1.8;
-  margin-bottom: 30px;
-}
-
-.btn-setup-goal {
-  display: inline-block;
-  padding: 16px 48px;
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  font-size: 1.2em;
-  font-weight: 600;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
-}
-
-.btn-setup-goal:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
-}
-
-/* プログレスバー */
-.progress-bar-container {
-  width: 100%;
-  height: 24px;
-  background: #E0E0E0;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-top: 8px;
-  position: relative;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.progress-bar {
-  height: 100%;
-  border-radius: 12px;
-  transition: width 0.5s ease, background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75em;
-  font-weight: 700;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-}
-
-.progress-bar.low {
-  background: linear-gradient(90deg, #EF5350, #F44336);
-}
-
-.progress-bar.medium {
-  background: linear-gradient(90deg, #FFA726, #FF9800);
-}
-
-.progress-bar.high {
-  background: linear-gradient(90deg, #66BB6A, #4CAF50);
-}
-
-/* レスポンシブ対応 */
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-  .calendar {
-    gap: 3px;
-  }
-  .day-cell {
-    min-height: 85px;
-    padding: 5px;
-  }
-  .modal-body {
-    padding: 20px;
-  }
-  .input-row {
-    grid-template-columns: 1fr;
-  }
-  .category-btn {
-    min-width: 80px;
-    padding: 10px 12px;
-  }
-  .category-icon {
-    font-size: 1.5em;
-  }
-  .category-name {
-    font-size: 0.75em;
-  }
-  
-  /* 月選択UIのスマホ対応 */
-  .month-selector {
-    gap: 8px;
-  }
-  
-  .month-nav-button {
-    width: 36px;
-    height: 36px;
-    font-size: 1.1em;
-  }
-  
-  .month-select-wrapper {
-    gap: 6px;
-  }
-  
-  .month-select-wrapper label {
-    font-size: 0.9em;
-  }
-  
-  .month-select-dropdown {
-    padding: 6px 10px;
-    font-size: 0.95em;
-  }
-}
-/* ホームボタン */
-.home-button {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
-}
-
-.home-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
-  background: linear-gradient(135deg, #FF8F00, #FFC107);
-}
-
-.home-button:active {
-  transform: translateY(0);
-}
-
-/* 使い方ガイドボタン */
-.guide-button {
-  position: fixed;
-  top: 100px;
-  left: 20px;
-  z-index: 1000;
-  background: linear-gradient(135deg, #43A047, #66BB6A);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
-}
-
-.guide-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(67, 160, 71, 0.4);
-  background: linear-gradient(135deg, #388E3C, #43A047);
-}
-
-.guide-button:active {
-  transform: translateY(0);
-}
-
-.button-text {
-  display: none;
-  margin-left: 4px;
-}
-
-.button-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-
-.home-button,
-.yearly-summary-button,
-.guide-button {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.home-button:hover .button-text,
-.yearly-summary-button:hover .button-text,
-.guide-button:hover .button-text {
-  display: inline;
-}
-
-.home-button:hover,
-.yearly-summary-button:hover,
-.guide-button:hover {
-  width: auto;
-  height: 40px;
-  padding: 8px 16px;
-}
-
+/* スマホ版 */
 @media (max-width: 768px) {
   body {
     padding: 10px;
   }
-  
+
   .container {
-    padding: 90px 15px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 20px);
+    padding: 10px;
+    overflow: hidden;
   }
-  
-  .button-text {
-    display: none;
+
+  .header {
+    flex-shrink: 0;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
   }
-  
-  .home-button:hover .button-text,
-  .yearly-summary-button:hover .button-text,
-  .guide-button:hover .button-text {
-    display: inline;
-  }
-  
-  .button-icon {
-    font-size: 1.2em;
-  }
-  
-  .home-button,
-  .yearly-summary-button,
-  .guide-button {
-    width: 44px !important;
-    height: 44px !important;
-    padding: 0 !important;
-    min-width: 44px;
-    min-height: 44px;
-    justify-content: center;
-    display: inline-flex !important;
-    align-items: center;
-  }
-  
-  .home-button:hover,
-  .yearly-summary-button:hover,
-  .guide-button:hover {
-    width: auto !important;
-    padding: 8px 16px !important;
-  }
-  
-  .home-button {
-    top: 10px !important;
-    left: 10px !important;
-  }
-  
-  .yearly-summary-button {
-    top: 60px !important;
-    left: 10px !important;
-  }
-  
-  .guide-button {
-    top: 110px !important;
-    left: 10px !important;
-  }
-  
+
   h1 {
     font-size: 1.3em;
   }
-  
-  .subtitle {
-    font-size: 0.8em;
+
+  /* カレンダーペイン（上部） */
+  .calendar-wrapper {
+    flex: 0 0 auto;
+    max-height: 40vh;
+    overflow: visible;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
-  
-  .year-selector,
-  .month-selector {
+
+  /* カレンダーグリッドの簡素化 */
+  .calendar {
+    gap: 2px;
+  }
+
+  .day-cell {
+    min-height: 42px;
+    max-height: 42px;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 0.85em;
+  }
+
+  .day-cell:hover {
+    transform: none;
+  }
+
+  /* 日付サマリーを非表示 */
+  .day-summary {
+    display: none !important;
+  }
+
+  /* 日付番号を左上に配置 */
+  .day-number {
+    font-size: 0.9em;
+    margin: 0;
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    line-height: 1;
+  }
+
+  .day-cell.today {
+    border-width: 2px;
+  }
+
+  /* 記録アイコン表示（スマホ版のみ） */
+  .record-icons {
+    display: flex !important;
+    gap: 1px;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.65em;
+    position: absolute;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+  }
+
+  .record-icon {
+    display: inline-block;
+  }
+
+  /* 選択中の日をハイライト */
+  .day-cell.selected {
+    border-color: #F57C00;
+    border-width: 3px;
+    background: linear-gradient(145deg, #FFE0B2, #FFFFFF);
+    transform: scale(1.05);
+    z-index: 10;
+  }
+
+  .day-cell.selected.saturday {
+    background: linear-gradient(145deg, #FFE0B2, #E3F2FD);
+  }
+
+  .day-cell.selected.sunday,
+  .day-cell.selected.holiday {
+    background: linear-gradient(145deg, #FFE0B2, #FFEBEE);
+  }
+
+  /* 詳細パネル（下部） */
+  .detail-pane {
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-top: 3px solid #FFD54F;
+  }
+
+  .detail-header {
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #FFD54F;
+  }
+
+  .detail-date {
+    font-size: 1.4em;
+    color: #212121;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .detail-nav {
+    display: flex;
     gap: 8px;
-    flex-wrap: wrap;
   }
-  
-  .month-nav-button {
-    width: 36px;
-    height: 36px;
-    font-size: 1.1em;
+
+  .btn-prev-day,
+  .btn-next-day {
+    flex: 1;
+    padding: 12px 8px;
+    background: linear-gradient(135deg, #F57C00, #FFB300);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
   }
-  
-  .month-select-wrapper {
+
+  .btn-prev-day:active,
+  .btn-next-day:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 4px rgba(245, 124, 0, 0.3);
+  }
+
+  .detail-content {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .detail-data-section {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: linear-gradient(145deg, #FAFAFA, #FFFFFF);
+    border-radius: 10px;
+    border: 2px solid #E0E0E0;
+  }
+
+  .detail-data-header {
+    font-size: 1em;
+    font-weight: 600;
+    color: #424242;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
     gap: 6px;
   }
-  
-  .month-select-wrapper label {
-    font-size: 0.85em;
+
+  .detail-data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #F5F5F5;
   }
-  
-  .month-select-dropdown {
-    padding: 6px 10px;
+
+  .detail-data-row:last-child {
+    border-bottom: none;
+  }
+
+  .detail-data-label {
     font-size: 0.9em;
+    color: #616161;
   }
-  
-  .current-nav-button {
-    padding: 6px 12px;
-    font-size: 0.85em;
+
+  .detail-data-value {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #212121;
   }
-}
 
-.yearly-summary-button {
-  position: fixed;
-  top: 60px;
-  left: 20px;
-  z-index: 1000;
-  background: linear-gradient(135deg, #1976D2, #42A5F5);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-}
-
-.yearly-summary-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
-  background: linear-gradient(135deg, #1565C0, #1976D2);
-}
-
-.yearly-summary-button:active {
-  transform: translateY(0);
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9E9E9E;
+  }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- ホームボタン -->
-  <a href="home.html" class="home-button">
-    <span class="button-icon">🏠</span>
-    <span class="button-text">ホームへ戻る</span>
-  </a>
-  
-  <!-- 年間サマリーボタン -->
-  <a href="yearly-summary.html" class="yearly-summary-button">
-    <span class="button-icon">📊</span>
-    <span class="button-text">年間サマリーを見る</span>
-  </a>
-  
-  <!-- 使い方ガイドボタン -->
-  <a href="features.html" class="guide-button">
-    <span class="button-icon">📖</span>
-    <span class="button-text">使い方ガイド</span>
-  </a>
-  
   <div class="header">
-    <h1><span id="title-icon">🍂</span> <span class="title-text"><span id="year-title">2025</span>年 トレーニング記録</span></h1>
+    <h1>🍂 <span class="title-text">2025年11月 トレーニング記録</span></h1>
     <p class="subtitle">血圧・体重・トレーニング実績管理カレンダー</p>
   </div>
 
-  <!-- 年選択 -->
-  <div class="year-selector">
-    <button id="prev-year-btn" class="month-nav-button" title="前の年">‹</button>
-    <div class="month-select-wrapper">
-      <label for="year-select">表示年:</label>
-      <select id="year-select" class="month-select-dropdown">
-        <option value="2024">2024年</option>
-        <option value="2025">2025年</option>
-        <option value="2026">2026年</option>
-      </select>
-    </div>
-    <button id="next-year-btn" class="month-nav-button" title="次の年">›</button>
-  </div>
-
-  <!-- 月選択 -->
-  <div class="month-selector">
-    <button id="prev-month-btn" class="month-nav-button" title="前の月">‹</button>
-    <div class="month-select-wrapper">
-      <label for="month-select">表示月:</label>
-      <select id="month-select" class="month-select-dropdown">
-        <option value="0">1月</option>
-        <option value="1">2月</option>
-        <option value="2">3月</option>
-        <option value="3">4月</option>
-        <option value="4">5月</option>
-        <option value="5">6月</option>
-        <option value="6">7月</option>
-        <option value="7">8月</option>
-        <option value="8">9月</option>
-        <option value="9">10月</option>
-        <option value="10">11月</option>
-        <option value="11">12月</option>
-      </select>
-    </div>
-    <button id="next-month-btn" class="month-nav-button" title="次の月">›</button>
-  </div>
-
-  <!-- 今月ボタン -->
-  <div class="current-month-container">
-    <button id="current-month-btn" class="current-nav-button" title="今月に戻る">今月</button>
-    <button id="clear-month-btn" class="clear-month-button" onclick="clearMonthData()" title="この月のデータをすべて削除">🗑️ 今月のデータを削除</button>
-  </div>
-
-  <div class="monthly-view active">
+  <!-- カレンダーラッパー -->
+  <div class="calendar-wrapper">
     <div class="calendar" id="calendar"></div>
-
-    <!-- 目標未設定メッセージ -->
-    <div class="goal-setup-prompt" id="goal-setup-prompt" style="display: none;">
-      <div class="prompt-icon">📌</div>
-      <div class="prompt-content">
-        <h3 class="prompt-title">月間目標が未設定です</h3>
-        <p class="prompt-description">
-          目標を設定すると、達成度を確認しながらトレーニングを進められます。<br>
-          ホーム画面から今月の目標を設定しましょう。
-        </p>
-        <a href="home.html?openGoals=true" class="btn-setup-goal">🎯 目標を設定する</a>
-      </div>
-    </div>
-
-    <div class="summary-section">
-      <h2 class="summary-title">📊 月間目標・サマリー・達成度</h2>
-      <div class="summary-grid">
-        <div class="summary-card">
-          <div class="summary-label">平均血圧</div>
-          <div class="goal-input-wrapper">
-            <div class="goal-label">目標</div>
-            <input type="text" class="goal-input" id="goal-bp" placeholder="" readonly>
-          </div>
-          <div class="summary-value-wrapper">
-            <div class="summary-value-label">実績</div>
-            <div class="summary-value" id="avg-bp">--/-- <span class="unit">mmHg</span></div>
-          </div>
-          <div class="achievement-wrapper">
-            <div class="achievement-label">達成度</div>
-            <div class="achievement-value" id="achievement-bp">-</div>
-          </div>
-        </div>
-
-        <div class="summary-card">
-          <div class="summary-label">平均体重</div>
-          <div class="goal-input-wrapper">
-            <div class="goal-label">目標</div>
-            <input type="text" class="goal-input" id="goal-weight" placeholder="" readonly>
-          </div>
-          <div class="summary-value-wrapper">
-            <div class="summary-value-label">実績</div>
-            <div class="summary-value" id="avg-weight">-- <span class="unit">kg</span></div>
-          </div>
-          <div class="achievement-wrapper">
-            <div class="achievement-label">達成度</div>
-            <div class="achievement-value" id="achievement-weight">-</div>
-          </div>
-        </div>
-
-        <div class="summary-card">
-          <div class="summary-label">トレーニング日数</div>
-          <div class="goal-input-wrapper">
-            <div class="goal-label">目標</div>
-            <input type="text" class="goal-input" id="goal-days" placeholder="" readonly>
-          </div>
-          <div class="summary-value-wrapper">
-            <div class="summary-value-label">実績</div>
-            <div class="summary-value" id="training-days">0 <span class="unit">日</span></div>
-          </div>
-          <div class="achievement-wrapper">
-            <div class="achievement-label">達成度</div>
-            <div class="achievement-value achievement-percent" id="achievement-days">0%</div>
-          </div>
-        </div>
-
-        <div class="summary-card">
-          <div class="summary-label">総運動時間</div>
-          <div class="goal-input-wrapper">
-            <div class="goal-label">目標</div>
-            <input type="text" class="goal-input" id="goal-time" placeholder="" readonly>
-          </div>
-          <div class="summary-value-wrapper">
-            <div class="summary-value-label">実績</div>
-            <div class="summary-value" id="total-time">0 <span class="unit">分</span></div>
-          </div>
-          <div class="achievement-wrapper">
-            <div class="achievement-label">達成度</div>
-            <div class="achievement-value achievement-percent" id="achievement-time">0%</div>
-          </div>
-        </div>
-
-        <div class="summary-card">
-          <div class="summary-label">総消費カロリー</div>
-          <div class="goal-input-wrapper">
-            <div class="goal-label">目標</div>
-            <input type="text" class="goal-input" id="goal-calories" placeholder="" readonly>
-          </div>
-          <div class="summary-value-wrapper">
-            <div class="summary-value-label">実績</div>
-            <div class="summary-value" id="total-calories">0 <span class="unit">kcal</span></div>
-          </div>
-          <div class="achievement-wrapper">
-            <div class="achievement-label">達成度</div>
-            <div class="achievement-value achievement-percent" id="achievement-calories">0%</div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
-</div>
-
-<!-- 入力モーダル -->
-<div class="modal" id="inputModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="modal-title">📅 10月15日のデータ入力</h2>
-      <button class="close-btn" onclick="closeModal()">&times;</button>
+  <!-- 詳細パネル -->
+  <div class="detail-pane">
+    <div class="detail-header">
+      <h2 class="detail-date" id="detail-date">日付を選択してください</h2>
+      <div class="detail-nav">
+        <button class="btn-prev-day" onclick="navigateToPrevDay()">◀ 前日</button>
+        <button class="btn-next-day" onclick="navigateToNextDay()">翌日 ▶</button>
+      </div>
     </div>
-    <div class="modal-body">
-      
-      <!-- 基本情報 -->
-      <div class="input-section">
-        <h3>💪 基本情報</h3>
-        <div class="quick-actions">
-          <button class="quick-fill-btn" onclick="fillPreviousData()">前回の値を入力</button>
-          <button class="quick-reset-btn" onclick="resetData()">🔄 データをリセット</button>
-        </div>
-        <div class="input-row">
-          <div class="input-group">
-            <label>最高血圧 (mmHg)</label>
-            <input type="number" id="input-systolic" placeholder="">
-          </div>
-          <div class="input-group">
-            <label>最低血圧 (mmHg)</label>
-            <input type="number" id="input-diastolic" placeholder="">
-          </div>
-          <div class="input-group">
-            <label>体重 (kg)</label>
-            <input type="number" step="0.1" id="input-weight" placeholder="">
-          </div>
-          <div class="input-group">
-            <label>総運動時間 (分)</label>
-            <input type="number" id="input-total-time" placeholder="自動計算されます" readonly style="background: #f8f9fa;">
-          </div>
-        </div>
+
+    <div id="detail-content">
+      <div class="empty-state">
+        <p>カレンダーから日付を選択してください</p>
       </div>
-
-      <!-- トレーニング内容 -->
-      <div class="input-section" id="training-section">
-        <h3>🏃 トレーニング内容</h3>
-        
-        <!-- カテゴリー選択 -->
-        <div class="exercise-category-selector">
-          <button type="button" class="category-btn active" data-category="cardio">
-            <span class="category-icon">🚶</span>
-            <span class="category-name">有酸素運動</span>
-          </button>
-          <button type="button" class="category-btn" data-category="water">
-            <span class="category-icon">🏊</span>
-            <span class="category-name">水中運動</span>
-          </button>
-          <button type="button" class="category-btn" data-category="flexibility">
-            <span class="category-icon">🧘</span>
-            <span class="category-name">柔軟性</span>
-          </button>
-          <button type="button" class="category-btn" data-category="other">
-            <span class="category-icon">💃</span>
-            <span class="category-name">その他</span>
-          </button>
-        </div>
-
-        <!-- 有酸素運動 -->
-        <div class="exercise-list" data-category="cardio">
-          <div class="exercise-item" data-exercise="walking">
-            <div class="exercise-header">
-              <span class="exercise-icon">🚶</span>
-              <span class="exercise-name">ウォーキング</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-mode-toggle">
-                <button type="button" class="mode-btn active" data-mode="time" data-exercise-type="walking">⏱️ 時間</button>
-                <button type="button" class="mode-btn" data-mode="distance" data-exercise-type="walking">📏 距離</button>
-              </div>
-              <div class="input-group">
-                <label>速さ</label>
-                <select class="exercise-select" data-field="speed">
-                  <option value="slow">ゆっくり (3km/h)</option>
-                  <option value="normal" selected>普通 (4km/h)</option>
-                  <option value="fast">速歩 (5-6km/h)</option>
-                </select>
-              </div>
-              <div class="input-group time-input">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="300" placeholder="30">
-              </div>
-              <div class="input-group distance-input" style="display: none;">
-                <label>距離（km）</label>
-                <input type="number" class="exercise-number" data-field="distance" min="0.1" max="50" step="0.1" placeholder="3.0">
-              </div>
-              <div class="calculated-time" style="display: none;">
-                <small>推定時間: <span class="calc-time-value">0</span>分</small>
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="walking">追加</button>
-            </div>
-          </div>
-
-          <div class="exercise-item" data-exercise="running">
-            <div class="exercise-header">
-              <span class="exercise-icon">🏃</span>
-              <span class="exercise-name">ランニング</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-mode-toggle">
-                <button type="button" class="mode-btn active" data-mode="time" data-exercise-type="running">⏱️ 時間</button>
-                <button type="button" class="mode-btn" data-mode="distance" data-exercise-type="running">📏 距離</button>
-              </div>
-              <div class="input-group">
-                <label>速度 (km/h)</label>
-                <select class="exercise-select" data-field="speed">
-                  <option value="4">4 km/h (軽いジョギング)</option>
-                  <option value="5">5 km/h</option>
-                  <option value="6">6 km/h (ジョギング)</option>
-                  <option value="7">7 km/h</option>
-                  <option value="8" selected>8 km/h (ランニング)</option>
-                  <option value="9">9 km/h</option>
-                  <option value="10">10 km/h (速いランニング)</option>
-                  <option value="11">11 km/h</option>
-                  <option value="12">12 km/h (とても速い)</option>
-                </select>
-              </div>
-              <div class="input-group time-input">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="180" placeholder="30">
-              </div>
-              <div class="input-group distance-input" style="display: none;">
-                <label>距離（km）</label>
-                <input type="number" class="exercise-number" data-field="distance" min="0.1" max="50" step="0.1" placeholder="5.0">
-              </div>
-              <div class="calculated-time" style="display: none;">
-                <small>推定時間: <span class="calc-time-value">0</span>分</small>
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="running">追加</button>
-            </div>
-          </div>
-
-          <div class="exercise-item" data-exercise="cycling">
-            <div class="exercise-header">
-              <span class="exercise-icon">🚴</span>
-              <span class="exercise-name">サイクリング</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-mode-toggle">
-                <button type="button" class="mode-btn active" data-mode="time" data-exercise-type="cycling">⏱️ 時間</button>
-                <button type="button" class="mode-btn" data-mode="distance" data-exercise-type="cycling">📏 距離</button>
-              </div>
-              <div class="input-group">
-                <label>速度 (km/h)</label>
-                <select class="exercise-select" data-field="speed">
-                  <option value="5">5 km/h (とてもゆっくり)</option>
-                  <option value="6">6 km/h</option>
-                  <option value="7">7 km/h</option>
-                  <option value="8">8 km/h</option>
-                  <option value="9">9 km/h</option>
-                  <option value="10">10 km/h (軽い)</option>
-                  <option value="11">11 km/h</option>
-                  <option value="12">12 km/h</option>
-                  <option value="13">13 km/h</option>
-                  <option value="14">14 km/h</option>
-                  <option value="15" selected>15 km/h (普通)</option>
-                  <option value="16">16 km/h</option>
-                  <option value="17">17 km/h</option>
-                  <option value="18">18 km/h</option>
-                  <option value="19">19 km/h</option>
-                  <option value="20">20 km/h (速い)</option>
-                </select>
-              </div>
-              <div class="input-group time-input">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="180" placeholder="30">
-              </div>
-              <div class="input-group distance-input" style="display: none;">
-                <label>距離（km）</label>
-                <input type="number" class="exercise-number" data-field="distance" min="0.1" max="100" step="0.1" placeholder="10.0">
-              </div>
-              <div class="calculated-time" style="display: none;">
-                <small>推定時間: <span class="calc-time-value">0</span>分</small>
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="cycling">追加</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 水中運動 -->
-        <div class="exercise-list" data-category="water" style="display: none;">
-          <div class="exercise-item" data-exercise="water-walking">
-            <div class="exercise-header">
-              <span class="exercise-icon">🏊</span>
-              <span class="exercise-name">水中ウォーキング</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-group">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="water-walking">追加</button>
-            </div>
-          </div>
-
-          <div class="exercise-item" data-exercise="swimming">
-            <div class="exercise-header">
-              <span class="exercise-icon">🏊‍♂️</span>
-              <span class="exercise-name">スイミング</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-mode-toggle">
-                <button type="button" class="mode-btn" data-mode="time" data-exercise-type="swimming">⏱️ 時間</button>
-                <button type="button" class="mode-btn active" data-mode="distance" data-exercise-type="swimming">📏 距離</button>
-              </div>
-              <div class="input-group time-input" style="display: none;">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
-              </div>
-              <div class="input-group distance-input">
-                <label>距離（m）</label>
-                <input type="number" class="exercise-number" data-field="distance" min="25" max="10000" step="25" placeholder="500">
-              </div>
-              <div class="calculated-time" style="display: block;">
-                <small>推定時間: <span class="calc-time-value">0</span>分（50m/分で計算）</small>
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="swimming">追加</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 柔軟性・バランス -->
-        <div class="exercise-list" data-category="flexibility" style="display: none;">
-          <div class="exercise-item" data-exercise="stretching">
-            <div class="exercise-header">
-              <span class="exercise-icon">🤸</span>
-              <span class="exercise-name">ストレッチ</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-group">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="60" placeholder="10">
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="stretching">追加</button>
-            </div>
-          </div>
-
-          <div class="exercise-item" data-exercise="yoga">
-            <div class="exercise-header">
-              <span class="exercise-icon">🧘</span>
-              <span class="exercise-name">ヨガ・ピラティス</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-group">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="yoga">追加</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- その他 -->
-        <div class="exercise-list" data-category="other" style="display: none;">
-          <div class="exercise-item" data-exercise="dance">
-            <div class="exercise-header">
-              <span class="exercise-icon">💃</span>
-              <span class="exercise-name">ダンス・エアロビクス</span>
-              <button type="button" class="exercise-toggle">+</button>
-            </div>
-            <div class="exercise-input">
-              <div class="input-group">
-                <label>時間（分）</label>
-                <input type="number" class="exercise-number" data-field="duration" min="1" max="120" placeholder="30">
-              </div>
-              <button type="button" class="btn-add-exercise" data-exercise="dance">追加</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 追加済み運動リスト -->
-        <div class="added-exercises" id="added-exercises">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
-
-        <!-- 運動サマリー -->
-        <div class="exercise-summary">
-          <div class="summary-item">
-            <span class="summary-label">総運動時間:</span>
-            <span class="summary-value" id="modal-total-time">0 分</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-label">総消費カロリー:</span>
-            <span class="summary-value" id="modal-total-calories">0 kcal</span>
-          </div>
-        </div>
-      </div>
-
-      <button class="save-btn" onclick="saveData()">💾 保存する</button>
     </div>
   </div>
 </div>
 
 <script>
-// ===== 月間目標管理（home.htmlと連携） =====
-
-// 月別目標のキーを生成
-function getGoalsKey(year, month) {
-  const monthStr = String(month + 1).padStart(2, '0');
-  return `monthly_goals_${year}_${monthStr}`;
-}
-
-// 月間目標を読み込む
-function loadMonthlyGoals(year, month) {
-  const key = getGoalsKey(year, month);
-  const goalsStr = localStorage.getItem(key);
-  if (goalsStr) {
-    return JSON.parse(goalsStr);
-  }
-  return null;
-}
-
-// 目標未設定メッセージを表示/非表示
-function toggleGoalSetupPrompt(show) {
-  const prompt = document.getElementById('goal-setup-prompt');
-  if (prompt) {
-    prompt.style.display = show ? 'block' : 'none';
-  }
-}
-
-// 目標を月間サマリーに表示
-function displayGoalsInSummary() {
-  const goals = loadMonthlyGoals(currentYear, currentMonth);
-  
-  if (!goals) {
-    // 目標未設定の場合
-    toggleGoalSetupPrompt(true);
-    // 目標欄をクリア
-    document.getElementById('goal-bp').value = '';
-    document.getElementById('goal-weight').value = '';
-    document.getElementById('goal-days').value = '';
-    document.getElementById('goal-time').value = '';
-    document.getElementById('goal-calories').value = '';
-    return;
-  }
-  
-  // 目標設定済みの場合はメッセージを非表示
-  toggleGoalSetupPrompt(false);
-  
-  // 血圧目標
-  if (goals.bloodPressure) {
-    document.getElementById('goal-bp').value = 
-      `${goals.bloodPressure.systolic}/${goals.bloodPressure.diastolic} mmHg`;
-  }
-  
-  // 体重目標
-  if (goals.weight) {
-    document.getElementById('goal-weight').value = `${goals.weight} kg`;
-  }
-  
-  // トレーニング日数目標
-  if (goals.trainingDays) {
-    document.getElementById('goal-days').value = `${goals.trainingDays} 日`;
-  }
-  
-  // 総運動時間目標
-  if (goals.totalTime) {
-    document.getElementById('goal-time').value = `${goals.totalTime} 分`;
-  }
-  
-  // 総消費カロリー目標
-  if (goals.totalCalories) {
-    document.getElementById('goal-calories').value = `${goals.totalCalories} kcal`;
-  }
-}
-
-// プログレスバーを作成・更新
-function createProgressBar(containerId, percentage) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  
-  // 既存のプログレスバーを削除
-  const existingBar = container.querySelector('.progress-bar-container');
-  if (existingBar) {
-    existingBar.remove();
-  }
-  
-  // 新しいプログレスバーを作成
-  const barContainer = document.createElement('div');
-  barContainer.className = 'progress-bar-container';
-  
-  const bar = document.createElement('div');
-  bar.className = 'progress-bar';
-  
-  // パーセンテージに応じて色を変更
-  const percent = Math.min(Math.max(percentage, 0), 100);
-  if (percent < 50) {
-    bar.classList.add('low');
-  } else if (percent < 80) {
-    bar.classList.add('medium');
-  } else {
-    bar.classList.add('high');
-  }
-  
-  bar.style.width = `${percent}%`;
-  bar.textContent = `${percent}%`;
-  
-  barContainer.appendChild(bar);
-  container.appendChild(barContainer);
-}
-
-// ===== 既存のコード =====
-
-// 現在の日付を取得して初期表示月を設定
-const today = new Date();
-let currentMonth = today.getMonth();
-let currentYear = today.getFullYear();
-let selectedDate = null;
-let weight = null;
-
-// 2025年の日本の祝日
-const holidays2025 = {
-  0: [
-    {day: 1, name: '元日'},
-    {day: 13, name: '成人の日'}
-  ],
-  1: [
-    {day: 11, name: '建国記念の日'},
-    {day: 23, name: '天皇誕生日'},
-    {day: 24, name: '振替休日'}
-  ],
-  2: [
-    {day: 20, name: '春分の日'}
-  ],
-  3: [
-    {day: 29, name: '昭和の日'}
-  ],
-  4: [
-    {day: 3, name: '憲法記念日'},
-    {day: 4, name: 'みどりの日'},
-    {day: 5, name: 'こどもの日'},
-    {day: 6, name: '振替休日'}
-  ],
-  5: [],
-  6: [
-    {day: 21, name: '海の日'}
-  ],
-  7: [
-    {day: 11, name: '山の日'}
-  ],
-  8: [
-    {day: 15, name: '敬老の日'},
-    {day: 23, name: '秋分の日'}
-  ],
-  9: [
-    {day: 13, name: 'スポーツの日'}
-  ],
-  10: [
-    {day: 3, name: '文化の日'},
-    {day: 23, name: '勤労感謝の日'},
-    {day: 24, name: '振替休日'}
-  ],
-  11: []
+// サンプルデータ
+const sampleData = {
+  1: { bloodPressure: { systolic: 125, diastolic: 82 }, weight: 64.0, exercises: [{ category: 'ウォーキング', type: '速歩', duration: 30, calories: 150 }] },
+  2: { bloodPressure: { systolic: 122, diastolic: 80 }, weight: 63.8, exercises: [{ category: 'ランニング', duration: 45, calories: 350 }] },
+  4: { bloodPressure: { systolic: 120, diastolic: 78 } },
+  5: { exercises: [{ category: 'ウォーキング', duration: 30, calories: 140 }] },
+  6: { weight: 63.5 },
+  7: { bloodPressure: { systolic: 118, diastolic: 76 }, weight: 63.3 },
+  8: { exercises: [{ category: 'ランニング', duration: 60, calories: 470 }] },
+  9: { weight: 63.0, exercises: [{ category: 'ストレッチ', duration: 15, calories: 35 }] },
+  11: { bloodPressure: { systolic: 125, diastolic: 80 } },
+  12: { exercises: [{ category: 'ウォーキング', duration: 30, calories: 145 }] },
+  13: { weight: 62.8 },
+  14: { bloodPressure: { systolic: 122, diastolic: 79 }, exercises: [{ category: 'ヨガ', duration: 20, calories: 50 }] },
+  15: { bloodPressure: { systolic: 119, diastolic: 77 }, weight: 62.5, exercises: [{ category: 'サイクリング', duration: 45, calories: 300 }] },
+  16: { weight: 62.5 },
+  18: { bloodPressure: { systolic: 119, diastolic: 77 } },
+  19: { exercises: [{ category: 'ウォーキング', duration: 30, calories: 148 }] },
+  20: { weight: 62.3 },
+  21: { bloodPressure: { systolic: 125, diastolic: 82 }, weight: 64.0, exercises: [{ category: 'ウォーキング', type: '速歩', duration: 30, calories: 150 }] },
+  22: { bloodPressure: { systolic: 123, diastolic: 81 } },
+  23: { exercises: [{ category: 'ランニング', duration: 60, calories: 480 }] },
+  25: { bloodPressure: { systolic: 121, diastolic: 79 }, weight: 62.1 }
 };
 
-// 2026年の日本の祝日
-const holidays2026 = {
-  0: [
-    {day: 1, name: '元日'},
-    {day: 12, name: '成人の日'}
-  ],
-  1: [
-    {day: 11, name: '建国記念の日'},
-    {day: 23, name: '天皇誕生日'}
-  ],
-  2: [
-    {day: 20, name: '春分の日'}
-  ],
-  3: [
-    {day: 29, name: '昭和の日'}
-  ],
-  4: [
-    {day: 3, name: '憲法記念日'},
-    {day: 4, name: 'みどりの日'},
-    {day: 5, name: 'こどもの日'},
-    {day: 6, name: '振替休日'}
-  ],
-  5: [],
-  6: [
-    {day: 20, name: '海の日'}
-  ],
-  7: [
-    {day: 11, name: '山の日'}
-  ],
-  8: [
-    {day: 21, name: '敬老の日'},
-    {day: 22, name: '国民の休日'},
-    {day: 23, name: '秋分の日'}
-  ],
-  9: [
-    {day: 12, name: 'スポーツの日'}
-  ],
-  10: [
-    {day: 3, name: '文化の日'},
-    {day: 23, name: '勤労感謝の日'}
-  ],
-  11: []
-};
+let currentSelectedDate = { year: 2025, month: 11, day: 21 };
 
-// 年に応じた祝日データを取得
-function getHolidaysForYear(year) {
-  if (year === 2026) return holidays2026;
-  if (year === 2025) return holidays2025;
-  return {}; // 2024年やその他の年はデータなし
-}
-
-const monthColors = {
-  0: { bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #BBDEFB 100%)', header: 'linear-gradient(135deg, #BBDEFB, #E3F2FD)', border: '#64B5F6', title: 'linear-gradient(135deg, #1976D2 0%, #42A5F5 100%)', icon: '❄️' },
-  1: { bg: 'linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 50%, #F8BBD0 100%)', header: 'linear-gradient(135deg, #F8BBD0, #FCE4EC)', border: '#EC407A', title: 'linear-gradient(135deg, #C2185B 0%, #EC407A 100%)', icon: '💗' },
-  2: { bg: 'linear-gradient(135deg, #F1F8E9 0%, #DCEDC8 50%, #DCEDC8 100%)', header: 'linear-gradient(135deg, #DCEDC8, #F1F8E9)', border: '#9CCC65', title: 'linear-gradient(135deg, #689F38 0%, #9CCC65 100%)', icon: '🌸' },
-  3: { bg: 'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 50%, #FFE0B2 100%)', header: 'linear-gradient(135deg, #FFE0B2, #FFF3E0)', border: '#FFB74D', title: 'linear-gradient(135deg, #F57C00 0%, #FFB74D 100%)', icon: '🌷' },
-  4: { bg: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #C8E6C9 100%)', header: 'linear-gradient(135deg, #C8E6C9, #E8F5E9)', border: '#66BB6A', title: 'linear-gradient(135deg, #388E3C 0%, #66BB6A 100%)', icon: '🌿' },
-  5: { bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #E1BEE7 100%)', header: 'linear-gradient(135deg, #E1BEE7, #F3E5F5)', border: '#AB47BC', title: 'linear-gradient(135deg, #7B1FA2 0%, #AB47BC 100%)', icon: '🌈' },
-  6: { bg: 'linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 50%, #B3E5FC 100%)', header: 'linear-gradient(135deg, #B3E5FC, #E1F5FE)', border: '#29B6F6', title: 'linear-gradient(135deg, #0277BD 0%, #29B6F6 100%)', icon: '🌊' },
-  7: { bg: 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 50%, #FFCDD2 100%)', header: 'linear-gradient(135deg, #FFCDD2, #FFEBEE)', border: '#EF5350', title: 'linear-gradient(135deg, #D32F2F 0%, #EF5350 100%)', icon: '🌻' },
-  8: { bg: 'linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 50%, #B2DFDB 100%)', header: 'linear-gradient(135deg, #B2DFDB, #E0F2F1)', border: '#26A69A', title: 'linear-gradient(135deg, #00796B 0%, #26A69A 100%)', icon: '🍂' },
-  9: { bg: 'linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFECB3 100%)', header: 'linear-gradient(135deg, #FFECB3, #FFF9C4)', border: '#FFB300', title: 'linear-gradient(135deg, #F57C00 0%, #FFB300 100%)', icon: '🍁' },
-  10: { bg: 'linear-gradient(135deg, #EFEBE9 0%, #D7CCC8 50%, #D7CCC8 100%)', header: 'linear-gradient(135deg, #D7CCC8, #EFEBE9)', border: '#A1887F', title: 'linear-gradient(135deg, #6D4C41 0%, #A1887F 100%)', icon: '🍄' },
-  11: { bg: 'linear-gradient(135deg, #ECEFF1 0%, #CFD8DC 50%, #CFD8DC 100%)', header: 'linear-gradient(135deg, #CFD8DC, #ECEFF1)', border: '#78909C', title: 'linear-gradient(135deg, #455A64 0%, #78909C 100%)', icon: '⛄' }
-};
-
-function applyMonthColors(month) {
-  const colors = monthColors[month];
-  document.body.style.background = colors.bg;
-  document.querySelector('.header').style.borderBottomColor = colors.border;
-  const titleText = document.querySelector('.title-text');
-  titleText.style.background = colors.title;
-  titleText.style.webkitBackgroundClip = 'text';
-  titleText.style.backgroundClip = 'text';
-  document.getElementById('title-icon').textContent = colors.icon;
-}
-
-// ===== 運動種目のMETsデータベース（簡潔版：8種目） =====
-const exerciseDatabase = {
-  // 有酸素運動（3種目）
-  walking: {
-    name: 'ウォーキング',
-    icon: '🚶',
-    mets: {
-      slow: 2.5,
-      normal: 3.0,
-      fast: 4.3
-    },
-    speedLabels: {
-      slow: 'ゆっくり (3km/h)',
-      normal: '普通 (4km/h)',
-      fast: '速歩 (5-6km/h)'
-    }
-  },
-  running: {
-    name: 'ランニング',
-    icon: '🏃',
-    mets: {
-      4: 6.0,
-      5: 7.0,
-      6: 8.3,
-      7: 9.0,
-      8: 9.8,
-      9: 10.5,
-      10: 11.0,
-      11: 11.5,
-      12: 12.3
-    }
-  },
-  cycling: {
-    name: 'サイクリング',
-    icon: '🚴',
-    mets: {
-      5: 3.0,
-      6: 3.5,
-      7: 4.0,
-      8: 4.5,
-      9: 5.0,
-      10: 5.5,
-      11: 6.0,
-      12: 6.5,
-      13: 7.0,
-      14: 7.5,
-      15: 8.0,
-      16: 8.5,
-      17: 9.0,
-      18: 9.5,
-      19: 10.0,
-      20: 10.5
-    }
-  },
-  
-  // 水中運動（2種目）
-  'water-walking': {
-    name: '水中ウォーキング',
-    icon: '🏊',
-    mets: 4.5
-  },
-  swimming: {
-    name: 'スイミング',
-    icon: '🏊‍♂️',
-    mets: 8.0
-  },
-  
-  // 柔軟性（2種目）
-  stretching: {
-    name: 'ストレッチ',
-    icon: '🤸',
-    mets: 2.3
-  },
-  yoga: {
-    name: 'ヨガ・ピラティス',
-    icon: '🧘',
-    mets: 2.5
-  },
-  
-  // その他（1種目）
-  dance: {
-    name: 'ダンス・エアロビクス',
-    icon: '💃',
-    mets: 6.0
-  }
-};
-
-// ===== 追加済み運動データ =====
-let addedExercises = [];
-
-// ===== カテゴリー切り替え =====
-document.querySelectorAll('.category-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    
-    const category = this.dataset.category;
-    document.querySelectorAll('.exercise-list').forEach(list => {
-      list.style.display = list.dataset.category === category ? 'flex' : 'none';
-    });
-  });
-});
-
-// ===== 運動項目の展開/折りたたみ =====
-document.querySelectorAll('.exercise-header').forEach(header => {
-  header.addEventListener('click', function() {
-    const exerciseItem = this.closest('.exercise-item');
-    exerciseItem.classList.toggle('expanded');
-  });
-});
-
-// ===== 入力モード切り替え（時間/距離） =====
-document.querySelectorAll('.mode-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const exerciseType = this.dataset.exerciseType;
-    const mode = this.dataset.mode;
-    const exerciseItem = this.closest('.exercise-item');
-    
-    // ボタンのアクティブ状態を切り替え
-    exerciseItem.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    
-    // 入力フィールドの表示/非表示を切り替え
-    const timeInput = exerciseItem.querySelector('.time-input');
-    const distanceInput = exerciseItem.querySelector('.distance-input');
-    const calculatedTime = exerciseItem.querySelector('.calculated-time');
-    
-    if (mode === 'time') {
-      timeInput.style.display = 'block';
-      distanceInput.style.display = 'none';
-      if (calculatedTime) calculatedTime.style.display = 'none';
-      // 距離入力フィールドをクリア
-      const distanceField = distanceInput.querySelector('input');
-      if (distanceField) distanceField.value = '';
-    } else {
-      timeInput.style.display = 'none';
-      distanceInput.style.display = 'block';
-      if (calculatedTime) calculatedTime.style.display = 'block';
-      // 時間入力フィールドをクリア
-      const durationField = timeInput.querySelector('input');
-      if (durationField) durationField.value = '';
-    }
-  });
-});
-
-// ===== 距離入力時の時間自動計算 =====
-document.querySelectorAll('.distance-input input').forEach(input => {
-  input.addEventListener('input', function() {
-    const exerciseItem = this.closest('.exercise-item');
-    const exerciseType = exerciseItem.dataset.exercise;
-    const distance = parseFloat(this.value) || 0;
-    
-    if (distance > 0) {
-      let estimatedTime = 0;
-      
-      switch(exerciseType) {
-        case 'walking':
-          const walkSpeed = exerciseItem.querySelector('select[data-field="speed"]').value;
-          const walkSpeedKmh = walkSpeed === 'slow' ? 3 : walkSpeed === 'normal' ? 4 : 5.5;
-          estimatedTime = Math.round((distance / walkSpeedKmh) * 60);
-          break;
-          
-        case 'running':
-          const runSpeed = parseInt(exerciseItem.querySelector('select[data-field="speed"]').value);
-          estimatedTime = Math.round((distance / runSpeed) * 60);
-          break;
-          
-        case 'cycling':
-          const cyclingSpeed = parseInt(exerciseItem.querySelector('select[data-field="speed"]').value);
-          estimatedTime = Math.round((distance / cyclingSpeed) * 60);
-          break;
-          
-        case 'swimming':
-          // 50m/分 = 3km/h の速度で計算
-          estimatedTime = Math.round(distance / 50);
-          break;
-      }
-      
-      const calcTimeValue = exerciseItem.querySelector('.calc-time-value');
-      if (calcTimeValue) {
-        calcTimeValue.textContent = estimatedTime;
-      }
-    }
-  });
-});
-
-// ===== 速度/強度変更時の時間再計算 =====
-document.querySelectorAll('.exercise-select').forEach(select => {
-  select.addEventListener('change', function() {
-    const exerciseItem = this.closest('.exercise-item');
-    const distanceInput = exerciseItem.querySelector('.distance-input input');
-    if (distanceInput && distanceInput.value) {
-      // input イベントをトリガーして再計算
-      distanceInput.dispatchEvent(new Event('input'));
-    }
-  });
-});
-
-// ===== 運動追加ボタン =====
-document.querySelectorAll('.btn-add-exercise').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const exerciseType = this.dataset.exercise;
-    const exerciseItem = this.closest('.exercise-item');
-    
-    const inputData = {};
-    exerciseItem.querySelectorAll('[data-field]').forEach(input => {
-      const field = input.dataset.field;
-      inputData[field] = input.value;
-    });
-    
-    const exercise = createExerciseData(exerciseType, inputData);
-    
-    if (exercise) {
-      addedExercises.push(exercise);
-      updateAddedExercisesList();
-      updateExerciseSummary();
-      
-      exerciseItem.querySelectorAll('input[type="number"]').forEach(input => {
-        input.value = '';
-      });
-      
-      exerciseItem.classList.remove('expanded');
-    }
-  });
-});
-
-// ===== 運動データ作成 =====
-function createExerciseData(type, inputData) {
-  const exerciseInfo = exerciseDatabase[type];
-  if (!exerciseInfo) return null;
-  
-  let mets, duration, calories, details;
-  
-  switch(type) {
-    case 'walking':
-      mets = exerciseInfo.mets[inputData.speed] || exerciseInfo.mets.normal;
-      
-      // 距離入力の場合
-      if (inputData.distance && inputData.distance.trim() !== '') {
-        const distance = parseFloat(inputData.distance);
-        const walkSpeedKmh = inputData.speed === 'slow' ? 3 : inputData.speed === 'normal' ? 4 : 5.5;
-        duration = Math.round((distance / walkSpeedKmh) * 60);
-        details = `${exerciseInfo.speedLabels[inputData.speed]} · ${distance}km`;
-      }
-      // 時間入力の場合
-      else {
-        duration = parseInt(inputData.duration);
-        details = exerciseInfo.speedLabels[inputData.speed];
-      }
-      break;
-      
-    case 'running':
-      mets = exerciseInfo.mets[inputData.speed] || 8.3;
-      
-      // 距離入力の場合
-      if (inputData.distance && inputData.distance.trim() !== '') {
-        const distance = parseFloat(inputData.distance);
-        const runSpeed = parseInt(inputData.speed);
-        duration = Math.round((distance / runSpeed) * 60);
-        details = `${inputData.speed} km/h · ${distance}km`;
-      }
-      // 時間入力の場合
-      else {
-        duration = parseInt(inputData.duration);
-        details = `${inputData.speed} km/h`;
-      }
-      break;
-      
-    case 'cycling':
-      const cyclingSpeed = parseInt(inputData.speed);
-      mets = exerciseInfo.mets[cyclingSpeed] || 8.0;
-      
-      // 距離入力の場合
-      if (inputData.distance && inputData.distance.trim() !== '') {
-        const distance = parseFloat(inputData.distance);
-        duration = Math.round((distance / cyclingSpeed) * 60);
-        details = `${cyclingSpeed} km/h · ${distance}km`;
-      }
-      // 時間入力の場合
-      else {
-        duration = parseInt(inputData.duration);
-        details = `${cyclingSpeed} km/h`;
-      }
-      break;
-      
-    case 'water-walking':
-      mets = exerciseInfo.mets;
-      duration = parseInt(inputData.duration);
-      details = `${duration}分`;
-      break;
-      
-    case 'swimming':
-      mets = exerciseInfo.mets;
-      
-      // 距離入力の場合
-      if (inputData.distance && inputData.distance.trim() !== '') {
-        const distance = parseInt(inputData.distance);
-        duration = Math.round(distance / 50);
-        details = `${distance}m`;
-      }
-      // 時間入力の場合
-      else {
-        duration = parseInt(inputData.duration);
-        details = `${duration}分`;
-      }
-      break;
-      
-    default:
-      mets = exerciseInfo.mets;
-      duration = parseInt(inputData.duration);
-      details = `${duration}分`;
-  }
-  
-  const profile = JSON.parse(localStorage.getItem('user_profile') || '{}');
-  const userWeight = profile.weight || 65;
-  
-  calories = calculateCalories(mets, userWeight, duration);
-  
-  return {
-    type: type,
-    name: exerciseInfo.name,
-    icon: exerciseInfo.icon,
-    mets: mets,
-    duration: duration,
-    calories: calories,
-    details: details,
-    timestamp: Date.now()
-  };
-}
-
-// ===== カロリー計算 =====
-function calculateCalories(mets, weight, duration) {
-  return Math.round(mets * weight * (duration / 60) * 1.05);
-}
-
-// ===== 追加済み運動リストの更新 =====
-function updateAddedExercisesList() {
-  const container = document.getElementById('added-exercises');
-  
-  if (addedExercises.length === 0) {
-    container.innerHTML = '<p style="text-align: center; color: #9E9E9E; padding: 20px;">まだ運動が追加されていません</p>';
-    return;
-  }
-  
-  container.innerHTML = addedExercises.map((exercise, index) => `
-    <div class="added-exercise-card">
-      <div class="added-exercise-info">
-        <div class="added-exercise-name">
-          <span>${exercise.icon}</span> ${exercise.name}
-        </div>
-        <div class="added-exercise-details">
-          ${exercise.details} · ${exercise.duration}分 · METs ${exercise.mets}
-        </div>
-      </div>
-      <span class="added-exercise-calories">${exercise.calories} kcal</span>
-      <button class="btn-remove-exercise" onclick="removeExercise(${index})">削除</button>
-    </div>
-  `).join('');
-}
-
-// ===== 運動サマリーの更新 =====
-function updateExerciseSummary() {
-  const totalTime = addedExercises.reduce((sum, ex) => sum + ex.duration, 0);
-  const totalCalories = addedExercises.reduce((sum, ex) => sum + ex.calories, 0);
-  
-  document.getElementById('modal-total-time').textContent = `${totalTime} 分`;
-  document.getElementById('modal-total-calories').textContent = `${totalCalories.toLocaleString()} kcal`;
-  document.getElementById('input-total-time').value = totalTime;
-}
-
-// ===== 運動削除 =====
-function removeExercise(index) {
-  addedExercises.splice(index, 1);
-  updateAddedExercisesList();
-  updateExerciseSummary();
-}
-
+// カレンダー生成
 function generateCalendar() {
   const calendar = document.getElementById('calendar');
   calendar.innerHTML = '';
-  const dayHeaders = ['日', '月', '火', '水', '木', '金', '土'];
-  const colors = monthColors[currentMonth];
   
+  const dayHeaders = ['日', '月', '火', '水', '木', '金', '土'];
   dayHeaders.forEach((day, index) => {
     const header = document.createElement('div');
     header.className = 'day-header';
+    if (index === 0) header.classList.add('sunday');
+    if (index === 6) header.classList.add('saturday');
     header.textContent = day;
-    if (index === 0) {
-      header.style.background = '#FFF5F5';
-    } else if (index === 6) {
-      header.style.background = '#F0F8FF';
-    } else {
-      const gradientPositions = { 1: '0%', 2: '25%', 3: '50%', 4: '75%', 5: '100%' };
-      const position = gradientPositions[index];
-      header.style.background = `linear-gradient(90deg, ${colors.header.match(/\((.+)\)/)[1].split(',')[0]} ${position}, ${colors.header.match(/\((.+)\)/)[1].split(',')[1]} ${position})`;
-    }
     calendar.appendChild(header);
   });
 
-  applyMonthColors(currentMonth);
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDay = new Date(2025, 10, 1).getDay();
+  const daysInMonth = 30;
 
+  // 空セル
   for (let i = 0; i < firstDay; i++) {
     const emptyCell = document.createElement('div');
     emptyCell.className = 'day-cell empty';
     calendar.appendChild(emptyCell);
   }
 
-  const today = new Date();
+  // 日付セル
   for (let day = 1; day <= daysInMonth; day++) {
     const dayCell = document.createElement('div');
     const dayOfWeek = (firstDay + day - 1) % 7;
     
-    const currentYearHolidays = getHolidaysForYear(currentYear);
-    const holidayInfo = currentYearHolidays[currentMonth] && currentYearHolidays[currentMonth].length > 0 ? 
-      currentYearHolidays[currentMonth].find(h => h.day === day) : null;
-    const isHoliday = holidayInfo !== null && holidayInfo !== undefined;
-    
     let classes = ['day-cell'];
-    if (dayOfWeek === 0 || isHoliday) {
-      classes.push(isHoliday ? 'holiday' : 'sunday');
-    } else if (dayOfWeek === 6) {
-      classes.push('weekend');
-    }
-    const data = loadDayData(day);
-    if (data && (data.bloodPressure || data.weight || (data.exercises && data.exercises.length > 0))) {
-      classes.push('has-data');
-    }
-    if (today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === day) {
-      classes.push('today');
-    }
+    if (dayOfWeek === 0) classes.push('sunday');
+    if (dayOfWeek === 6) classes.push('saturday');
+    if (day === 3) classes.push('holiday');
+    if (sampleData[day]) classes.push('has-data');
+    if (day === 24) classes.push('today');
+    
     dayCell.className = classes.join(' ');
     
-    let dayNumberHTML = `<div class="day-number"><span>${day}</span>`;
-    if (isHoliday && holidayInfo && holidayInfo.name) {
-      dayNumberHTML += `<span class="holiday-name">${holidayInfo.name}</span>`;
-    }
-    dayNumberHTML += `</div>`;
+    // 日付番号
+    let html = `<div class="day-number">${day}</div>`;
     
-    dayCell.innerHTML = `${dayNumberHTML}<div id="status-${day}"></div><div class="day-summary" id="summary-${day}"></div>`;
-    
-    // 祝日セルのイベント設定
-    if (isHoliday && holidayInfo && holidayInfo.name) {
-      let tooltipShown = false;
-      let touchHandled = false; // タッチイベントが処理されたかを追跡
+    // 記録アイコン（常に生成・CSSで表示制御）
+    const data = sampleData[day];
+    if (data) {
+      const icons = [];
+      if (data.bloodPressure) icons.push('🩺');
+      if (data.weight) icons.push('⚖️');
+      if (data.exercises) icons.push('💪');
       
-      // モバイル用：タッチイベント（2段階タップ）
-      dayCell.addEventListener('touchend', function(e) {
-        e.preventDefault(); // クリックイベントの発火を防ぐ
-        touchHandled = true;
-        
-        if (!tooltipShown) {
-          // 1回目のタップ：ツールチップ表示
-          showHolidayTooltip(e, holidayInfo.name);
-          tooltipShown = true;
-          
-          // 3秒後にリセット
-          setTimeout(() => {
-            tooltipShown = false;
-          }, 3000);
-        } else {
-          // 2回目のタップ：モーダルを開く
-          hideHolidayTooltip();
-          openModal(day);
-          tooltipShown = false;
-        }
-        
-        // 100ms後にtouchHandledをリセット
-        setTimeout(() => {
-          touchHandled = false;
-        }, 100);
+      if (icons.length > 0) {
+        html += `<div class="record-icons">${icons.map(icon => `<span class="record-icon">${icon}</span>`).join('')}</div>`;
+      }
+    }
+    
+    dayCell.innerHTML = html;
+    dayCell.onclick = () => selectDay(day);
+    calendar.appendChild(dayCell);
+  }
+  
+  highlightSelectedDay(21);
+}
+
+// 日付選択
+function selectDay(day) {
+  currentSelectedDate.day = day;
+  updateDetailPane(day);
+  highlightSelectedDay(day);
+}
+
+// 詳細パネル更新
+function updateDetailPane(day) {
+  const detailDate = document.getElementById('detail-date');
+  const detailContent = document.getElementById('detail-content');
+  
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  const date = new Date(2025, 10, day);
+  detailDate.textContent = `11月${day}日(${weekdays[date.getDay()]})`;
+  
+  const data = sampleData[day];
+  if (data) {
+    let html = '';
+    
+    if (data.bloodPressure) {
+      html += `
+        <div class="detail-data-section">
+          <div class="detail-data-header">🩺 血圧</div>
+          <div class="detail-data-row">
+            <span class="detail-data-label">最高血圧</span>
+            <span class="detail-data-value">${data.bloodPressure.systolic} <span style="font-size: 0.7em; color: #616161;">mmHg</span></span>
+          </div>
+          <div class="detail-data-row">
+            <span class="detail-data-label">最低血圧</span>
+            <span class="detail-data-value">${data.bloodPressure.diastolic} <span style="font-size: 0.7em; color: #616161;">mmHg</span></span>
+          </div>
+        </div>
+      `;
+    }
+    
+    if (data.weight) {
+      html += `
+        <div class="detail-data-section">
+          <div class="detail-data-header">⚖️ 体重</div>
+          <div class="detail-data-row">
+            <span class="detail-data-label">体重</span>
+            <span class="detail-data-value">${data.weight} <span style="font-size: 0.7em; color: #616161;">kg</span></span>
+          </div>
+        </div>
+      `;
+    }
+    
+    if (data.exercises) {
+      const totalTime = data.exercises.reduce((sum, ex) => sum + ex.duration, 0);
+      const totalCalories = data.exercises.reduce((sum, ex) => sum + ex.calories, 0);
+      
+      html += `
+        <div class="detail-data-section">
+          <div class="detail-data-header">💪 運動 (合計: ${totalTime}分 / ${Math.round(totalCalories)}kcal)</div>
+      `;
+      
+      data.exercises.forEach(ex => {
+        html += `
+          <div class="detail-data-row">
+            <span class="detail-data-label">${ex.category}${ex.type ? ` - ${ex.type}` : ''}</span>
+            <span class="detail-data-value">${ex.duration}分 / ${Math.round(ex.calories)}kcal</span>
+          </div>
+        `;
       });
       
-      // PC・タブレット用：クリックイベント（1回クリックでモーダル）
-      dayCell.onclick = function(e) {
-        // タッチイベントが処理された場合はクリックイベントをスキップ
-        if (!touchHandled) {
-          openModal(day);
-        }
-      };
-    } else {
-      // 通常セルは従来通りクリックでモーダルを開く
-      dayCell.onclick = () => openModal(day);
-    }
-    calendar.appendChild(dayCell);
-    updateDaySummary(day);
-  }
-  loadPreviousMonthGoals();
-  updateMonthlySummary();
-}
-
-function updateDaySummary(day) {
-  const data = loadDayData(day);
-  const summaryEl = document.getElementById(`summary-${day}`);
-  const statusEl = document.getElementById(`status-${day}`);
-  if (!summaryEl || !statusEl) return;
-  
-  if (data) {
-    // status表示は削除
-    statusEl.innerHTML = '';
-    
-    let summary = '';
-    if (data.bloodPressure) {
-      summary += `<span class="data-icon">💉</span>${data.bloodPressure.systolic}/${data.bloodPressure.diastolic}<br>`;
-    }
-    if (data.weight) {
-      summary += `<span class="data-icon">⚖️</span>${data.weight}kg<br>`;
-    }
-    if (data.totalCalories) {
-      summary += `<span class="data-icon">🔥</span>${data.totalCalories}kcal`;
-    }
-    summaryEl.innerHTML = summary;
-  } else {
-    statusEl.innerHTML = '';
-    summaryEl.innerHTML = '';
-  }
-}
-
-function openModal(day) {
-  selectedDate = day;
-  document.getElementById('inputModal').classList.add('active');
-  document.getElementById('modal-title').textContent = `📅 ${currentYear}年${currentMonth + 1}月${day}日のデータ入力`;
-  loadModalData(day);
-}
-
-function closeModal() {
-  document.getElementById('inputModal').classList.remove('active');
-  selectedDate = null;
-  addedExercises = [];
-  updateAddedExercisesList();
-  updateExerciseSummary();
-}
-
-function loadModalData(day) {
-  const data = loadDayData(day);
-  if (data) {
-    if (data.bloodPressure) {
-      document.getElementById('input-systolic').value = data.bloodPressure.systolic;
-      document.getElementById('input-diastolic').value = data.bloodPressure.diastolic;
-    } else {
-      document.getElementById('input-systolic').value = '';
-      document.getElementById('input-diastolic').value = '';
-    }
-    if (data.weight) {
-      document.getElementById('input-weight').value = data.weight;
-      weight = data.weight;
-    } else {
-      document.getElementById('input-weight').value = '';
-      weight = findPreviousWeight(day);
-    }
-    // 運動データがあれば表示
-    if (data.exercises && data.exercises.length > 0) {
-      addedExercises = data.exercises.map(ex => ({...ex}));
-      updateAddedExercisesList();
-      updateExerciseSummary();
-    }
-  } else {
-    resetModalInputs();
-    weight = findPreviousWeight(day);
-  }
-}
-
-function findPreviousWeight(fromDay) {
-  for (let day = fromDay - 1; day >= 1; day--) {
-    const data = loadDayData(day);
-    if (data && data.weight) {
-      return data.weight;
-    }
-  }
-  if (currentMonth > 0) {
-    const prevMonth = currentMonth - 1;
-    const prevDaysInMonth = new Date(currentYear, prevMonth + 1, 0).getDate();
-    for (let day = prevDaysInMonth; day >= 1; day--) {
-      const key = `training_${currentYear}_${prevMonth}_${day}`;
-      const dataStr = localStorage.getItem(key);
-      if (dataStr) {
-        const data = JSON.parse(dataStr);
-        if (data.weight) {
-          return data.weight;
-        }
-      }
-    }
-  }
-  return null;
-}
-
-function resetModalInputs() {
-  document.getElementById('input-systolic').value = '';
-  document.getElementById('input-diastolic').value = '';
-  document.getElementById('input-weight').value = '';
-  addedExercises = [];
-  updateAddedExercisesList();
-  updateExerciseSummary();
-}
-
-function fillPreviousData() {
-  for (let day = selectedDate - 1; day >= 1; day--) {
-    const data = loadDayData(day);
-    if (data) {
-      if (data.bloodPressure) {
-        document.getElementById('input-systolic').value = data.bloodPressure.systolic;
-        document.getElementById('input-diastolic').value = data.bloodPressure.diastolic;
-      }
-      if (data.weight) {
-        document.getElementById('input-weight').value = data.weight;
-      }
-      alert(`${currentMonth + 1}月${day}日のデータを入力しました`);
-      return;
-    }
-  }
-  alert('前回のデータが見つかりません');
-}
-
-function saveData() {
-  const systolic = document.getElementById('input-systolic').value;
-  const diastolic = document.getElementById('input-diastolic').value;
-  const weightValue = document.getElementById('input-weight').value;
-  const data = {
-    date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`,
-    bloodPressure: systolic && diastolic ? { systolic: parseInt(systolic), diastolic: parseInt(diastolic) } : null,
-    weight: weightValue ? parseFloat(weightValue) : null,
-    totalTime: addedExercises.reduce((sum, ex) => sum + ex.duration, 0),
-    totalCalories: addedExercises.reduce((sum, ex) => sum + ex.calories, 0),
-    exercises: addedExercises
-  };
-  saveDayData(selectedDate, data);
-  updateDaySummary(selectedDate);
-  updateMonthlySummary();
-  updateNextMonthGoals();
-  closeModal();
-  alert('✅ データを保存しました!');
-}
-
-function resetData() {
-  if (!selectedDate) {
-    console.error('resetData: selectedDate is null');
-    return;
-  }
-  
-  const confirmMessage = `${currentYear}年${currentMonth + 1}月${selectedDate}日のデータをリセットしますか？\nこの操作は取り消せません。`;
-  if (!confirm(confirmMessage)) {
-    return;
-  }
-  
-  // LocalStorageからデータを削除
-  const key = getStorageKey(selectedDate);
-  console.log('Deleting key:', key);
-  console.log('Data before delete:', localStorage.getItem(key));
-  
-  localStorage.removeItem(key);
-  
-  console.log('Data after delete:', localStorage.getItem(key));
-  
-  // モーダルの入力フォームをリセット
-  resetModalInputs();
-  
-  // カレンダー表示を更新
-  updateDaySummary(selectedDate);
-  updateMonthlySummary();
-  
-  alert('🔄 データをリセットしました');
-}
-
-function clearMonthData() {
-  const monthName = `${currentYear}年${currentMonth + 1}月`;
-  const confirmMessage = `【警告】\n${monthName}のすべてのデータを削除しますか？\n\nこの操作は取り消せません。\n削除されるデータ:\n・血圧記録\n・体重記録\n・運動記録\n・月間目標\n\n本当に削除しますか？`;
-  
-  if (!confirm(confirmMessage)) {
-    return;
-  }
-  
-  // 二重確認
-  const doubleConfirm = confirm(`本当に${monthName}のすべてのデータを削除してもよろしいですか？\n\nこれが最後の確認です。`);
-  if (!doubleConfirm) {
-    return;
-  }
-  
-  let deletedCount = 0;
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  
-  // 日別データを削除
-  for (let day = 1; day <= daysInMonth; day++) {
-    const key = getStorageKey(day);
-    if (localStorage.getItem(key)) {
-      localStorage.removeItem(key);
-      deletedCount++;
-    }
-  }
-  
-  // 月間目標を削除
-  const goalsKey = getGoalsKey(currentYear, currentMonth);
-  if (localStorage.getItem(goalsKey)) {
-    localStorage.removeItem(goalsKey);
-  }
-  
-  // カレンダー表示を更新
-  renderCalendar();
-  updateMonthlySummary();
-  
-  alert(`✅ ${monthName}のデータを削除しました\n削除した日数: ${deletedCount}日`);
-}
-
-function getStorageKey(day) {
-  return `training_${currentYear}_${currentMonth}_${day}`;
-}
-
-function getMonthStorageKey() {
-  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-  return `${monthNames[currentMonth]}${currentYear}_data`;
-}
-
-function saveDayData(day, data) {
-  localStorage.setItem(getStorageKey(day), JSON.stringify(data));
-}
-
-function loadDayData(day) {
-  const data = localStorage.getItem(getStorageKey(day));
-  return data ? JSON.parse(data) : null;
-}
-
-function updateMonthlySummary() {
-  let totalSystolic = 0, totalDiastolic = 0, bpCount = 0;
-  let totalWeight = 0, weightCount = 0;
-  let trainingDays = 0;
-  let totalTime = 0;
-  let totalCalories = 0;
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  for (let day = 1; day <= daysInMonth; day++) {
-    const data = loadDayData(day);
-    if (data) {
-      if (data.bloodPressure) {
-        totalSystolic += data.bloodPressure.systolic;
-        totalDiastolic += data.bloodPressure.diastolic;
-        bpCount++;
-      }
-      if (data.weight) {
-        totalWeight += data.weight;
-        weightCount++;
-      }
-      if (data.exercises && data.exercises.length > 0) {
-        trainingDays++;
-      }
-      if (data.totalTime) {
-        totalTime += data.totalTime;
-      }
-      if (data.totalCalories) {
-        totalCalories += data.totalCalories;
-      }
-    }
-  }
-  
-  // 実績を表示
-  document.getElementById('avg-bp').innerHTML = bpCount > 0 
-    ? `${Math.round(totalSystolic / bpCount)}/${Math.round(totalDiastolic / bpCount)} <span class="unit">mmHg</span>`
-    : `--/-- <span class="unit">mmHg</span>`;
-  document.getElementById('avg-weight').innerHTML = weightCount > 0 
-    ? `${(totalWeight / weightCount).toFixed(1)} <span class="unit">kg</span>`
-    : `-- <span class="unit">kg</span>`;
-  document.getElementById('training-days').innerHTML = `${trainingDays} <span class="unit">日</span>`;
-  document.getElementById('total-time').innerHTML = `${totalTime} <span class="unit">分</span>`;
-  document.getElementById('total-calories').innerHTML = `${totalCalories} <span class="unit">kcal</span>`;
-  
-  // home.htmlから目標データを読み込む
-  displayGoalsInSummary();
-  
-  // 目標データを取得（達成度計算用）
-  const goals = loadMonthlyGoals(currentYear, currentMonth);
-  let goalDays = 0, goalTime = 0, goalCalories = 0;
-  
-  if (goals) {
-    goalDays = goals.trainingDays || 0;
-    goalTime = goals.totalTime || 0;
-    goalCalories = goals.totalCalories || 0;
-  }
-  
-  // 達成度を更新
-  updateAchievements(
-    bpCount > 0 ? Math.round(totalSystolic / bpCount) : 0,
-    bpCount > 0 ? Math.round(totalDiastolic / bpCount) : 0,
-    weightCount > 0 ? totalWeight / weightCount : 0,
-    trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories
-  );
-}
-
-function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories) {
-  // 血圧の達成度
-  const goalBp = document.getElementById('goal-bp').value;
-  const achievementBp = document.getElementById('achievement-bp');
-  if (goalBp && goalBp.includes('/') && avgSys > 0) {
-    const [goalSys, goalDia] = goalBp.split('/').map(v => parseInt(v.trim().replace(/[^\d]/g, '')));
-    if (avgSys <= goalSys && avgDia <= goalDia) {
-      achievementBp.textContent = '達成';
-      achievementBp.className = 'achievement-value achievement-success';
-    } else {
-      achievementBp.textContent = '未達成';
-      achievementBp.className = 'achievement-value achievement-fail';
-    }
-  } else {
-    achievementBp.textContent = '-';
-    achievementBp.className = 'achievement-value';
-  }
-  
-  // 体重の達成度
-  const goalWeightStr = document.getElementById('goal-weight').value;
-  const goalWeight = goalWeightStr ? parseFloat(goalWeightStr.replace(/[^\d.]/g, '')) : 0;
-  const achievementWeight = document.getElementById('achievement-weight');
-  if (goalWeight && avgWeight > 0) {
-    if (avgWeight <= goalWeight) {
-      achievementWeight.textContent = '達成';
-      achievementWeight.className = 'achievement-value achievement-success';
-    } else {
-      achievementWeight.textContent = '未達成';
-      achievementWeight.className = 'achievement-value achievement-fail';
-    }
-  } else {
-    achievementWeight.textContent = '-';
-    achievementWeight.className = 'achievement-value';
-  }
-  
-  // トレーニング日数の達成度（プログレスバー付き）
-  const achievementDaysEl = document.getElementById('achievement-days');
-  if (goalDays > 0) {
-    const percentage = Math.round((trainingDays / goalDays) * 100);
-    achievementDaysEl.textContent = `${percentage}%`;
-    createProgressBar('achievement-days', percentage);
-  } else {
-    achievementDaysEl.textContent = '0%';
-  }
-  
-  // 総運動時間の達成度（プログレスバー付き）
-  const achievementTimeEl = document.getElementById('achievement-time');
-  if (goalTime > 0) {
-    const percentage = Math.round((totalTime / goalTime) * 100);
-    achievementTimeEl.textContent = `${percentage}%`;
-    createProgressBar('achievement-time', percentage);
-  } else {
-    achievementTimeEl.textContent = '0%';
-  }
-  
-  // 総消費カロリーの達成度（プログレスバー付き）
-  const achievementCaloriesEl = document.getElementById('achievement-calories');
-  if (goalCalories > 0) {
-    const percentage = Math.round((totalCalories / goalCalories) * 100);
-    achievementCaloriesEl.textContent = `${percentage}%`;
-    createProgressBar('achievement-calories', percentage);
-  } else {
-    achievementCaloriesEl.textContent = '0%';
-  }
-}
-
-function loadPreviousMonthGoals() {
-  if (currentMonth < 1) {
-    document.getElementById('goal-bp').value = '';
-    document.getElementById('goal-weight').value = '';
-    return;
-  }
-  
-  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-  
-  const currentDataStr = localStorage.getItem(getMonthStorageKey());
-  if (currentDataStr) {
-    const currentData = JSON.parse(currentDataStr);
-    if (currentData.goals && currentData.goals.bp && currentData.goals.weight) {
-      document.getElementById('goal-bp').value = currentData.goals.bp;
-      document.getElementById('goal-weight').value = currentData.goals.weight;
-      return;
-    }
-  }
-  
-  const previousMonth = currentMonth - 1;
-  let bpSum = { systolic: 0, diastolic: 0, count: 0 };
-  let weightSum = { total: 0, count: 0 };
-  const prevDaysInMonth = new Date(currentYear, previousMonth + 1, 0).getDate();
-  
-  for (let day = 1; day <= prevDaysInMonth; day++) {
-    const prevKey = `training_${currentYear}_${previousMonth}_${day}`;
-    const dayDataStr = localStorage.getItem(prevKey);
-    if (dayDataStr) {
-      const dayData = JSON.parse(dayDataStr);
-      if (dayData.bloodPressure) {
-        bpSum.systolic += dayData.bloodPressure.systolic;
-        bpSum.diastolic += dayData.bloodPressure.diastolic;
-        bpSum.count++;
-      }
-      if (dayData.weight) {
-        weightSum.total += dayData.weight;
-        weightSum.count++;
-      }
-    }
-  }
-  
-  if (bpSum.count === 0 && weightSum.count === 0) {
-    document.getElementById('goal-bp').value = '';
-    document.getElementById('goal-weight').value = '';
-    return;
-  }
-  
-  if (bpSum.count > 0) {
-    const avgSys = Math.round(bpSum.systolic / bpSum.count);
-    const avgDia = Math.round(bpSum.diastolic / bpSum.count);
-    let targetSys = Math.round(avgSys * 0.98);
-    let targetDia = Math.round(avgDia * 0.98);
-    targetSys = Math.max(targetSys, 110);
-    targetDia = Math.max(targetDia, 70);
-    document.getElementById('goal-bp').value = `${targetSys}/${targetDia} mmHg`;
-  } else {
-    document.getElementById('goal-bp').value = '';
-  }
-  
-  if (weightSum.count > 0) {
-    const avgWeight = weightSum.total / weightSum.count;
-    let targetWeight = avgWeight * 0.98;
-    targetWeight = Math.max(targetWeight, 55);
-    document.getElementById('goal-weight').value = `${targetWeight.toFixed(1)} kg`;
-  } else {
-    document.getElementById('goal-weight').value = '';
-  }
-}
-
-function updateNextMonthGoals() {
-  if (currentMonth >= 11) return;
-  const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-  const nextMonth = currentMonth + 1;
-  const nextStorageKey = `${monthNames[nextMonth]}${currentYear}_data`;
-  let bpSum = { systolic: 0, diastolic: 0, count: 0 };
-  let weightSum = { total: 0, count: 0 };
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  for (let day = 1; day <= daysInMonth; day++) {
-    const data = loadDayData(day);
-    if (data) {
-      if (data.bloodPressure) {
-        bpSum.systolic += data.bloodPressure.systolic;
-        bpSum.diastolic += data.bloodPressure.diastolic;
-        bpSum.count++;
-      }
-      if (data.weight) {
-        weightSum.total += data.weight;
-        weightSum.count++;
-      }
-    }
-  }
-  let nextData = { goals: {} };
-  const nextDataStr = localStorage.getItem(nextStorageKey);
-  if (nextDataStr) {
-    nextData = JSON.parse(nextDataStr);
-    if (!nextData.goals) nextData.goals = {};
-  }
-  if (bpSum.count > 0) {
-    const avgSys = Math.round(bpSum.systolic / bpSum.count);
-    const avgDia = Math.round(bpSum.diastolic / bpSum.count);
-    let targetSys = Math.round(avgSys * 0.98);
-    let targetDia = Math.round(avgDia * 0.98);
-    targetSys = Math.max(targetSys, 110);
-    targetDia = Math.max(targetDia, 70);
-    nextData.goals.bp = `${targetSys}/${targetDia} mmHg`;
-  } else {
-    nextData.goals.bp = '';
-  }
-  if (weightSum.count > 0) {
-    const avgWeight = weightSum.total / weightSum.count;
-    let targetWeight = avgWeight * 0.98;
-    targetWeight = Math.max(targetWeight, 55);
-    nextData.goals.weight = `${targetWeight.toFixed(1)} kg`;
-  } else {
-    nextData.goals.weight = '';
-  }
-  localStorage.setItem(nextStorageKey, JSON.stringify(nextData));
-}
-
-// 年選択の変更イベント
-document.getElementById('year-select').addEventListener('change', function() {
-  currentYear = parseInt(this.value);
-  updateYearTitle();
-  generateCalendar();
-  updateMonthNavButtons();
-  updateYearNavButtons();
-});
-
-// 前の年ボタン
-document.getElementById('prev-year-btn').addEventListener('click', function() {
-  const yearSelect = document.getElementById('year-select');
-  const currentValue = parseInt(yearSelect.value);
-  if (currentValue > 2024) {
-    currentYear = currentValue - 1;
-    yearSelect.value = currentYear;
-    updateYearTitle();
-    generateCalendar();
-    updateMonthNavButtons();
-    updateYearNavButtons();
-  }
-});
-
-// 次の年ボタン
-document.getElementById('next-year-btn').addEventListener('click', function() {
-  const yearSelect = document.getElementById('year-select');
-  const currentValue = parseInt(yearSelect.value);
-  if (currentValue < 2026) {
-    currentYear = currentValue + 1;
-    yearSelect.value = currentYear;
-    updateYearTitle();
-    generateCalendar();
-    updateMonthNavButtons();
-    updateYearNavButtons();
-  }
-});
-
-// 今月ボタン（年と月の両方を今日の日付に移動）
-document.getElementById('current-month-btn').addEventListener('click', function() {
-  const today = new Date();
-  currentYear = today.getFullYear();
-  currentMonth = today.getMonth();
-  document.getElementById('year-select').value = currentYear;
-  document.getElementById('month-select').value = currentMonth;
-  updateYearTitle();
-  generateCalendar();
-  updateMonthNavButtons();
-  updateYearNavButtons();
-});
-
-// 月選択の変更イベント
-document.getElementById('month-select').addEventListener('change', function() {
-  currentMonth = parseInt(this.value);
-  generateCalendar();
-  updateMonthNavButtons();
-});
-
-// 前の月ボタン
-document.getElementById('prev-month-btn').addEventListener('click', function() {
-  currentMonth--;
-  if (currentMonth < 0) {
-    currentMonth = 11;
-    currentYear--;
-    document.getElementById('year-select').value = currentYear;
-    updateYearTitle();
-    updateYearNavButtons();
-  }
-  document.getElementById('month-select').value = currentMonth;
-  generateCalendar();
-  updateMonthNavButtons();
-});
-
-// 次の月ボタン
-document.getElementById('next-month-btn').addEventListener('click', function() {
-  currentMonth++;
-  if (currentMonth > 11) {
-    currentMonth = 0;
-    currentYear++;
-    document.getElementById('year-select').value = currentYear;
-    updateYearTitle();
-    updateYearNavButtons();
-  }
-  document.getElementById('month-select').value = currentMonth;
-  generateCalendar();
-  updateMonthNavButtons();
-});
-
-// 矢印ボタンの有効/無効状態を更新
-function updateMonthNavButtons() {
-  const prevBtn = document.getElementById('prev-month-btn');
-  const nextBtn = document.getElementById('next-month-btn');
-  
-  // 年をまたぐ移動が可能なので、常に有効
-  prevBtn.disabled = false;
-  nextBtn.disabled = false;
-}
-
-// 年選択ボタンの有効/無効状態を更新
-function updateYearNavButtons() {
-  const prevBtn = document.getElementById('prev-year-btn');
-  const nextBtn = document.getElementById('next-year-btn');
-  
-  // 2024年の場合は前年ボタンを無効化
-  prevBtn.disabled = (currentYear === 2024);
-  
-  // 2026年の場合は次年ボタンを無効化
-  nextBtn.disabled = (currentYear === 2026);
-}
-
-// 年タイトルを更新
-function updateYearTitle() {
-  document.getElementById('year-title').textContent = currentYear;
-}
-
-document.getElementById('year-select').value = currentYear;
-document.getElementById('month-select').value = currentMonth;
-
-// 祝日ツールチップ機能
-let currentTooltip = null;
-
-function showHolidayTooltip(event, holidayName) {
-  // 既存のツールチップを削除
-  hideHolidayTooltip();
-  
-  // 新しいツールチップを作成
-  const tooltip = document.createElement('div');
-  tooltip.className = 'holiday-tooltip';
-  tooltip.textContent = holidayName;
-  document.body.appendChild(tooltip);
-  
-  // タッチ位置の取得（touchendではchangedTouchesを使用）
-  const touch = event.changedTouches ? event.changedTouches[0] : event.touches ? event.touches[0] : event;
-  const x = touch.clientX;
-  const y = touch.clientY;
-  
-  // ツールチップの位置を設定（セルの上に表示）
-  tooltip.style.left = `${x}px`;
-  tooltip.style.top = `${y - 50}px`;
-  tooltip.style.transform = 'translateX(-50%)';
-  
-  // 画面外に出ないように調整
-  requestAnimationFrame(() => {
-    const rect = tooltip.getBoundingClientRect();
-    if (rect.left < 10) {
-      tooltip.style.left = '10px';
-      tooltip.style.transform = 'translateX(0)';
-    } else if (rect.right > window.innerWidth - 10) {
-      tooltip.style.left = `${window.innerWidth - rect.width - 10}px`;
-      tooltip.style.transform = 'translateX(0)';
+      html += `</div>`;
     }
     
-    // アニメーション表示
-    setTimeout(() => tooltip.classList.add('show'), 10);
+    detailContent.innerHTML = html;
+  } else {
+    detailContent.innerHTML = '<div class="empty-state"><p>この日はまだ記録がありません</p></div>';
+  }
+}
+
+// 前日へ
+function navigateToPrevDay() {
+  if (currentSelectedDate.day > 1) {
+    currentSelectedDate.day--;
+    selectDay(currentSelectedDate.day);
+  }
+}
+
+// 翌日へ
+function navigateToNextDay() {
+  if (currentSelectedDate.day < 30) {
+    currentSelectedDate.day++;
+    selectDay(currentSelectedDate.day);
+  }
+}
+
+// ハイライト
+function highlightSelectedDay(day) {
+  document.querySelectorAll('.day-cell').forEach(cell => {
+    cell.classList.remove('selected');
   });
   
-  currentTooltip = tooltip;
-  
-  // 2秒後に自動で消す
-  setTimeout(hideHolidayTooltip, 2000);
+  const allCells = Array.from(document.querySelectorAll('.day-cell'));
+  allCells.forEach(cell => {
+    const dayNum = cell.querySelector('.day-number');
+    if (dayNum && parseInt(dayNum.textContent) === day) {
+      cell.classList.add('selected');
+    }
+  });
 }
-
-function hideHolidayTooltip() {
-  if (currentTooltip) {
-    currentTooltip.classList.remove('show');
-    setTimeout(() => {
-      if (currentTooltip && currentTooltip.parentNode) {
-        currentTooltip.parentNode.removeChild(currentTooltip);
-      }
-      currentTooltip = null;
-    }, 200);
-  }
-}
-
-// 画面タッチ時にツールチップを隠す
-document.addEventListener('touchstart', function(event) {
-  if (currentTooltip && !event.target.closest('.day-cell.holiday')) {
-    hideHolidayTooltip();
-  }
-});
 
 // 初期化
-updateAddedExercisesList();
-updateExerciseSummary();
 generateCalendar();
-updateMonthNavButtons(); // 初期状態でボタンの有効/無効を設定
-updateYearNavButtons(); // 初期状態で年ボタンの有効/無効を設定
+updateDetailPane(21);
 </script>
 
 </body>
