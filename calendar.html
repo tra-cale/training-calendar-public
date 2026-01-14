@@ -102,23 +102,25 @@ h1 {
 }
 
 .clear-month-button {
-  position: absolute;
-  right: 0;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   background: linear-gradient(135deg, #EF5350, #E53935);
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 0.75em;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 0.85em;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(239, 83, 80, 0.3);
+  box-shadow: 0 2px 12px rgba(239, 83, 80, 0.4);
   font-weight: 600;
+  z-index: 999;
 }
 
 .clear-month-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.4);
+  box-shadow: 0 4px 16px rgba(239, 83, 80, 0.5);
   background: linear-gradient(135deg, #E53935, #C62828);
 }
 
@@ -128,10 +130,10 @@ h1 {
 
 @media (max-width: 768px) {
   .clear-month-button {
-    position: static;
-    margin-top: 10px;
-    width: auto;
-    max-width: 200px;
+    bottom: 15px;
+    right: 15px;
+    padding: 8px 14px;
+    font-size: 0.8em;
   }
   
   .current-month-container {
@@ -286,7 +288,13 @@ h1 {
 
 /* 詳細パネル（PC版では非表示） */
 .detail-pane {
-  display: none;
+  display: none !important;
+}
+
+@media (min-width: 769px) {
+  .detail-pane {
+    display: none !important;
+  }
 }
 
 .day-cell.today .day-number::after {
@@ -1364,69 +1372,154 @@ h1 {
     opacity: 0.6;
   }
 }
-/* ホームボタン */
-.home-button {
+/* ハンバーガーメニュー */
+.hamburger-menu {
   position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
+  top: 15px;
+  right: 15px;
+  z-index: 1001;
+}
+
+.hamburger-button {
+  width: 44px;
+  height: 44px;
   background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85em;
-  display: inline-flex;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
 }
 
-.home-button:hover {
+.hamburger-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
-  background: linear-gradient(135deg, #FF8F00, #FFC107);
 }
 
-.home-button:active {
+.hamburger-line {
+  width: 24px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-button.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translateY(8px);
+}
+
+.hamburger-button.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-button.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translateY(-8px);
+}
+
+/* ドロップダウンメニュー */
+.nav-dropdown {
+  position: fixed;
+  top: 70px;
+  right: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.nav-dropdown.active {
+  opacity: 1;
+  visibility: visible;
   transform: translateY(0);
 }
 
-/* 使い方ガイドボタン */
-.guide-button {
-  position: fixed;
-  top: 100px;
-  left: 20px;
-  z-index: 1000;
-  background: linear-gradient(135deg, #43A047, #66BB6A);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
+.nav-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #424242;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.85em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
+  font-size: 0.95em;
+  transition: all 0.2s ease;
 }
 
-.guide-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(67, 160, 71, 0.4);
-  background: linear-gradient(135deg, #388E3C, #43A047);
+.nav-dropdown a:hover {
+  background: #F5F5F5;
 }
 
-.guide-button:active {
-  transform: translateY(0);
+.nav-dropdown a .button-icon {
+  font-size: 1.3em;
+  width: 24px;
+  text-align: center;
+}
+
+.nav-dropdown a:nth-child(1) {
+  color: #F57C00;
+}
+
+.nav-dropdown a:nth-child(2) {
+  color: #FFB300;
+}
+
+.nav-dropdown a:nth-child(3) {
+  color: #1976D2;
+}
+
+.nav-dropdown a:nth-child(4) {
+  color: #43A047;
+}
+
+/* 区切り線 */
+.nav-dropdown-divider {
+  height: 1px;
+  background: #E0E0E0;
+  margin: 8px 0;
+}
+
+/* 削除ボタン（6番目のリンク） */
+.nav-dropdown a:nth-child(6) {
+  color: #EF5350;
+}
+
+.nav-dropdown a:nth-child(6):hover {
+  background: #FFEBEE;
+}
+
+/* 古いナビゲーションボタンのスタイルを非表示 */
+.nav-buttons-container {
+  display: none;
+}
+
+.home-button,
+.yearly-summary-button,
+.guide-button {
+  display: none;
+}
+
+/* 固定配置の削除ボタンを非表示 */
+.clear-month-button {
+  display: none;
 }
 
 .button-text {
-  display: none;
-  margin-left: 4px;
+  display: inline;
+}
+
+.button-icon {
+  font-size: 1em;
 }
 
 .button-icon {
@@ -1471,56 +1564,29 @@ h1 {
   }
   
   .container {
-    padding: 90px 15px 15px 15px;
+    padding: 20px 15px 15px 15px;  /* 上部余白を大幅削減 */
   }
   
-  .button-text {
-    display: none;
+  /* ハンバーガーメニューのスマホ調整 */
+  .hamburger-menu {
+    top: 10px;
+    right: 10px;
   }
   
-  .home-button:hover .button-text,
-  .yearly-summary-button:hover .button-text,
-  .guide-button:hover .button-text {
-    display: inline;
+  .hamburger-button {
+    width: 40px;
+    height: 40px;
   }
   
-  .button-icon {
-    font-size: 1.2em;
+  .nav-dropdown {
+    top: 60px;
+    right: 10px;
+    min-width: 180px;
   }
   
-  .home-button,
-  .yearly-summary-button,
-  .guide-button {
-    width: 44px !important;
-    height: 44px !important;
-    padding: 0 !important;
-    min-width: 44px;
-    min-height: 44px;
-    justify-content: center;
-    display: inline-flex !important;
-    align-items: center;
-  }
-  
-  .home-button:hover,
-  .yearly-summary-button:hover,
-  .guide-button:hover {
-    width: auto !important;
-    padding: 8px 16px !important;
-  }
-  
-  .home-button {
-    top: 10px !important;
-    left: 10px !important;
-  }
-  
-  .yearly-summary-button {
-    top: 60px !important;
-    left: 10px !important;
-  }
-  
-  .guide-button {
-    top: 110px !important;
-    left: 10px !important;
+  .nav-dropdown a {
+    padding: 10px 16px;
+    font-size: 0.9em;
   }
   
   h1 {
@@ -1562,57 +1628,44 @@ h1 {
   }
 }
 
-.yearly-summary-button {
-  position: fixed;
-  top: 60px;
-  left: 20px;
-  z-index: 1000;
-  background: linear-gradient(135deg, #1976D2, #42A5F5);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-}
-
-.yearly-summary-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
-  background: linear-gradient(135deg, #1565C0, #1976D2);
-}
-
-.yearly-summary-button:active {
-  transform: translateY(0);
-}
 </style>
 </head>
 <body>
 
+<!-- ハンバーガーメニュー -->
+<div class="hamburger-menu">
+  <button class="hamburger-button" id="hamburger-button" aria-label="メニュー">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+  
+  <div class="nav-dropdown" id="nav-dropdown">
+    <a href="home.html">
+      <span class="button-icon">🏠</span>
+      <span class="button-text">ホームへ戻る</span>
+    </a>
+    <a href="#" onclick="goToCurrentMonth(); return false;">
+      <span class="button-icon">📅</span>
+      <span class="button-text">今月へ戻る</span>
+    </a>
+    <a href="yearly-summary.html">
+      <span class="button-icon">📊</span>
+      <span class="button-text">年間サマリーを見る</span>
+    </a>
+    <a href="features.html">
+      <span class="button-icon">📖</span>
+      <span class="button-text">使い方ガイド</span>
+    </a>
+    <div class="nav-dropdown-divider"></div>
+    <a href="#" onclick="clearMonthData(); return false;">
+      <span class="button-icon">🗑️</span>
+      <span class="button-text">今月のデータを削除</span>
+    </a>
+  </div>
+</div>
+
 <div class="container">
-  <!-- ホームボタン -->
-  <a href="home.html" class="home-button">
-    <span class="button-icon">🏠</span>
-    <span class="button-text">ホームへ戻る</span>
-  </a>
-  
-  <!-- 年間サマリーボタン -->
-  <a href="yearly-summary.html" class="yearly-summary-button">
-    <span class="button-icon">📊</span>
-    <span class="button-text">年間サマリーを見る</span>
-  </a>
-  
-  <!-- 使い方ガイドボタン -->
-  <a href="features.html" class="guide-button">
-    <span class="button-icon">📖</span>
-    <span class="button-text">使い方ガイド</span>
-  </a>
-  
   <div class="header">
     <h1><span id="title-icon">🍂</span> <span class="title-text"><span id="year-title">2025</span>年 トレーニング記録</span></h1>
     <p class="subtitle">血圧・体重・トレーニング実績管理カレンダー</p>
@@ -1653,12 +1706,6 @@ h1 {
       </select>
     </div>
     <button id="next-month-btn" class="month-nav-button" title="次の月">›</button>
-  </div>
-
-  <!-- 今月ボタン -->
-  <div class="current-month-container">
-    <button id="current-month-btn" class="current-nav-button" title="今月に戻る">今月</button>
-    <button id="clear-month-btn" class="clear-month-button" onclick="clearMonthData()" title="この月のデータをすべて削除">🗑️ 今月のデータを削除</button>
   </div>
 
   <div class="monthly-view active">
@@ -2779,9 +2826,7 @@ function generateCalendar() {
     dayCell.className = classes.join(' ');
     
     let dayNumberHTML = `<div class="day-number"><span>${day}</span>`;
-    if (isHoliday && holidayInfo && holidayInfo.name) {
-      dayNumberHTML += `<span class="holiday-name">${holidayInfo.name}</span>`;
-    }
+    // 祝日名は表示しない（背景色のみで判別）
     dayNumberHTML += `</div>`;
     
     // 記録アイコンを追加（スマホ版用・CSSで表示制御）
@@ -2795,7 +2840,7 @@ function generateCalendar() {
         icons.push('⚖️');
       }
       if (data.exercises && data.exercises.length > 0) {
-        icons.push('💪');
+        icons.push('🏃');
       }
       if (icons.length > 0) {
         recordIconsHTML = `<div class="record-icons">${icons.map(icon => `<span class="record-icon">${icon}</span>`).join('')}</div>`;
@@ -3345,8 +3390,8 @@ document.getElementById('next-year-btn').addEventListener('click', function() {
   }
 });
 
-// 今月ボタン（年と月の両方を今日の日付に移動）
-document.getElementById('current-month-btn').addEventListener('click', function() {
+// 今月へ戻る関数
+function goToCurrentMonth() {
   const today = new Date();
   currentYear = today.getFullYear();
   currentMonth = today.getMonth();
@@ -3356,7 +3401,13 @@ document.getElementById('current-month-btn').addEventListener('click', function(
   generateCalendar();
   updateMonthNavButtons();
   updateYearNavButtons();
-});
+  
+  // スマホ版の場合は詳細パネルも更新
+  if (window.innerWidth <= 768) {
+    updateDetailPane(currentYear, currentMonth + 1, today.getDate());
+    highlightSelectedDay(currentYear, currentMonth + 1, today.getDate());
+  }
+}
 
 // 月選択の変更イベント
 document.getElementById('month-select').addEventListener('change', function() {
@@ -3762,6 +3813,35 @@ updateExerciseSummary();
 generateCalendar();
 updateMonthNavButtons(); // 初期状態でボタンの有効/無効を設定
 updateYearNavButtons(); // 初期状態で年ボタンの有効/無効を設定
+
+// ===== ハンバーガーメニューの開閉 =====
+const hamburgerButton = document.getElementById('hamburger-button');
+const navDropdown = document.getElementById('nav-dropdown');
+
+if (hamburgerButton && navDropdown) {
+  // ハンバーガーボタンのクリック
+  hamburgerButton.addEventListener('click', function(e) {
+    e.stopPropagation();
+    hamburgerButton.classList.toggle('active');
+    navDropdown.classList.toggle('active');
+  });
+
+  // ドロップダウン外をクリックしたら閉じる
+  document.addEventListener('click', function(e) {
+    if (!navDropdown.contains(e.target) && !hamburgerButton.contains(e.target)) {
+      hamburgerButton.classList.remove('active');
+      navDropdown.classList.remove('active');
+    }
+  });
+
+  // ドロップダウン内のリンクをクリックしたらメニューを閉じる
+  navDropdown.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', function() {
+      hamburgerButton.classList.remove('active');
+      navDropdown.classList.remove('active');
+    });
+  });
+}
 </script>
 
 </body>
