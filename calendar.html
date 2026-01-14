@@ -279,47 +279,14 @@ h1 {
   white-space: nowrap;
 }
 
-/* モバイル表示時は祝日名を非表示 */
-@media (max-width: 768px) {
-  .holiday-name {
-    display: none;
-  }
+/* 記録アイコン（PC版では非表示） */
+.record-icons {
+  display: none;
 }
 
-/* ツールチップ用スタイル */
-.holiday-tooltip {
-  position: fixed;
-  background: rgba(198, 40, 40, 0.95);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.85em;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  z-index: 10000;
-  pointer-events: none;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(-5px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.holiday-tooltip.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.holiday-tooltip::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid rgba(198, 40, 40, 0.95);
+/* 詳細パネル（PC版では非表示） */
+.detail-pane {
+  display: none;
 }
 
 .day-cell.today .day-number::after {
@@ -1114,6 +1081,288 @@ h1 {
     padding: 6px 10px;
     font-size: 0.95em;
   }
+
+  /* スマホ版の調整 */
+  .container {
+    padding: 90px 15px 15px 15px;  /* 上部にボタン用の余白 */
+  }
+
+  /* カレンダーラッパー（実際のHTML要素は.monthly-view） */
+  .monthly-view {
+    margin-bottom: 20px;
+  }
+
+  .calendar {
+    gap: 2px;
+  }
+
+  .day-cell {
+    min-height: 42px !important;
+    max-height: 42px;
+    padding: 2px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 0.85em;
+  }
+
+  .day-cell:hover {
+    transform: none;
+  }
+
+  .day-summary {
+    display: none !important;
+  }
+
+  /* 日付番号を左上に配置 */
+  .day-number {
+    font-size: 0.9em;
+    margin: 0;
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    line-height: 1;
+  }
+
+  .day-cell.today {
+    border-width: 2px;
+  }
+
+  .day-cell.saturday {
+    background: #F0F8FF;
+  }
+
+  .day-cell.saturday.has-data {
+    background: linear-gradient(145deg, #E3F2FD, #F0F8FF);
+  }
+
+  .day-cell.sunday,
+  .day-cell.holiday {
+    background: #FFF5F5;
+  }
+
+  .day-cell.sunday.has-data,
+  .day-cell.holiday.has-data {
+    background: linear-gradient(145deg, #FFEBEE, #FFF5F5);
+  }
+
+  /* 記録アイコン表示（案1実装） */
+  .record-icons {
+    display: flex;
+    gap: 1px;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.65em;
+    position: absolute;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+  }
+
+  .record-icon {
+    display: inline-block;
+  }
+
+  /* 選択中の日をハイライト */
+  .day-cell.selected {
+    border-color: #F57C00;
+    border-width: 3px;
+    background: linear-gradient(145deg, #FFE0B2, #FFFFFF);
+    transform: scale(1.05);
+    z-index: 10;
+  }
+
+  .day-cell.selected.saturday {
+    background: linear-gradient(145deg, #FFE0B2, #E3F2FD);
+  }
+
+  .day-cell.selected.sunday,
+  .day-cell.selected.holiday {
+    background: linear-gradient(145deg, #FFE0B2, #FFEBEE);
+  }
+
+  /* 詳細パネル */
+  .detail-pane {
+    display: block !important;  /* スマホ版では表示 */
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-top: 3px solid #FFD54F;
+  }
+
+  .detail-header {
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #FFD54F;
+  }
+
+  .detail-date {
+    font-size: 1.4em;
+    color: #212121;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .detail-nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-prev-day,
+  .btn-next-day {
+    flex: 1;
+    padding: 12px 8px;
+    background: linear-gradient(135deg, #F57C00, #FFB300);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+  }
+
+  .btn-prev-day:active,
+  .btn-next-day:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 4px rgba(245, 124, 0, 0.3);
+  }
+
+  .detail-data-section {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: linear-gradient(145deg, #FAFAFA, #FFFFFF);
+    border-radius: 10px;
+    border: 2px solid #E0E0E0;
+  }
+
+  .detail-data-header {
+    font-size: 1em;
+    font-weight: 600;
+    color: #424242;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .detail-data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #F5F5F5;
+  }
+
+  .detail-data-row:last-child {
+    border-bottom: none;
+  }
+
+  .detail-data-label {
+    font-size: 0.9em;
+    color: #616161;
+  }
+
+  .detail-data-value {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #212121;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9E9E9E;
+  }
+
+  .btn-edit-record {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(135deg, #42A5F5, #1E88E5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-delete-record {
+    flex: 1;
+    padding: 12px;
+    background: white;
+    color: #EF5350;
+    border: 2px solid #EF5350;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  /* サマリーセクションと目標プロンプトを非表示 */
+  .summary-section,
+  .goal-setup-prompt {
+    display: none !important;
+  }
+
+  /* 詳細コンテンツのフェードインアニメーション */
+  .detail-content {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 詳細パネルにrelative配置を追加（スワイプインジケーター用） */
+  .detail-pane {
+    position: relative;
+  }
+
+  /* スワイプインジケーター */
+  .swipe-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3em;
+    color: #F57C00;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+  }
+
+  .swipe-indicator.left {
+    left: 30px;
+  }
+
+  .swipe-indicator.right {
+    right: 30px;
+  }
+
+  .swipe-indicator.show {
+    opacity: 0.6;
+  }
 }
 /* ホームボタン */
 .home-button {
@@ -1818,6 +2067,34 @@ h1 {
   </div>
 </div>
 
+<!-- 詳細パネル（スマホ版専用・下部70%エリア） -->
+<div class="detail-pane" id="detail-pane">
+  <!-- スワイプインジケーター -->
+  <div class="swipe-indicator left" id="swipe-left">◀</div>
+  <div class="swipe-indicator right" id="swipe-right">▶</div>
+
+  <div class="detail-header">
+    <h2 class="detail-date" id="detail-date">日付を選択してください</h2>
+    <div class="detail-nav">
+      <button class="btn-prev-day" id="btn-prev-day" onclick="navigateToPrevDay()">◀ 前日</button>
+      <button class="btn-next-day" id="btn-next-day" onclick="navigateToNextDay()">翌日 ▶</button>
+    </div>
+  </div>
+
+  <div class="detail-content" id="detail-content">
+    <div class="empty-state">
+      <p>カレンダーから日付を選択してください</p>
+    </div>
+  </div>
+
+  <div class="detail-actions" id="detail-actions" style="display: none;">
+    <button class="btn-edit-record" onclick="openEditModalFromDetail()">✏️ 編集</button>
+    <button class="btn-delete-record" onclick="deleteCurrentRecord()">🗑️ 削除</button>
+  </div>
+</div>
+
+</div>
+
 <script>
 // ===== 月間目標管理（home.htmlと連携） =====
 
@@ -2443,6 +2720,14 @@ function generateCalendar() {
   dayHeaders.forEach((day, index) => {
     const header = document.createElement('div');
     header.className = 'day-header';
+    
+    // 土曜日・日曜日のクラスを追加
+    if (index === 0) {
+      header.classList.add('sunday');
+    } else if (index === 6) {
+      header.classList.add('saturday');
+    }
+    
     header.textContent = day;
     if (index === 0) {
       header.style.background = '#FFF5F5';
@@ -2479,8 +2764,10 @@ function generateCalendar() {
     let classes = ['day-cell'];
     if (dayOfWeek === 0 || isHoliday) {
       classes.push(isHoliday ? 'holiday' : 'sunday');
+      if (dayOfWeek === 0) classes.push('sunday');
     } else if (dayOfWeek === 6) {
       classes.push('weekend');
+      classes.push('saturday');
     }
     const data = loadDayData(day);
     if (data && (data.bloodPressure || data.weight || (data.exercises && data.exercises.length > 0))) {
@@ -2497,51 +2784,26 @@ function generateCalendar() {
     }
     dayNumberHTML += `</div>`;
     
-    dayCell.innerHTML = `${dayNumberHTML}<div id="status-${day}"></div><div class="day-summary" id="summary-${day}"></div>`;
-    
-    // 祝日セルのイベント設定
-    if (isHoliday && holidayInfo && holidayInfo.name) {
-      let tooltipShown = false;
-      let touchHandled = false; // タッチイベントが処理されたかを追跡
-      
-      // モバイル用：タッチイベント（2段階タップ）
-      dayCell.addEventListener('touchend', function(e) {
-        e.preventDefault(); // クリックイベントの発火を防ぐ
-        touchHandled = true;
-        
-        if (!tooltipShown) {
-          // 1回目のタップ：ツールチップ表示
-          showHolidayTooltip(e, holidayInfo.name);
-          tooltipShown = true;
-          
-          // 3秒後にリセット
-          setTimeout(() => {
-            tooltipShown = false;
-          }, 3000);
-        } else {
-          // 2回目のタップ：モーダルを開く
-          hideHolidayTooltip();
-          openModal(day);
-          tooltipShown = false;
-        }
-        
-        // 100ms後にtouchHandledをリセット
-        setTimeout(() => {
-          touchHandled = false;
-        }, 100);
-      });
-      
-      // PC・タブレット用：クリックイベント（1回クリックでモーダル）
-      dayCell.onclick = function(e) {
-        // タッチイベントが処理された場合はクリックイベントをスキップ
-        if (!touchHandled) {
-          openModal(day);
-        }
-      };
-    } else {
-      // 通常セルは従来通りクリックでモーダルを開く
-      dayCell.onclick = () => openModal(day);
+    // 記録アイコンを追加（スマホ版用・CSSで表示制御）
+    let recordIconsHTML = '';
+    if (data) {
+      const icons = [];
+      if (data.bloodPressure && (data.bloodPressure.systolic || data.bloodPressure.diastolic)) {
+        icons.push('🩺');
+      }
+      if (data.weight) {
+        icons.push('⚖️');
+      }
+      if (data.exercises && data.exercises.length > 0) {
+        icons.push('💪');
+      }
+      if (icons.length > 0) {
+        recordIconsHTML = `<div class="record-icons">${icons.map(icon => `<span class="record-icon">${icon}</span>`).join('')}</div>`;
+      }
     }
+    
+    dayCell.innerHTML = `${dayNumberHTML}${recordIconsHTML}<div id="status-${day}"></div><div class="day-summary" id="summary-${day}"></div>`;
+    dayCell.onclick = () => openModal(day);
     calendar.appendChild(dayCell);
     updateDaySummary(day);
   }
@@ -2578,9 +2840,18 @@ function updateDaySummary(day) {
 
 function openModal(day) {
   selectedDate = day;
-  document.getElementById('inputModal').classList.add('active');
-  document.getElementById('modal-title').textContent = `📅 ${currentYear}年${currentMonth + 1}月${day}日のデータ入力`;
-  loadModalData(day);
+  
+  // スマホ版（768px以下）では詳細パネルを更新
+  if (window.innerWidth <= 768) {
+    updateDetailPane(currentYear, currentMonth + 1, day);
+    highlightSelectedDay(currentYear, currentMonth + 1, day);
+  } 
+  // PC版では従来通りモーダルを開く
+  else {
+    document.getElementById('inputModal').classList.add('active');
+    document.getElementById('modal-title').textContent = `📅 ${currentYear}年${currentMonth + 1}月${day}日のデータ入力`;
+    loadModalData(day);
+  }
 }
 
 function closeModal() {
@@ -3144,68 +3415,334 @@ function updateYearTitle() {
 document.getElementById('year-select').value = currentYear;
 document.getElementById('month-select').value = currentMonth;
 
-// 祝日ツールチップ機能
-let currentTooltip = null;
+// ===== スマホ版詳細パネル関連の関数（ステップ3） =====
 
-function showHolidayTooltip(event, holidayName) {
-  // 既存のツールチップを削除
-  hideHolidayTooltip();
-  
-  // 新しいツールチップを作成
-  const tooltip = document.createElement('div');
-  tooltip.className = 'holiday-tooltip';
-  tooltip.textContent = holidayName;
-  document.body.appendChild(tooltip);
-  
-  // タッチ位置の取得（touchendではchangedTouchesを使用）
-  const touch = event.changedTouches ? event.changedTouches[0] : event.touches ? event.touches[0] : event;
-  const x = touch.clientX;
-  const y = touch.clientY;
-  
-  // ツールチップの位置を設定（セルの上に表示）
-  tooltip.style.left = `${x}px`;
-  tooltip.style.top = `${y - 50}px`;
-  tooltip.style.transform = 'translateX(-50%)';
-  
-  // 画面外に出ないように調整
-  requestAnimationFrame(() => {
-    const rect = tooltip.getBoundingClientRect();
-    if (rect.left < 10) {
-      tooltip.style.left = '10px';
-      tooltip.style.transform = 'translateX(0)';
-    } else if (rect.right > window.innerWidth - 10) {
-      tooltip.style.left = `${window.innerWidth - rect.width - 10}px`;
-      tooltip.style.transform = 'translateX(0)';
+// グローバル変数：現在選択中の日付
+window.currentSelectedDate = null;
+
+// 詳細パネルを更新
+function updateDetailPane(year, month, day) {
+  const key = `training_${year}_${month}_${day}`;
+  const data = localStorage.getItem(key);
+  const detailContent = document.getElementById('detail-content');
+  const detailDate = document.getElementById('detail-date');
+  const detailActions = document.getElementById('detail-actions');
+
+  if (!detailContent || !detailDate) return;
+
+  // 日付表示
+  const date = new Date(year, month - 1, day);
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  detailDate.textContent = `${month}月${day}日(${weekdays[date.getDay()]})`;
+
+  // 現在選択中の日付を保存
+  window.currentSelectedDate = { year, month, day };
+
+  // データ表示
+  if (data) {
+    try {
+      const record = JSON.parse(data);
+      detailContent.innerHTML = renderDetailContent(record);
+      if (detailActions) detailActions.style.display = 'flex';
+    } catch (error) {
+      console.error('データ読み込みエラー:', error);
+      detailContent.innerHTML = '<div class="empty-state"><p>データの読み込みに失敗しました</p></div>';
+      if (detailActions) detailActions.style.display = 'none';
     }
-    
-    // アニメーション表示
-    setTimeout(() => tooltip.classList.add('show'), 10);
+  } else {
+    detailContent.innerHTML = `
+      <div class="empty-state">
+        <p>この日はまだ記録がありません</p>
+        <button class="btn-add-record" onclick="openEditModalFromDetail()" style="
+          padding: 12px 24px;
+          background: linear-gradient(135deg, #66BB6A, #81C784);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 1em;
+          font-weight: 600;
+          cursor: pointer;
+          margin-top: 15px;
+        ">
+          ➕ 記録を追加
+        </button>
+      </div>
+    `;
+    if (detailActions) detailActions.style.display = 'none';
+  }
+}
+
+// 詳細コンテンツのレンダリング
+function renderDetailContent(data) {
+  let html = '';
+
+  // 血圧
+  if (data.bloodPressure && (data.bloodPressure.systolic || data.bloodPressure.diastolic)) {
+    html += `
+      <div class="detail-data-section">
+        <div class="detail-data-header">🩺 血圧</div>
+        <div class="detail-data-row">
+          <span class="detail-data-label">最高血圧</span>
+          <span class="detail-data-value">${data.bloodPressure.systolic || '--'} <span style="font-size: 0.7em; color: #616161;">mmHg</span></span>
+        </div>
+        <div class="detail-data-row">
+          <span class="detail-data-label">最低血圧</span>
+          <span class="detail-data-value">${data.bloodPressure.diastolic || '--'} <span style="font-size: 0.7em; color: #616161;">mmHg</span></span>
+        </div>
+      </div>
+    `;
+  }
+
+  // 体重
+  if (data.weight) {
+    html += `
+      <div class="detail-data-section">
+        <div class="detail-data-header">⚖️ 体重</div>
+        <div class="detail-data-row">
+          <span class="detail-data-label">体重</span>
+          <span class="detail-data-value">${data.weight} <span style="font-size: 0.7em; color: #616161;">kg</span></span>
+        </div>
+      </div>
+    `;
+  }
+
+  // 運動
+  if (data.exercises && data.exercises.length > 0) {
+    const totalTime = data.exercises.reduce((sum, ex) => sum + (ex.duration || 0), 0);
+    const totalCalories = data.exercises.reduce((sum, ex) => sum + (ex.calories || 0), 0);
+
+    html += `
+      <div class="detail-data-section">
+        <div class="detail-data-header">🏃 運動 (合計: ${totalTime}分 / ${Math.round(totalCalories)}kcal)</div>
+    `;
+
+    data.exercises.forEach(ex => {
+      const exerciseName = ex.category || '運動';
+      const exerciseType = ex.type || '';
+      html += `
+        <div class="detail-data-row">
+          <span class="detail-data-label">${exerciseName}${exerciseType ? ` - ${exerciseType}` : ''}</span>
+          <span class="detail-data-value">${ex.duration}分 / ${Math.round(ex.calories)}kcal</span>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+  }
+
+  // データが何もない場合
+  if (!html) {
+    html = '<div class="empty-state"><p>記録データがありません</p></div>';
+  }
+
+  return html;
+}
+
+// 前日へ移動
+function navigateToPrevDay() {
+  if (!window.currentSelectedDate) return;
+
+  const { year, month, day } = window.currentSelectedDate;
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() - 1);
+
+  const newYear = date.getFullYear();
+  const newMonth = date.getMonth() + 1;
+  const newDay = date.getDate();
+
+  // 月をまたぐ場合はカレンダーも更新
+  if (newMonth !== month) {
+    currentYear = newYear;
+    currentMonth = newMonth - 1;
+    document.getElementById('year-select').value = currentYear;
+    document.getElementById('month-select').value = currentMonth;
+    generateCalendar();
+  }
+
+  updateDetailPane(newYear, newMonth, newDay);
+  highlightSelectedDay(newYear, newMonth, newDay);
+}
+
+// 翌日へ移動
+function navigateToNextDay() {
+  if (!window.currentSelectedDate) return;
+
+  const { year, month, day } = window.currentSelectedDate;
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() + 1);
+
+  const newYear = date.getFullYear();
+  const newMonth = date.getMonth() + 1;
+  const newDay = date.getDate();
+
+  // 月をまたぐ場合はカレンダーも更新
+  if (newMonth !== month) {
+    currentYear = newYear;
+    currentMonth = newMonth - 1;
+    document.getElementById('year-select').value = currentYear;
+    document.getElementById('month-select').value = currentMonth;
+    generateCalendar();
+  }
+
+  updateDetailPane(newYear, newMonth, newDay);
+  highlightSelectedDay(newYear, newMonth, newDay);
+}
+
+// 選択日をハイライト
+function highlightSelectedDay(year, month, day) {
+  // すべての選択状態をクリア
+  document.querySelectorAll('.day-cell.selected').forEach(cell => {
+    cell.classList.remove('selected');
   });
-  
-  currentTooltip = tooltip;
-  
-  // 2秒後に自動で消す
-  setTimeout(hideHolidayTooltip, 2000);
-}
 
-function hideHolidayTooltip() {
-  if (currentTooltip) {
-    currentTooltip.classList.remove('show');
-    setTimeout(() => {
-      if (currentTooltip && currentTooltip.parentNode) {
-        currentTooltip.parentNode.removeChild(currentTooltip);
+  // 該当日をハイライト（現在表示中の月の場合のみ）
+  if (year === currentYear && month === currentMonth + 1) {
+    const allCells = document.querySelectorAll('.day-cell');
+    allCells.forEach(cell => {
+      const dayNumber = cell.querySelector('.day-number span');
+      if (dayNumber && parseInt(dayNumber.textContent) === day && !cell.classList.contains('empty')) {
+        cell.classList.add('selected');
       }
-      currentTooltip = null;
-    }, 200);
+    });
   }
 }
 
-// 画面タッチ時にツールチップを隠す
-document.addEventListener('touchstart', function(event) {
-  if (currentTooltip && !event.target.closest('.day-cell.holiday')) {
-    hideHolidayTooltip();
+// 詳細パネルから編集モーダルを開く
+function openEditModalFromDetail() {
+  if (!window.currentSelectedDate) return;
+  
+  const { year, month, day } = window.currentSelectedDate;
+  
+  // PC版と同じモーダルを開く
+  selectedDate = day;
+  document.getElementById('inputModal').classList.add('active');
+  document.getElementById('modal-title').textContent = `📅 ${year}年${month}月${day}日のデータ入力`;
+  loadModalData(day);
+}
+
+// 現在選択中のレコードを削除
+function deleteCurrentRecord() {
+  if (!window.currentSelectedDate) return;
+  
+  const { year, month, day } = window.currentSelectedDate;
+  
+  if (!confirm(`${month}月${day}日の記録を削除してもよろしいですか？`)) {
+    return;
   }
-});
+
+  try {
+    const key = `training_${year}_${month}_${day}`;
+    localStorage.removeItem(key);
+    
+    // カレンダーを再生成
+    generateCalendar();
+    
+    // 詳細パネルを更新
+    updateDetailPane(year, month, day);
+    
+    alert('削除しました');
+  } catch (error) {
+    console.error('削除エラー:', error);
+    alert('削除に失敗しました');
+  }
+}
+
+// モーダルを閉じた後に詳細パネルを更新（スマホ版）
+const originalCloseModal = closeModal;
+closeModal = function() {
+  originalCloseModal();
+  
+  // スマホ版で、選択中の日付がある場合は詳細パネルを更新
+  if (window.innerWidth <= 768 && window.currentSelectedDate) {
+    const { year, month, day } = window.currentSelectedDate;
+    updateDetailPane(year, month, day);
+    generateCalendar();
+  }
+};
+
+// 初期化時に今日の日付を詳細パネルに表示（スマホ版のみ）
+if (window.innerWidth <= 768) {
+  const today = new Date();
+  const detailPane = document.getElementById('detail-pane');
+  if (detailPane) {
+    detailPane.style.display = 'block';
+  }
+  updateDetailPane(today.getFullYear(), today.getMonth() + 1, today.getDate());
+  highlightSelectedDay(today.getFullYear(), today.getMonth() + 1, today.getDate());
+}
+
+// ===== スワイプ操作の実装（ステップ4） =====
+if (window.innerWidth <= 768) {
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let touchStartY = 0;
+  let touchEndY = 0;
+  
+  const detailPane = document.getElementById('detail-pane');
+  const swipeLeft = document.getElementById('swipe-left');
+  const swipeRight = document.getElementById('swipe-right');
+
+  if (detailPane && swipeLeft && swipeRight) {
+    // タッチ開始
+    detailPane.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    // タッチ移動中（インジケーター表示）
+    detailPane.addEventListener('touchmove', (e) => {
+      const currentX = e.changedTouches[0].screenX;
+      const currentY = e.changedTouches[0].screenY;
+      const diffX = currentX - touchStartX;
+      const diffY = currentY - touchStartY;
+      
+      // 横方向のスワイプが縦方向より大きい場合のみインジケーターを表示
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+        if (diffX > 0) {
+          // 右スワイプ（前日へ）
+          swipeLeft.classList.add('show');
+          swipeRight.classList.remove('show');
+        } else {
+          // 左スワイプ（翌日へ）
+          swipeRight.classList.add('show');
+          swipeLeft.classList.remove('show');
+        }
+      } else {
+        swipeLeft.classList.remove('show');
+        swipeRight.classList.remove('show');
+      }
+    }, { passive: true });
+
+    // タッチ終了
+    detailPane.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      
+      // インジケーターを非表示
+      swipeLeft.classList.remove('show');
+      swipeRight.classList.remove('show');
+      
+      handleSwipe();
+    }, { passive: true });
+  }
+
+  function handleSwipe() {
+    const swipeThreshold = 50; // 最低50pxのスワイプ
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    
+    // 横方向のスワイプが縦方向より明らかに大きい場合のみ処理
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+      if (diffX > 0) {
+        // 右スワイプ → 前日
+        navigateToPrevDay();
+      } else {
+        // 左スワイプ → 翌日
+        navigateToNextDay();
+      }
+    }
+  }
+}
 
 // 初期化
 updateAddedExercisesList();
