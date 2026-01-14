@@ -2834,13 +2834,13 @@ function generateCalendar() {
     if (data) {
       const icons = [];
       if (data.bloodPressure && (data.bloodPressure.systolic || data.bloodPressure.diastolic)) {
-        icons.push('🩺');
+        icons.push('🫀');
       }
       if (data.weight) {
         icons.push('⚖️');
       }
       if (data.exercises && data.exercises.length > 0) {
-        icons.push('🏃');
+        icons.push('🔥');
       }
       if (icons.length > 0) {
         recordIconsHTML = `<div class="record-icons">${icons.map(icon => `<span class="record-icon">${icon}</span>`).join('')}</div>`;
@@ -2868,7 +2868,7 @@ function updateDaySummary(day) {
     
     let summary = '';
     if (data.bloodPressure) {
-      summary += `<span class="data-icon">💉</span>${data.bloodPressure.systolic}/${data.bloodPressure.diastolic}<br>`;
+      summary += `<span class="data-icon">🫀</span>${data.bloodPressure.systolic}/${data.bloodPressure.diastolic}<br>`;
     }
     if (data.weight) {
       summary += `<span class="data-icon">⚖️</span>${data.weight}kg<br>`;
@@ -3542,7 +3542,7 @@ function renderDetailContent(data) {
   if (data.bloodPressure && (data.bloodPressure.systolic || data.bloodPressure.diastolic)) {
     html += `
       <div class="detail-data-section">
-        <div class="detail-data-header">🩺 血圧</div>
+        <div class="detail-data-header">🫀 血圧</div>
         <div class="detail-data-row">
           <span class="detail-data-label">最高血圧</span>
           <span class="detail-data-value">${data.bloodPressure.systolic || '--'} <span style="font-size: 0.7em; color: #616161;">mmHg</span></span>
@@ -3575,7 +3575,7 @@ function renderDetailContent(data) {
 
     html += `
       <div class="detail-data-section">
-        <div class="detail-data-header">🏃 運動 (合計: ${totalTime}分 / ${Math.round(totalCalories)}kcal)</div>
+        <div class="detail-data-header">🔥 運動 (合計: ${totalTime}分 / ${Math.round(totalCalories)}kcal)</div>
     `;
 
     data.exercises.forEach(ex => {
