@@ -57,7 +57,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 25px;
 }
 
 .month-selector {
@@ -66,7 +66,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 25px;
 }
 
 .current-month-container {
@@ -143,37 +143,36 @@ h1 {
 }
 
 .month-nav-button {
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
+  background: transparent;
+  color: #9E9E9E;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  font-size: 1.2em;
+  font-size: 1.3em;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  line-height: 1;
 }
 
 .month-nav-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
-  background: linear-gradient(135deg, #FF8F00, #FFC107);
+  color: #F57C00;
+  background: #FFF3E0;
+  transform: none;
 }
 
 .month-nav-button:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.95);
 }
 
 .month-nav-button:disabled {
-  background: linear-gradient(135deg, #BDBDBD, #E0E0E0);
+  color: #E0E0E0;
   cursor: not-allowed;
   opacity: 0.5;
-  box-shadow: none;
+  background: transparent;
 }
 
 .month-select-wrapper {
@@ -194,7 +193,7 @@ h1 {
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 25px;
 }
 
@@ -202,16 +201,16 @@ h1 {
   text-align: center;
   font-weight: bold;
   color: #424242;
-  padding: 8px;
-  background: linear-gradient(135deg, #FFD54F, #FFECB3);
-  border-radius: 6px;
-  font-size: 0.85em;
+  padding: 4px 2px;
+  background: linear-gradient(135deg, #FFE082, #FFF9C4);
+  border-radius: 4px;
+  font-size: 0.7em;
   transition: background 0.5s ease;
 }
 
 .day-cell {
   background: white;
-  border: 2px solid #E0E0E0;
+  border: none;
   border-radius: 8px;
   min-height: 100px;
   padding: 8px;
@@ -220,35 +219,34 @@ h1 {
   position: relative;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .day-cell:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-color: #FFD54F;
+  box-shadow: 0 2px 8px rgba(255, 213, 79, 0.4);
 }
 
 .day-cell.empty {
   background: #F5F5F5;
-  border: 1px dashed #E0E0E0;
+  border: none;
   cursor: default;
+  box-shadow: none;
 }
 
 .day-cell.empty:hover {
   transform: none;
   box-shadow: none;
-  border-color: #E0E0E0;
 }
 
 .day-cell.has-data {
   background: linear-gradient(145deg, #FFF8E1, #FFFFFF);
-  border-color: #FFB300;
+  box-shadow: 0 2px 4px rgba(255, 179, 0, 0.2);
 }
 
 .day-cell.today {
   background: linear-gradient(145deg, #FFF9C4, #FFFFFF);
-  border-color: #FFB300;
-  border-width: 3px;
+  box-shadow: 0 0 0 2px #FFB300, 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .day-cell.weekend {
@@ -1068,13 +1066,13 @@ h1 {
   
   /* 月選択UIのスマホ対応 */
   .month-selector {
-    gap: 8px;
+    gap: 20px;
   }
   
   .month-nav-button {
-    width: 36px;
-    height: 36px;
-    font-size: 1.1em;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2em;
   }
   
   .month-select-wrapper {
@@ -1101,7 +1099,7 @@ h1 {
   }
 
   .calendar {
-    gap: 2px;
+    gap: 3px;
   }
 
   .day-cell {
@@ -1175,8 +1173,7 @@ h1 {
 
   /* 選択中の日をハイライト */
   .day-cell.selected {
-    border-color: #F57C00;
-    border-width: 3px;
+    box-shadow: 0 0 0 3px #F57C00, 0 2px 8px rgba(0,0,0,0.2);
     background: linear-gradient(145deg, #FFE0B2, #FFFFFF);
     transform: scale(1.05);
     z-index: 10;
@@ -1673,7 +1670,7 @@ h1 {
 
   <!-- 年選択 -->
   <div class="year-selector">
-    <button id="prev-year-btn" class="month-nav-button" title="前の年">‹</button>
+    <button id="prev-year-btn" class="month-nav-button" title="前の年">◄</button>
     <div class="month-select-wrapper">
       <label for="year-select">表示年:</label>
       <select id="year-select" class="month-select-dropdown">
@@ -1682,12 +1679,12 @@ h1 {
         <option value="2026">2026年</option>
       </select>
     </div>
-    <button id="next-year-btn" class="month-nav-button" title="次の年">›</button>
+    <button id="next-year-btn" class="month-nav-button" title="次の年">►</button>
   </div>
 
   <!-- 月選択 -->
   <div class="month-selector">
-    <button id="prev-month-btn" class="month-nav-button" title="前の月">‹</button>
+    <button id="prev-month-btn" class="month-nav-button" title="前の月">◄</button>
     <div class="month-select-wrapper">
       <label for="month-select">表示月:</label>
       <select id="month-select" class="month-select-dropdown">
@@ -1705,7 +1702,7 @@ h1 {
         <option value="11">12月</option>
       </select>
     </div>
-    <button id="next-month-btn" class="month-nav-button" title="次の月">›</button>
+    <button id="next-month-btn" class="month-nav-button" title="次の月">►</button>
   </div>
 
   <div class="monthly-view active">
@@ -3414,6 +3411,7 @@ document.getElementById('month-select').addEventListener('change', function() {
   currentMonth = parseInt(this.value);
   generateCalendar();
   updateMonthNavButtons();
+  resetDetailPanel(); // 詳細パネルをリセット
 });
 
 // 前の月ボタン
@@ -3429,6 +3427,7 @@ document.getElementById('prev-month-btn').addEventListener('click', function() {
   document.getElementById('month-select').value = currentMonth;
   generateCalendar();
   updateMonthNavButtons();
+  resetDetailPanel(); // 詳細パネルをリセット
 });
 
 // 次の月ボタン
@@ -3444,6 +3443,7 @@ document.getElementById('next-month-btn').addEventListener('click', function() {
   document.getElementById('month-select').value = currentMonth;
   generateCalendar();
   updateMonthNavButtons();
+  resetDetailPanel(); // 詳細パネルをリセット
 });
 
 // 矢印ボタンの有効/無効状態を更新
@@ -3665,6 +3665,33 @@ function highlightSelectedDay(year, month, day) {
       if (dayNumber && parseInt(dayNumber.textContent) === day && !cell.classList.contains('empty')) {
         cell.classList.add('selected');
       }
+    });
+  }
+}
+
+// 詳細パネルをリセットする関数（スマホ版用）
+function resetDetailPanel() {
+  // スマホ版のみ実行
+  if (window.innerWidth <= 768) {
+    const detailDate = document.getElementById('detail-date');
+    const detailContent = document.getElementById('detail-content');
+    const detailActions = document.getElementById('detail-actions');
+    
+    if (detailDate) {
+      detailDate.textContent = '';
+    }
+    
+    if (detailContent) {
+      detailContent.innerHTML = '<div class="empty-state"><p>カレンダーから日付を選択してください</p></div>';
+    }
+    
+    if (detailActions) {
+      detailActions.style.display = 'none';
+    }
+    
+    // すべての選択状態をクリア
+    document.querySelectorAll('.day-cell.selected').forEach(cell => {
+      cell.classList.remove('selected');
     });
   }
 }
