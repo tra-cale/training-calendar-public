@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>タイムライン - トレーニング管理カレンダー 2025</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFE082 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #212121;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ヘッダー */
+.header {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 0;
+}
+
+.header-title {
+  font-size: 2.5em;
+  color: #212121;
+  text-align: center;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.header-subtitle {
+  text-align: center;
+  color: #616161;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+
+/* ナビゲーションボタン */
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background: #F5F5F5;
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  background: transparent;
+  color: #616161;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-btn:hover {
+  background: rgba(245, 124, 0, 0.1);
+  color: #F57C00;
+}
+
+.nav-btn.active {
+  background: white;
+  color: #F57C00;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* コントロールバー - NEW! */
+.control-bar {
+  background: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-top: 1px solid #F5F5F5;
+}
+
+.date-selector-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #FAFAFA;
+  border-radius: 10px;
+  border: 2px solid #E0E0E0;
+}
+
+.label-text {
+  font-weight: 600;
+  color: #424242;
+  font-size: 0.95em;
+  white-space: nowrap;
+}
+
+.date-selector-inline select {
+  padding: 6px 10px;
+  border: 1px solid #E0E0E0;
+  border-radius: 6px;
+  font-size: 0.95em;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #F57C00;
+}
+
+.date-selector-inline select:focus {
+  outline: none;
+  border-color: #F57C00;
+  box-shadow: 0 0 0 2px rgba(245, 124, 0, 0.1);
+}
+
+/* フィルターボタン - NEW! */
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  background: white;
+  color: #616161;
+  border: 2px solid #E0E0E0;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: #FFB300;
+  color: #F57C00;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border-color: #F57C00;
+}
+
+/* コンテンツエリア */
+.content {
+  background: white;
+  border-radius: 0 0 20px 20px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* セクションタイトル */
+.section-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 20px;
+  text-align: center;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #FFD54F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.record-count {
+  font-size: 0.7em;
+  color: #616161;
+  font-weight: normal;
+}
+
+/* 年セパレーター */
+.year-separator {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 30px 0 20px 0;
+}
+
+.year-separator .line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #F57C00, transparent);
+}
+
+.year-separator .year-text {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #616161;
+  white-space: nowrap;
+  padding: 4px 12px;
+  background: #F5F5F5;
+  border-radius: 12px;
+  border: 1px solid #E0E0E0;
+}
+
+/* タイムラインコンテナ */
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* タイムラインカード */
+.timeline-card {
+  background: white;
+  border: 2px solid #E0E0E0;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timeline-card:hover {
+  border-color: #FFB300;
+  box-shadow: 0 4px 16px rgba(245, 124, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.timeline-card.recorded {
+  border-color: #66BB6A;
+  background: linear-gradient(145deg, #E8F5E9, #FFFFFF);
+}
+
+/* カードヘッダー */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #F5F5F5;
+}
+
+.card-date {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #212121;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-weekday {
+  font-size: 0.75em;
+  color: #616161;
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.card-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.status-recorded {
+  background: #66BB6A;
+  color: white;
+}
+
+/* カードボディ */
+.card-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.data-section {
+  padding: 16px;
+  background: #FAFAFA;
+  border-radius: 12px;
+  border-left: 4px solid #FFB300;
+}
+
+.data-header {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.data-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.data-label {
+  font-size: 0.95em;
+  color: #616161;
+}
+
+.data-value {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #212121;
+}
+
+.data-change {
+  font-size: 0.85em;
+  margin-left: 8px;
+}
+
+.data-change.positive {
+  color: #4CAF50;
+}
+
+.data-change.negative {
+  color: #EF5350;
+}
+
+.empty-message {
+  text-align: center;
+  color: #9E9E9E;
+  font-size: 0.95em;
+  padding: 10px;
+}
+
+/* 運動リスト */
+.training-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.training-item {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #F57C00;
+  transition: all 0.3s ease;
+}
+
+.training-item:hover {
+  transform: translateX(3px);
+  box-shadow: 0 2px 6px rgba(245, 124, 0, 0.15);
+}
+
+.training-name {
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 5px;
+}
+
+.training-details {
+  font-size: 0.9em;
+  color: #616161;
+}
+
+/* もっと見るセクション */
+.load-more-section {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.load-more-section.hidden {
+  display: none;
+}
+
+.btn-load-more {
+  padding: 12px 40px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.05em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+}
+
+.btn-load-more:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+}
+
+.btn-load-more:disabled {
+  background: #BDBDBD;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 空の状態 */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 10px;
+}
+
+.empty-description {
+  color: #757575;
+  font-size: 1.05em;
+  margin-bottom: 20px;
+}
+
+.empty-action {
+  display: inline-block;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.empty-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 20px;
+  }
+
+  .header-title {
+    font-size: 2em;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .nav-buttons {
+    padding: 3px;
+  }
+
+  .nav-btn {
+    padding: 6px 12px;
+    font-size: 0.8em;
+    gap: 3px;
+  }
+
+  .control-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-selector-inline {
+    justify-content: center;
+  }
+
+  .filter-buttons {
+    justify-content: center;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .card-date {
+    font-size: 1.2em;
+  }
+
+  .data-section {
+    padding: 12px;
+  }
+}
+
+/* ローディングアニメーション - NEW! */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #616161;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #E0E0E0;
+  border-top-color: #F57C00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="header-title">📋 タイムライン</div>
+    <div class="header-subtitle">指定年月以前の全ての記録を表示</div>
+
+    <!-- ナビゲーション -->
+    <div class="nav-buttons">
+      <a href="home.html" class="nav-btn">🏠 ホーム</a>
+      <a href="calendar.html" class="nav-btn">📅 カレンダー</a>
+      <a href="timeline.html" class="nav-btn active">📋 タイムライン</a>
+      <a href="yearly-summary.html" class="nav-btn">📈 年間サマリー</a>
+      <a href="features.html" class="nav-btn">❓ 使い方</a>
+    </div>
+  </div>
+
+  <!-- コントロールバー -->
+  <div class="control-bar">
+    <!-- 年月選択 -->
+    <div class="date-selector-inline">
+      <span class="label-text">表示期間：</span>
+      <select id="select-year"></select>
+      <select id="select-month">
+        <option value="1">1月</option>
+        <option value="2">2月</option>
+        <option value="3">3月</option>
+        <option value="4">4月</option>
+        <option value="5">5月</option>
+        <option value="6">6月</option>
+        <option value="7">7月</option>
+        <option value="8">8月</option>
+        <option value="9">9月</option>
+        <option value="10">10月</option>
+        <option value="11">11月</option>
+        <option value="12">12月</option>
+      </select>
+      <span class="label-text">まで</span>
+    </div>
+
+    <!-- フィルターボタン -->
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">すべて</button>
+      <button class="filter-btn" data-filter="bloodPressure">血圧のみ</button>
+      <button class="filter-btn" data-filter="weight">体重のみ</button>
+      <button class="filter-btn" data-filter="training">運動のみ</button>
+    </div>
+  </div>
+
+  <!-- コンテンツ -->
+  <div class="content">
+    <!-- セクションタイトル -->
+    <div class="section-title">
+      🗓️ 記録一覧
+      <span class="record-count" id="record-count"></span>
+    </div>
+
+    <!-- タイムライン -->
+    <div class="timeline-container" id="timeline-container">
+      <!-- 動的に生成 -->
+    </div>
+
+    <!-- もっと見る -->
+    <div class="load-more-section" id="load-more-section">
+      <button class="btn-load-more" id="btn-load-more">もっと見る</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// グローバル変数
+let currentYear = new Date().getFullYear();
+let currentMonth = new Date().getMonth() + 1;
+let allRecords = [];
+let filteredRecords = [];
+let displayedRecords = 0;
+const recordsPerPage = 10;
+let currentFilter = 'all';
+
+// 初期化
+document.addEventListener('DOMContentLoaded', function() {
+  initYearSelector();
+  loadTimeline();
+
+  // イベントリスナー
+  document.getElementById('select-year').addEventListener('change', onMonthChange);
+  document.getElementById('select-month').addEventListener('change', onMonthChange);
+  document.getElementById('btn-load-more').addEventListener('click', loadMoreRecords);
+
+  // フィルターボタン
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter = this.dataset.filter;
+      applyFilter();
+    });
+  });
+});
+
+// 年セレクター初期化
+function initYearSelector() {
+  const selectYear = document.getElementById('select-year');
+  const currentYearValue = new Date().getFullYear();
+  
+  for (let year = currentYearValue - 2; year <= currentYearValue + 1; year++) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = `${year}年`;
+    if (year === currentYear) {
+      option.selected = true;
+    }
+    selectYear.appendChild(option);
+  }
+
+  const selectMonth = document.getElementById('select-month');
+  selectMonth.value = currentMonth;
+}
+
+// 月変更時
+function onMonthChange() {
+  currentYear = parseInt(document.getElementById('select-year').value);
+  currentMonth = parseInt(document.getElementById('select-month').value);
+  loadTimeline();
+}
+
+// タイムライン読み込み
+function loadTimeline() {
+  // データ取得（指定年月以前の全記録）
+  allRecords = getRecordsUpToMonth(currentYear, currentMonth);
+  
+  // 初期状態
+  displayedRecords = 0;
+  currentFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === 'all');
+  });
+
+  // 表示更新
+  applyFilter();
+}
+
+// フィルター適用
+function applyFilter() {
+  // フィルター適用
+  if (currentFilter === 'all') {
+    // すべて：全ての記録を表示
+    filteredRecords = [...allRecords];
+  } else if (currentFilter === 'bloodPressure') {
+    // 血圧のみ：血圧データがある記録のみ
+    filteredRecords = allRecords.filter(r => 
+      r.data && r.data.bloodPressure && r.data.bloodPressure.systolic
+    );
+  } else if (currentFilter === 'weight') {
+    // 体重のみ：体重データがある記録のみ
+    filteredRecords = allRecords.filter(r => 
+      r.data && r.data.weight
+    );
+  } else if (currentFilter === 'training') {
+    // 運動のみ：運動データがある記録のみ
+    filteredRecords = allRecords.filter(r => 
+      r.data && r.data.training && r.data.training.length > 0
+    );
+  }
+
+  // 表示リセット
+  displayedRecords = 0;
+  document.getElementById('timeline-container').innerHTML = '';
+  
+  // レコード数表示
+  document.getElementById('record-count').textContent = 
+    `(${filteredRecords.length}件)`;
+
+  // 初回ロード
+  loadMoreRecords();
+}
+
+// 指定年月以前の全記録を取得
+function getRecordsUpToMonth(year, month) {
+  const records = [];
+  const targetDate = new Date(year, month - 1, 1); // 指定年月の1日
+
+  // 2024年1月から指定年月まで全てをチェック
+  const startYear = 2024;
+  const startMonth = 1;
+
+  for (let y = startYear; y <= year; y++) {
+    const monthStart = (y === startYear) ? startMonth : 1;
+    const monthEnd = (y === year) ? month : 12;
+
+    for (let m = monthStart; m <= monthEnd; m++) {
+      const daysInMonth = new Date(y, m, 0).getDate();
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = `training_${y}_${m}_${day}`;
+        const data = localStorage.getItem(key);
+
+        // データが存在し、かつ何らかの記録がある場合のみ追加
+        if (data) {
+          try {
+            const parsedData = JSON.parse(data);
+            const hasBloodPressure = parsedData.bloodPressure && parsedData.bloodPressure.systolic;
+            const hasWeight = parsedData.weight;
+            const hasTraining = parsedData.training && parsedData.training.length > 0;
+            
+            // 何らかの記録がある場合のみ追加
+            if (hasBloodPressure || hasWeight || hasTraining) {
+              records.push({
+                date: new Date(y, m - 1, day),
+                data: parsedData,
+                key: key
+              });
+            }
+          } catch (error) {
+            console.error(`データ読み込みエラー (${key}):`, error);
+          }
+        }
+      }
+    }
+  }
+
+  // 新しい順にソート
+  return records.sort((a, b) => b.date - a.date);
+}
+
+// もっと見る
+function loadMoreRecords() {
+  const container = document.getElementById('timeline-container');
+  const loadMoreBtn = document.getElementById('btn-load-more');
+  
+  const start = displayedRecords;
+  const end = Math.min(start + recordsPerPage, filteredRecords.length);
+
+  // レコードが0件の場合
+  if (filteredRecords.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">記録がありません</div>
+        <div class="empty-description">
+          カレンダー画面から日々の記録を追加しましょう
+        </div>
+        <a href="calendar.html" class="empty-action">カレンダーへ</a>
+      </div>
+    `;
+    document.getElementById('load-more-section').classList.add('hidden');
+    return;
+  }
+
+  // レコードを表示（年セパレーターを挿入）
+  let lastYear = start > 0 && filteredRecords[start - 1] 
+    ? filteredRecords[start - 1].date.getFullYear() 
+    : null;
+  
+  for (let i = start; i < end; i++) {
+    const record = filteredRecords[i];
+    const currentYear = record.date.getFullYear();
+    
+    // 年が変わったらセパレーターを挿入（または最初のレコード）
+    if (lastYear === null || lastYear !== currentYear) {
+      const separator = createYearSeparator(currentYear);
+      container.appendChild(separator);
+    }
+    
+    const card = createTimelineCard(record);
+    container.appendChild(card);
+    
+    lastYear = currentYear;
+  }
+
+  displayedRecords = end;
+
+  // すべて表示した場合はボタンを無効化
+  if (displayedRecords >= filteredRecords.length) {
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.textContent = 'すべて表示しました';
+  } else {
+    loadMoreBtn.disabled = false;
+    loadMoreBtn.textContent = `もっと見る (残り${filteredRecords.length - displayedRecords}件)`;
+  }
+  
+  // ボタンを非表示にする場合
+  if (filteredRecords.length <= recordsPerPage) {
+    document.getElementById('load-more-section').classList.add('hidden');
+  } else {
+    document.getElementById('load-more-section').classList.remove('hidden');
+  }
+}
+
+// 年セパレーター作成
+function createYearSeparator(year) {
+  const separator = document.createElement('div');
+  separator.className = 'year-separator';
+  separator.innerHTML = `
+    <div class="line"></div>
+    <div class="year-text">${year}年</div>
+    <div class="line"></div>
+  `;
+  return separator;
+}
+
+// タイムラインカード作成
+function createTimelineCard(record) {
+  const card = document.createElement('div');
+  
+  // 記録があることが前提なので、recordedクラスのみ使用
+  card.className = 'timeline-card recorded';
+
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  const weekday = weekdays[record.date.getDay()];
+  const dateStr = `${record.date.getMonth() + 1}月${record.date.getDate()}日`;
+
+  // フィルターに応じて表示する項目を決定
+  let bodyContent = '';
+  
+  if (currentFilter === 'all') {
+    // すべて表示
+    bodyContent = `
+      ${renderBloodPressure(record.data.bloodPressure)}
+      ${renderWeight(record.data.weight, record)}
+      ${renderTraining(record.data.training)}
+    `;
+  } else if (currentFilter === 'bloodPressure') {
+    // 血圧のみ表示
+    bodyContent = renderBloodPressure(record.data.bloodPressure);
+  } else if (currentFilter === 'weight') {
+    // 体重のみ表示
+    bodyContent = renderWeight(record.data.weight, record);
+  } else if (currentFilter === 'training') {
+    // 運動のみ表示
+    bodyContent = renderTraining(record.data.training);
+  }
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-date">
+        🗓 ${dateStr}
+        <span class="card-weekday">(${weekday})</span>
+      </div>
+      <div class="card-status status-recorded">
+        記録済み
+      </div>
+    </div>
+
+    <div class="card-body">
+      ${bodyContent}
+    </div>
+  `;
+
+  return card;
+}
+
+// 血圧表示
+function renderBloodPressure(bloodPressure) {
+  if (!bloodPressure || !bloodPressure.systolic) {
+    return `
+      <div class="data-section">
+        <div class="data-header">🩺 血圧</div>
+        <div class="empty-message">未記録</div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="data-section">
+      <div class="data-header">🩺 血圧</div>
+      <div class="data-content">
+        <div class="data-row">
+          <span class="data-label">最高血圧</span>
+          <span class="data-value">${bloodPressure.systolic} <span style="font-size: 0.8em; color: #616161;">mmHg</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">最低血圧</span>
+          <span class="data-value">${bloodPressure.diastolic} <span style="font-size: 0.8em; color: #616161;">mmHg</span></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 体重表示
+function renderWeight(weight, record) {
+  if (!weight) {
+    return `
+      <div class="data-section">
+        <div class="data-header">⚖️ 体重</div>
+        <div class="empty-message">未記録</div>
+      </div>
+    `;
+  }
+
+  // 前日との比較
+  const prevDate = new Date(record.date);
+  prevDate.setDate(prevDate.getDate() - 1);
+  const prevKey = `training_${prevDate.getFullYear()}_${prevDate.getMonth() + 1}_${prevDate.getDate()}`;
+  const prevData = localStorage.getItem(prevKey);
+  
+  let changeHtml = '';
+  if (prevData) {
+    try {
+      const prev = JSON.parse(prevData);
+      if (prev.weight) {
+        const change = weight - prev.weight;
+        const changeClass = change > 0 ? 'negative' : (change < 0 ? 'positive' : '');
+        const changeSymbol = change > 0 ? '▲' : (change < 0 ? '▼' : '');
+        changeHtml = `<span class="data-change ${changeClass}">(前日比 ${changeSymbol}${Math.abs(change).toFixed(1)}kg)</span>`;
+      }
+    } catch (error) {
+      console.error('前日データ読み込みエラー:', error);
+    }
+  }
+
+  return `
+    <div class="data-section">
+      <div class="data-header">⚖️ 体重</div>
+      <div class="data-content">
+        <div class="data-row">
+          <span class="data-label">体重</span>
+          <span class="data-value">
+            ${weight} <span style="font-size: 0.8em; color: #616161;">kg</span>
+            ${changeHtml}
+          </span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 運動表示
+function renderTraining(training) {
+  if (!training || training.length === 0) {
+    return `
+      <div class="data-section">
+        <div class="data-header">🏃 運動</div>
+        <div class="empty-message">未記録</div>
+      </div>
+    `;
+  }
+
+  let totalTime = 0;
+  let totalCalories = 0;
+
+  const trainingHtml = training.map(item => {
+    totalTime += item.duration || 0;
+    totalCalories += item.calories || 0;
+
+    return `
+      <div class="training-item">
+        <div class="training-name">${item.category || '運動'} ${item.type ? `- ${item.type}` : ''}</div>
+        <div class="training-details">
+          ${item.duration}分 / ${Math.round(item.calories)}kcal
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="data-section">
+      <div class="data-header">🏃 運動 (合計: ${totalTime}分 / ${Math.round(totalCalories)}kcal)</div>
+      <div class="training-list">
+        ${trainingHtml}
+      </div>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
