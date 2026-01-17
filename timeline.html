@@ -288,18 +288,6 @@ body {
   margin-left: 8px;
 }
 
-.card-status {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.85em;
-  font-weight: 600;
-}
-
-.status-recorded {
-  background: #66BB6A;
-  color: white;
-}
-
 /* カードボディ */
 .card-body {
   display: grid;
@@ -512,7 +500,14 @@ body {
   }
 
   .filter-buttons {
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 12px 16px;
+    font-size: 0.95em;
   }
 
   .card-header {
@@ -559,7 +554,6 @@ body {
   <!-- ヘッダー -->
   <div class="header">
     <div class="header-title">📋 タイムライン</div>
-    <div class="header-subtitle">指定年月以前の全ての記録を表示</div>
 
     <!-- ナビゲーション -->
     <div class="nav-buttons">
@@ -591,7 +585,7 @@ body {
         <option value="11">11月</option>
         <option value="12">12月</option>
       </select>
-      <span class="label-text">まで</span>
+      <span class="label-text">以前</span>
     </div>
 
     <!-- フィルターボタン -->
@@ -892,9 +886,6 @@ function createTimelineCard(record) {
       <div class="card-date">
         🗓 ${dateStr}
         <span class="card-weekday">(${weekday})</span>
-      </div>
-      <div class="card-status status-recorded">
-        記録済み
       </div>
     </div>
 
