@@ -3091,7 +3091,8 @@ function clearMonthData() {
 }
 
 function getStorageKey(day) {
-  return `training_${currentYear}_${currentMonth}_${day}`;
+  // currentMonthは0-11なので、実際の月番号(1-12)に変換
+  return `training_${currentYear}_${currentMonth + 1}_${day}`;
 }
 
 function getMonthStorageKey() {
