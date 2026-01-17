@@ -715,7 +715,7 @@ function applyFilter() {
   } else if (currentFilter === 'training') {
     // 運動のみ：運動データがある記録のみ
     filteredRecords = allRecords.filter(r => 
-      r.data && r.data.training && r.data.training.length > 0
+      r.data && r.data.exercises && r.data.exercises.length > 0
     );
   }
 
@@ -757,7 +757,7 @@ function getRecordsUpToMonth(year, month) {
             const parsedData = JSON.parse(data);
             const hasBloodPressure = parsedData.bloodPressure && parsedData.bloodPressure.systolic;
             const hasWeight = parsedData.weight;
-            const hasTraining = parsedData.training && parsedData.training.length > 0;
+            const hasTraining = parsedData.exercises && parsedData.exercises.length > 0;
             
             // 何らかの記録がある場合のみ追加
             if (hasBloodPressure || hasWeight || hasTraining) {
@@ -874,7 +874,7 @@ function createTimelineCard(record) {
     bodyContent = `
       ${renderBloodPressure(record.data.bloodPressure)}
       ${renderWeight(record.data.weight, record)}
-      ${renderTraining(record.data.training)}
+      ${renderTraining(record.data.exercises)}
     `;
   } else if (currentFilter === 'bloodPressure') {
     // 血圧のみ表示
@@ -884,7 +884,7 @@ function createTimelineCard(record) {
     bodyContent = renderWeight(record.data.weight, record);
   } else if (currentFilter === 'training') {
     // 運動のみ表示
-    bodyContent = renderTraining(record.data.training);
+    bodyContent = renderTraining(record.data.exercises);
   }
 
   card.innerHTML = `
@@ -1002,7 +1002,7 @@ function renderTraining(training) {
 
     return `
       <div class="training-item">
-        <div class="training-name">${item.category || '運動'} ${item.type ? `- ${item.type}` : ''}</div>
+        <div class="training-name">${item.icon || '🏃'} ${item.name || '運動'}${item.details ? ` - ${item.details}` : ''}</div>
         <div class="training-details">
           ${item.duration}分 / ${Math.round(item.calories)}kcal
         </div>
