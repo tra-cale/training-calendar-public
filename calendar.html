@@ -2892,18 +2892,9 @@ function openModal(day) {
   
   // スマホ版（768px以下）
   if (window.innerWidth <= 768) {
-    // 詳細パネルを更新
+    // 詳細パネルのみ表示（モーダルは開かない）
     updateDetailPane(currentYear, currentMonth + 1, day);
     highlightSelectedDay(currentYear, currentMonth + 1, day);
-    
-    // データがない場合は、モーダルも開く（記録追加のため）
-    const key = `training_${currentYear}_${currentMonth}_${day}`;
-    const data = localStorage.getItem(key);
-    if (!data) {
-      document.getElementById('inputModal').classList.add('active');
-      document.getElementById('modal-title').textContent = `📅 ${currentYear}年${currentMonth + 1}月${day}日のデータ入力`;
-      loadModalData(day);
-    }
   } 
   // PC版では従来通りモーダルを開く
   else {
@@ -3491,8 +3482,8 @@ window.currentSelectedDate = null;
 
 // 詳細パネルを更新
 function updateDetailPane(year, month, day) {
-  // monthは1-12で渡されるので、LocalStorageのキーに合わせて0-11に変換
-  const key = `training_${year}_${month - 1}_${day}`;
+  // monthは1-12で渡されるので、そのまま使用
+  const key = `training_${year}_${month}_${day}`;
   const data = localStorage.getItem(key);
   const detailContent = document.getElementById('detail-content');
   const detailDate = document.getElementById('detail-date');
@@ -3728,8 +3719,8 @@ function deleteCurrentRecord() {
   }
 
   try {
-    // monthは1-12なので、キー生成時は0-11に変換
-    const key = `training_${year}_${month - 1}_${day}`;
+    // monthは1-12なので、そのまま使用
+    const key = `training_${year}_${month}_${day}`;
     localStorage.removeItem(key);
     
     // カレンダーを再生成
