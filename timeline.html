@@ -696,7 +696,7 @@ body {
     </div>
     
     <div class="settings-item">
-      <span class="settings-item-label">💓 血圧（最高/最低）</span>
+      <span class="settings-item-label">🫀 血圧（最高/最低）</span>
       <div class="toggle-switch active" data-item="bloodPressure">
         <div class="toggle-switch-knob"></div>
       </div>
@@ -1117,7 +1117,7 @@ function renderBloodPressure(bloodPressure) {
   if (!bloodPressure || !bloodPressure.systolic) {
     return `
       <div class="data-section">
-        <div class="data-header">🩺 血圧</div>
+        <div class="data-header">🫀 血圧</div>
         <div class="empty-message">未記録</div>
       </div>
     `;
@@ -1125,7 +1125,7 @@ function renderBloodPressure(bloodPressure) {
 
   return `
     <div class="data-section">
-      <div class="data-header">🩺 血圧</div>
+      <div class="data-header">🫀 血圧</div>
       <div class="data-content">
         <div class="data-row">
           <span class="data-label">最高血圧</span>
@@ -1235,7 +1235,7 @@ function renderTraining(training, settings) {
 
   return `
     <div class="data-section">
-      <div class="data-header">🏃 運動${summaryText}</div>
+      <div class="data-header">🔥 運動${summaryText}</div>
       <div class="training-list">
         ${trainingHtml}
       </div>
