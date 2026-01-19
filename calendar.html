@@ -947,6 +947,171 @@ h1 {
   color: #F57C00;
 }
 
+/* 表示設定ボタン */
+.display-settings-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.btn-display-settings {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(245, 124, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-display-settings:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(245, 124, 0, 0.4);
+}
+
+.btn-display-settings:active {
+  transform: translateY(0);
+}
+
+.settings-icon {
+  font-size: 1.2em;
+}
+
+.settings-text {
+  font-size: 1em;
+}
+
+/* 設定パネル */
+.settings-panel {
+  background: white;
+  border: 2px solid #FFD54F;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-panel-header {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #F57C00;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #FFD54F;
+}
+
+.settings-panel-title {
+  font-size: 1em;
+}
+
+.settings-item {
+  padding: 12px;
+  border-bottom: 1px solid #F0F0F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-item:hover {
+  background: #FFF9C4;
+}
+
+.settings-item-label {
+  font-size: 0.95em;
+  color: #424242;
+  font-weight: 500;
+}
+
+/* サブ項目コンテナ */
+.settings-sub-items {
+  margin-left: 20px;
+  padding-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.settings-sub-items.hidden {
+  display: none;
+}
+
+/* サブ項目のスタイル */
+.settings-item-sub {
+  padding: 10px 12px;
+}
+
+.settings-item-sub:hover {
+  background: #FFF9C4;
+}
+
+.settings-item-sub .settings-item-label {
+  font-size: 0.9em;
+  color: #616161;
+  font-weight: 400;
+}
+
+/* 日数の設定項目（PC版のみ表示） */
+.settings-item-sub[data-item-container="trainingDays"] {
+  display: flex; /* PC版では表示 */
+}
+
+/* トグルスイッチ */
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background: #CCC;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.toggle-switch.active {
+  background: #4CAF50;
+}
+
+.toggle-switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.active .toggle-switch-knob {
+  transform: translateX(24px);
+}
+
+/* サマリーカードの非表示状態 */
+.summary-card.hidden {
+  display: none;
+}
+
 /* 目標未設定メッセージ */
 .goal-setup-prompt {
   background: linear-gradient(145deg, #FFF9C4, #FFECB3);
@@ -1085,6 +1250,42 @@ h1 {
   .month-select-dropdown {
     padding: 6px 10px;
     font-size: 0.95em;
+  }
+  
+  /* 表示設定ボタン（スマホ版） */
+  .btn-display-settings {
+    padding: 10px 20px;
+    font-size: 0.95em;
+  }
+  
+  /* 設定パネル（スマホ版） */
+  .settings-panel {
+    padding: 15px;
+  }
+  
+  .settings-panel-header {
+    font-size: 1em;
+  }
+  
+  .settings-item {
+    padding: 10px;
+  }
+  
+  .settings-item-label {
+    font-size: 0.9em;
+  }
+  
+  .settings-sub-items {
+    margin-left: 15px;
+  }
+  
+  .settings-item-sub {
+    padding: 8px 10px;
+  }
+  
+  /* スマホ版では日数の設定項目を非表示 */
+  .settings-item-sub[data-item-container="trainingDays"] {
+    display: none;
   }
 
   /* スマホ版の調整 */
@@ -1728,10 +1929,70 @@ h1 {
       </div>
     </div>
 
+    <!-- 表示設定ボタン -->
+    <div class="display-settings-container">
+      <button class="btn-display-settings" id="btnDisplaySettings">
+        <span class="settings-icon">⚙️</span>
+        <span class="settings-text">表示設定</span>
+      </button>
+    </div>
+
+    <!-- 設定パネル -->
+    <div class="settings-panel" id="settingsPanel" style="display: none;">
+      <div class="settings-panel-header">
+        <span class="settings-panel-title">表示項目の設定</span>
+      </div>
+      
+      <div class="settings-item">
+        <span class="settings-item-label">💓 血圧（最高/最低）</span>
+        <div class="toggle-switch active" data-item="bloodPressure">
+          <div class="toggle-switch-knob"></div>
+        </div>
+      </div>
+      
+      <div class="settings-item">
+        <span class="settings-item-label">⚖️ 体重</span>
+        <div class="toggle-switch active" data-item="weight">
+          <div class="toggle-switch-knob"></div>
+        </div>
+      </div>
+      
+      <div class="settings-item settings-item-parent">
+        <span class="settings-item-label">🔥 運動記録</span>
+        <div class="toggle-switch active" data-item="exerciseRecord">
+          <div class="toggle-switch-knob"></div>
+        </div>
+      </div>
+      
+      <!-- 運動記録のサブ項目 -->
+      <div class="settings-sub-items" id="exerciseSubItems">
+        <div class="settings-item settings-item-sub" data-item-container="trainingDays">
+          <span class="settings-item-label">📅 日数</span>
+          <div class="toggle-switch active" data-item="trainingDays" data-parent="exerciseRecord">
+            <div class="toggle-switch-knob"></div>
+          </div>
+        </div>
+        
+        <div class="settings-item settings-item-sub">
+          <span class="settings-item-label">⏱️ 時間</span>
+          <div class="toggle-switch active" data-item="trainingTime" data-parent="exerciseRecord">
+            <div class="toggle-switch-knob"></div>
+          </div>
+        </div>
+        
+        <div class="settings-item settings-item-sub">
+          <span class="settings-item-label">🔥 カロリー</span>
+          <div class="toggle-switch active" data-item="calories" data-parent="exerciseRecord">
+            <div class="toggle-switch-knob"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="summary-section">
       <h2 class="summary-title">📊 月間目標・サマリー・達成度</h2>
       <div class="summary-grid">
-        <div class="summary-card">
+        <div class="summary-card" data-item="bloodPressure">
           <div class="summary-label">平均血圧</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
@@ -1747,7 +2008,7 @@ h1 {
           </div>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card" data-item="weight">
           <div class="summary-label">平均体重</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
@@ -1763,7 +2024,7 @@ h1 {
           </div>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card" data-item="trainingDays">
           <div class="summary-label">トレーニング日数</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
@@ -1779,7 +2040,7 @@ h1 {
           </div>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card" data-item="trainingTime">
           <div class="summary-label">総運動時間</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
@@ -1795,7 +2056,7 @@ h1 {
           </div>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card" data-item="calories">
           <div class="summary-label">総消費カロリー</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
@@ -3536,9 +3797,12 @@ function updateDetailPane(year, month, day) {
 // 詳細コンテンツのレンダリング
 function renderDetailContent(data) {
   let html = '';
+  
+  // 表示設定を読み込む
+  const displaySettings = loadDisplaySettings();
 
   // 血圧
-  if (data.bloodPressure && (data.bloodPressure.systolic || data.bloodPressure.diastolic)) {
+  if (displaySettings.bloodPressure && data.bloodPressure && (data.bloodPressure.systolic || data.bloodPressure.diastolic)) {
     html += `
       <div class="detail-data-section">
         <div class="detail-data-header">🫀 血圧</div>
@@ -3555,7 +3819,7 @@ function renderDetailContent(data) {
   }
 
   // 体重
-  if (data.weight) {
+  if (displaySettings.weight && data.weight) {
     html += `
       <div class="detail-data-section">
         <div class="detail-data-header">⚖️ 体重</div>
@@ -3567,28 +3831,54 @@ function renderDetailContent(data) {
     `;
   }
 
-  // 運動
-  if (data.exercises && data.exercises.length > 0) {
+  // 運動（親項目がONの場合のみ表示）
+  if (displaySettings.exerciseRecord && data.exercises && data.exercises.length > 0) {
     const totalTime = data.exercises.reduce((sum, ex) => sum + (ex.duration || 0), 0);
     const totalCalories = data.exercises.reduce((sum, ex) => sum + (ex.calories || 0), 0);
-
-    html += `
-      <div class="detail-data-section">
-        <div class="detail-data-header">🔥 運動 (合計: ${totalTime}分 / ${Math.round(totalCalories)}kcal)</div>
-    `;
-
-    data.exercises.forEach(ex => {
-      const exerciseName = ex.category || '運動';
-      const exerciseType = ex.type || '';
+    
+    // サブ項目のいずれかがONの場合のみ表示
+    if (displaySettings.trainingTime || displaySettings.calories) {
       html += `
-        <div class="detail-data-row">
-          <span class="detail-data-label">${exerciseName}${exerciseType ? ` - ${exerciseType}` : ''}</span>
-          <span class="detail-data-value">${ex.duration}分 / ${Math.round(ex.calories)}kcal</span>
-        </div>
-      `;
-    });
+        <div class="detail-data-section">
+          <div class="detail-data-header">🔥 運動`;
+      
+      // サマリー情報を表示設定に応じて追加
+      let summaryParts = [];
+      if (displaySettings.trainingTime) {
+        summaryParts.push(`${totalTime}分`);
+      }
+      if (displaySettings.calories) {
+        summaryParts.push(`${Math.round(totalCalories)}kcal`);
+      }
+      if (summaryParts.length > 0) {
+        html += ` (合計: ${summaryParts.join(' / ')})`;
+      }
+      
+      html += `</div>`;
 
-    html += `</div>`;
+      data.exercises.forEach(ex => {
+        const exerciseName = ex.category || '運動';
+        const exerciseType = ex.type || '';
+        
+        // 各運動の詳細も表示設定に応じて調整
+        let exerciseDetail = [];
+        if (displaySettings.trainingTime) {
+          exerciseDetail.push(`${ex.duration}分`);
+        }
+        if (displaySettings.calories) {
+          exerciseDetail.push(`${Math.round(ex.calories)}kcal`);
+        }
+        
+        html += `
+          <div class="detail-data-row">
+            <span class="detail-data-label">${exerciseName}${exerciseType ? ` - ${exerciseType}` : ''}</span>
+            <span class="detail-data-value">${exerciseDetail.join(' / ')}</span>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+    }
   }
 
   // データが何もない場合
@@ -3833,6 +4123,195 @@ if (window.innerWidth <= 768) {
   }
 }
 
+// ===== 月間サマリー表示設定機能 =====
+
+// デフォルトの表示設定（階層構造対応）
+const DEFAULT_DISPLAY_SETTINGS = {
+  bloodPressure: true,
+  weight: true,
+  exerciseRecord: true,        // 運動記録全体（親項目）
+  trainingDays: true,          // 運動日数（サブ項目）
+  trainingTime: true,          // 運動時間（サブ項目）
+  calories: true               // 消費カロリー（サブ項目）
+};
+
+// 表示設定を読み込む
+function loadDisplaySettings() {
+  const saved = localStorage.getItem('summary_display_settings');
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch (e) {
+      console.error('表示設定の読み込みエラー:', e);
+      return { ...DEFAULT_DISPLAY_SETTINGS };
+    }
+  }
+  return { ...DEFAULT_DISPLAY_SETTINGS };
+}
+
+// 表示設定を保存する
+function saveDisplaySettings(settings) {
+  try {
+    localStorage.setItem('summary_display_settings', JSON.stringify(settings));
+  } catch (e) {
+    console.error('表示設定の保存エラー:', e);
+  }
+}
+
+// 表示設定をUIに適用する
+function applyDisplaySettings() {
+  const settings = loadDisplaySettings();
+  
+  // 血圧・体重カードの表示/非表示
+  ['bloodPressure', 'weight'].forEach(itemKey => {
+    const card = document.querySelector(`.summary-card[data-item="${itemKey}"]`);
+    if (card) {
+      if (settings[itemKey]) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    }
+  });
+  
+  // 運動記録の親項目がOFFの場合、すべての運動関連カードを非表示
+  if (!settings.exerciseRecord) {
+    ['trainingDays', 'trainingTime', 'calories'].forEach(itemKey => {
+      const card = document.querySelector(`.summary-card[data-item="${itemKey}"]`);
+      if (card) {
+        card.classList.add('hidden');
+      }
+    });
+    // サブ項目も非表示
+    const subItems = document.getElementById('exerciseSubItems');
+    if (subItems) {
+      subItems.classList.add('hidden');
+    }
+  } else {
+    // 運動記録の親項目がONの場合、各サブ項目の設定に従う
+    ['trainingDays', 'trainingTime', 'calories'].forEach(itemKey => {
+      const card = document.querySelector(`.summary-card[data-item="${itemKey}"]`);
+      if (card) {
+        if (settings[itemKey]) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      }
+    });
+    // サブ項目を表示
+    const subItems = document.getElementById('exerciseSubItems');
+    if (subItems) {
+      subItems.classList.remove('hidden');
+    }
+  }
+  
+  // トグルスイッチの状態を更新
+  Object.keys(settings).forEach(itemKey => {
+    const toggle = document.querySelector(`.toggle-switch[data-item="${itemKey}"]`);
+    if (toggle) {
+      if (settings[itemKey]) {
+        toggle.classList.add('active');
+      } else {
+        toggle.classList.remove('active');
+      }
+    }
+  });
+  
+  // スマホ版の詳細パネルも更新
+  if (window.innerWidth <= 768 && window.currentSelectedDate) {
+    const { year, month, day } = window.currentSelectedDate;
+    updateDetailPane(year, month, day);
+  }
+}
+
+// 表示設定ボタンのクリック
+const btnDisplaySettings = document.getElementById('btnDisplaySettings');
+const settingsPanel = document.getElementById('settingsPanel');
+
+if (btnDisplaySettings && settingsPanel) {
+  btnDisplaySettings.addEventListener('click', function() {
+    // パネルの表示/非表示を切り替え
+    if (settingsPanel.style.display === 'none' || settingsPanel.style.display === '') {
+      settingsPanel.style.display = 'block';
+    } else {
+      settingsPanel.style.display = 'none';
+    }
+  });
+}
+
+// トグルスイッチのクリック
+const toggleSwitches = document.querySelectorAll('.toggle-switch');
+toggleSwitches.forEach(toggle => {
+  toggle.addEventListener('click', function() {
+    const itemKey = this.getAttribute('data-item');
+    const parentKey = this.getAttribute('data-parent');
+    if (!itemKey) return;
+    
+    // 現在の設定を読み込む
+    const settings = loadDisplaySettings();
+    
+    // 画面サイズを確認
+    const isMobile = window.innerWidth <= 768;
+    
+    // 親項目の場合
+    if (itemKey === 'exerciseRecord') {
+      // 運動記録全体のON/OFF
+      settings[itemKey] = !settings[itemKey];
+      
+      // OFFにした場合、すべてのサブ項目もOFFに
+      if (!settings[itemKey]) {
+        settings.trainingDays = false;
+        settings.trainingTime = false;
+        settings.calories = false;
+      } else {
+        // ONにした場合、すべてのサブ項目もONに
+        settings.trainingDays = true;
+        settings.trainingTime = true;
+        settings.calories = true;
+      }
+    }
+    // サブ項目の場合
+    else if (parentKey) {
+      // サブ項目のON/OFF
+      settings[itemKey] = !settings[itemKey];
+      
+      // スマホ版の場合は日数を除外して判定
+      if (isMobile) {
+        // 時間とカロリーの両方がOFFになった場合、親もOFF
+        if (!settings.trainingTime && !settings.calories) {
+          settings.exerciseRecord = false;
+        }
+        // いずれかがONの場合、親もON
+        else {
+          settings.exerciseRecord = true;
+        }
+      }
+      // PC版の場合は日数も含めて判定
+      else {
+        // すべてのサブ項目がOFFになった場合、親もOFF
+        if (!settings.trainingDays && !settings.trainingTime && !settings.calories) {
+          settings.exerciseRecord = false;
+        }
+        // いずれかのサブ項目がONの場合、親もON
+        else {
+          settings.exerciseRecord = true;
+        }
+      }
+    }
+    // 通常の項目の場合
+    else {
+      settings[itemKey] = !settings[itemKey];
+    }
+    
+    // 保存
+    saveDisplaySettings(settings);
+    
+    // UIに適用
+    applyDisplaySettings();
+  });
+});
+
 // 初期化
 updateAddedExercisesList();
 updateExerciseSummary();
@@ -3840,6 +4319,7 @@ updateYearTitle(); // 年タイトルを現在の年に更新
 generateCalendar();
 updateMonthNavButtons(); // 初期状態でボタンの有効/無効を設定
 updateYearNavButtons(); // 初期状態で年ボタンの有効/無効を設定
+applyDisplaySettings(); // 表示設定を適用
 
 // ===== ハンバーガーメニューの開閉 =====
 const hamburgerButton = document.getElementById('hamburger-button');
