@@ -137,36 +137,133 @@ body {
   box-shadow: 0 0 0 2px rgba(245, 124, 0, 0.1);
 }
 
-/* フィルターボタン - NEW! */
-.filter-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  padding: 8px 16px;
-  background: white;
-  color: #616161;
-  border: 2px solid #E0E0E0;
-  border-radius: 20px;
-  font-size: 0.9em;
+/* 表示設定ボタン */
+.btn-display-settings {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95em;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.2);
 }
 
-.filter-btn:hover {
-  border-color: #FFB300;
+.btn-display-settings:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+}
+
+/* 設定パネル */
+.settings-panel {
+  background: white;
+  border-top: 1px solid #F5F5F5;
+  padding: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.settings-panel-header {
+  font-size: 1.1em;
+  font-weight: 600;
   color: #F57C00;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #FFD54F;
 }
 
-.filter-btn.active {
-  background: linear-gradient(135deg, #F57C00, #FFB300);
-  color: white;
-  border-color: #F57C00;
+.settings-panel-title {
+  font-size: 1em;
 }
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.settings-item:hover {
+  background: #FAFAFA;
+}
+
+.settings-item-label {
+  font-size: 0.95em;
+  color: #424242;
+  font-weight: 500;
+}
+
+/* サブ項目コンテナ */
+.settings-sub-items {
+  margin-left: 20px;
+  padding-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.settings-sub-items.hidden {
+  display: none;
+}
+
+/* サブ項目のスタイル */
+.settings-item-sub {
+  padding: 10px 12px;
+}
+
+.settings-item-sub:hover {
+  background: #FFF9C4;
+}
+
+.settings-item-sub .settings-item-label {
+  font-size: 0.9em;
+  color: #616161;
+  font-weight: 400;
+}
+
+/* トグルスイッチ */
+.toggle-switch {
+  width: 50px;
+  height: 26px;
+  background: #CCC;
+  border-radius: 13px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: #4CAF50;
+}
+
+.toggle-switch-knob {
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.active .toggle-switch-knob {
+  transform: translateX(24px);
+}
+
 
 /* コンテンツエリア */
 .content {
@@ -588,12 +685,52 @@ body {
       <span class="label-text">以前</span>
     </div>
 
-    <!-- フィルターボタン -->
-    <div class="filter-buttons">
-      <button class="filter-btn active" data-filter="all">すべて</button>
-      <button class="filter-btn" data-filter="bloodPressure">血圧のみ</button>
-      <button class="filter-btn" data-filter="weight">体重のみ</button>
-      <button class="filter-btn" data-filter="training">運動のみ</button>
+    <!-- 表示設定ボタン -->
+    <button class="btn-display-settings" id="btnDisplaySettings">⚙️ 表示設定</button>
+  </div>
+
+  <!-- 設定パネル -->
+  <div class="settings-panel" id="settingsPanel" style="display: none;">
+    <div class="settings-panel-header">
+      <span class="settings-panel-title">表示項目の設定</span>
+    </div>
+    
+    <div class="settings-item">
+      <span class="settings-item-label">💓 血圧（最高/最低）</span>
+      <div class="toggle-switch active" data-item="bloodPressure">
+        <div class="toggle-switch-knob"></div>
+      </div>
+    </div>
+    
+    <div class="settings-item">
+      <span class="settings-item-label">⚖️ 体重</span>
+      <div class="toggle-switch active" data-item="weight">
+        <div class="toggle-switch-knob"></div>
+      </div>
+    </div>
+    
+    <div class="settings-item">
+      <span class="settings-item-label">🔥 運動記録</span>
+      <div class="toggle-switch active" data-item="exerciseRecord">
+        <div class="toggle-switch-knob"></div>
+      </div>
+    </div>
+    
+    <!-- 運動記録のサブ項目 -->
+    <div class="settings-sub-items" id="exerciseSubItems">
+      <div class="settings-item settings-item-sub">
+        <span class="settings-item-label">⏱️ 時間</span>
+        <div class="toggle-switch active" data-item="trainingTime" data-parent="exerciseRecord">
+          <div class="toggle-switch-knob"></div>
+        </div>
+      </div>
+      
+      <div class="settings-item settings-item-sub">
+        <span class="settings-item-label">🔥 カロリー</span>
+        <div class="toggle-switch active" data-item="calories" data-parent="exerciseRecord">
+          <div class="toggle-switch-knob"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -622,28 +759,83 @@ body {
 let currentYear = new Date().getFullYear();
 let currentMonth = new Date().getMonth() + 1;
 let allRecords = [];
-let filteredRecords = [];
 let displayedRecords = 0;
 const recordsPerPage = 10;
-let currentFilter = 'all';
 
 // 初期化
 document.addEventListener('DOMContentLoaded', function() {
   initYearSelector();
   loadTimeline();
+  applyDisplaySettings(); // 表示設定を適用
 
   // イベントリスナー
   document.getElementById('select-year').addEventListener('change', onMonthChange);
   document.getElementById('select-month').addEventListener('change', onMonthChange);
   document.getElementById('btn-load-more').addEventListener('click', loadMoreRecords);
 
-  // フィルターボタン
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentFilter = this.dataset.filter;
-      applyFilter();
+  // 表示設定ボタンのクリック
+  const btnDisplaySettings = document.getElementById('btnDisplaySettings');
+  const settingsPanel = document.getElementById('settingsPanel');
+  
+  if (btnDisplaySettings && settingsPanel) {
+    btnDisplaySettings.addEventListener('click', function() {
+      if (settingsPanel.style.display === 'none' || settingsPanel.style.display === '') {
+        settingsPanel.style.display = 'block';
+      } else {
+        settingsPanel.style.display = 'none';
+      }
+    });
+  }
+
+  // トグルスイッチのクリック
+  const toggleSwitches = document.querySelectorAll('.toggle-switch');
+  toggleSwitches.forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      const itemKey = this.getAttribute('data-item');
+      const parentKey = this.getAttribute('data-parent');
+      if (!itemKey) return;
+      
+      // 現在の設定を読み込む
+      const settings = loadDisplaySettings();
+      
+      // 親項目の場合
+      if (itemKey === 'exerciseRecord') {
+        settings[itemKey] = !settings[itemKey];
+        
+        if (!settings[itemKey]) {
+          settings.trainingTime = false;
+          settings.calories = false;
+        } else {
+          settings.trainingTime = true;
+          settings.calories = true;
+        }
+      }
+      // サブ項目の場合
+      else if (parentKey) {
+        settings[itemKey] = !settings[itemKey];
+        
+        // 両方がOFFになった場合、親もOFF
+        if (!settings.trainingTime && !settings.calories) {
+          settings.exerciseRecord = false;
+        } else {
+          settings.exerciseRecord = true;
+        }
+      }
+      // 通常の項目の場合
+      else {
+        settings[itemKey] = !settings[itemKey];
+      }
+      
+      // 保存
+      saveDisplaySettings(settings);
+      
+      // UIに適用
+      applyDisplaySettings();
+      
+      // タイムラインを再描画
+      displayedRecords = 0;
+      document.getElementById('timeline-container').innerHTML = '';
+      loadMoreRecords();
     });
   });
 });
@@ -681,48 +873,74 @@ function loadTimeline() {
   
   // 初期状態
   displayedRecords = 0;
-  currentFilter = 'all';
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.filter === 'all');
-  });
-
-  // 表示更新
-  applyFilter();
-}
-
-// フィルター適用
-function applyFilter() {
-  // フィルター適用
-  if (currentFilter === 'all') {
-    // すべて：全ての記録を表示
-    filteredRecords = [...allRecords];
-  } else if (currentFilter === 'bloodPressure') {
-    // 血圧のみ：血圧データがある記録のみ
-    filteredRecords = allRecords.filter(r => 
-      r.data && r.data.bloodPressure && r.data.bloodPressure.systolic
-    );
-  } else if (currentFilter === 'weight') {
-    // 体重のみ：体重データがある記録のみ
-    filteredRecords = allRecords.filter(r => 
-      r.data && r.data.weight
-    );
-  } else if (currentFilter === 'training') {
-    // 運動のみ：運動データがある記録のみ
-    filteredRecords = allRecords.filter(r => 
-      r.data && r.data.exercises && r.data.exercises.length > 0
-    );
-  }
-
-  // 表示リセット
-  displayedRecords = 0;
   document.getElementById('timeline-container').innerHTML = '';
   
   // レコード数表示
   document.getElementById('record-count').textContent = 
-    `(${filteredRecords.length}件)`;
+    `(${allRecords.length}件)`;
 
   // 初回ロード
   loadMoreRecords();
+}
+
+// ===== 表示設定機能 =====
+
+// デフォルトの表示設定
+const DEFAULT_DISPLAY_SETTINGS = {
+  bloodPressure: true,
+  weight: true,
+  exerciseRecord: true,
+  trainingTime: true,
+  calories: true
+};
+
+// 表示設定を読み込む
+function loadDisplaySettings() {
+  try {
+    const settingsStr = localStorage.getItem('summary_display_settings');
+    if (settingsStr) {
+      return { ...DEFAULT_DISPLAY_SETTINGS, ...JSON.parse(settingsStr) };
+    }
+  } catch (e) {
+    console.error('表示設定の読み込みエラー:', e);
+  }
+  return { ...DEFAULT_DISPLAY_SETTINGS };
+}
+
+// 表示設定を保存する
+function saveDisplaySettings(settings) {
+  try {
+    localStorage.setItem('summary_display_settings', JSON.stringify(settings));
+  } catch (e) {
+    console.error('表示設定の保存エラー:', e);
+  }
+}
+
+// 表示設定をUIに適用する
+function applyDisplaySettings() {
+  const settings = loadDisplaySettings();
+  
+  // 運動記録の親項目がOFFの場合、サブ項目も非表示
+  const subItems = document.getElementById('exerciseSubItems');
+  if (subItems) {
+    if (!settings.exerciseRecord) {
+      subItems.classList.add('hidden');
+    } else {
+      subItems.classList.remove('hidden');
+    }
+  }
+  
+  // トグルスイッチの状態を更新
+  Object.keys(settings).forEach(itemKey => {
+    const toggle = document.querySelector(`.toggle-switch[data-item="${itemKey}"]`);
+    if (toggle) {
+      if (settings[itemKey]) {
+        toggle.classList.add('active');
+      } else {
+        toggle.classList.remove('active');
+      }
+    }
+  });
 }
 
 // 指定年月以前の全記録を取得
@@ -779,10 +997,10 @@ function loadMoreRecords() {
   const loadMoreBtn = document.getElementById('btn-load-more');
   
   const start = displayedRecords;
-  const end = Math.min(start + recordsPerPage, filteredRecords.length);
+  const end = Math.min(start + recordsPerPage, allRecords.length);
 
   // レコードが0件の場合
-  if (filteredRecords.length === 0) {
+  if (allRecords.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">📭</div>
@@ -798,39 +1016,39 @@ function loadMoreRecords() {
   }
 
   // レコードを表示（年セパレーターを挿入）
-  let lastYear = start > 0 && filteredRecords[start - 1] 
-    ? filteredRecords[start - 1].date.getFullYear() 
+  let lastYear = start > 0 && allRecords[start - 1] 
+    ? allRecords[start - 1].date.getFullYear() 
     : null;
   
   for (let i = start; i < end; i++) {
-    const record = filteredRecords[i];
-    const currentYear = record.date.getFullYear();
+    const record = allRecords[i];
+    const currentYearValue = record.date.getFullYear();
     
     // 年が変わったらセパレーターを挿入（または最初のレコード）
-    if (lastYear === null || lastYear !== currentYear) {
-      const separator = createYearSeparator(currentYear);
+    if (lastYear === null || lastYear !== currentYearValue) {
+      const separator = createYearSeparator(currentYearValue);
       container.appendChild(separator);
     }
     
     const card = createTimelineCard(record);
     container.appendChild(card);
     
-    lastYear = currentYear;
+    lastYear = currentYearValue;
   }
 
   displayedRecords = end;
 
   // すべて表示した場合はボタンを無効化
-  if (displayedRecords >= filteredRecords.length) {
+  if (displayedRecords >= allRecords.length) {
     loadMoreBtn.disabled = true;
     loadMoreBtn.textContent = 'すべて表示しました';
   } else {
     loadMoreBtn.disabled = false;
-    loadMoreBtn.textContent = `もっと見る (残り${filteredRecords.length - displayedRecords}件)`;
+    loadMoreBtn.textContent = `もっと見る (残り${allRecords.length - displayedRecords}件)`;
   }
   
   // ボタンを非表示にする場合
-  if (filteredRecords.length <= recordsPerPage) {
+  if (allRecords.length <= recordsPerPage) {
     document.getElementById('load-more-section').classList.add('hidden');
   } else {
     document.getElementById('load-more-section').classList.remove('hidden');
@@ -860,25 +1078,22 @@ function createTimelineCard(record) {
   const weekday = weekdays[record.date.getDay()];
   const dateStr = `${record.date.getMonth() + 1}月${record.date.getDate()}日`;
 
-  // フィルターに応じて表示する項目を決定
+  // 表示設定を読み込む
+  const settings = loadDisplaySettings();
+  
+  // 表示設定に応じて表示する項目を決定
   let bodyContent = '';
   
-  if (currentFilter === 'all') {
-    // すべて表示
-    bodyContent = `
-      ${renderBloodPressure(record.data.bloodPressure)}
-      ${renderWeight(record.data.weight, record)}
-      ${renderTraining(record.data.exercises)}
-    `;
-  } else if (currentFilter === 'bloodPressure') {
-    // 血圧のみ表示
-    bodyContent = renderBloodPressure(record.data.bloodPressure);
-  } else if (currentFilter === 'weight') {
-    // 体重のみ表示
-    bodyContent = renderWeight(record.data.weight, record);
-  } else if (currentFilter === 'training') {
-    // 運動のみ表示
-    bodyContent = renderTraining(record.data.exercises);
+  if (settings.bloodPressure) {
+    bodyContent += renderBloodPressure(record.data.bloodPressure);
+  }
+  
+  if (settings.weight) {
+    bodyContent += renderWeight(record.data.weight, record);
+  }
+  
+  if (settings.exerciseRecord) {
+    bodyContent += renderTraining(record.data.exercises, settings);
   }
 
   card.innerHTML = `
@@ -974,36 +1189,53 @@ function renderWeight(weight, record) {
 }
 
 // 運動表示
-function renderTraining(training) {
+function renderTraining(training, settings) {
   if (!training || training.length === 0) {
-    return `
-      <div class="data-section">
-        <div class="data-header">🏃 運動</div>
-        <div class="empty-message">未記録</div>
-      </div>
-    `;
+    return '';
   }
 
   let totalTime = 0;
   let totalCalories = 0;
 
-  const trainingHtml = training.map(item => {
+  training.forEach(item => {
     totalTime += item.duration || 0;
     totalCalories += item.calories || 0;
+  });
+
+  // サマリー部分を表示設定に応じて作成
+  let summaryParts = [];
+  if (settings.trainingTime) {
+    summaryParts.push(`${totalTime}分`);
+  }
+  if (settings.calories) {
+    summaryParts.push(`${Math.round(totalCalories)}kcal`);
+  }
+  
+  const summaryText = summaryParts.length > 0 ? ` (合計: ${summaryParts.join(' / ')})` : '';
+
+  // 各運動の詳細を表示設定に応じて作成
+  const trainingHtml = training.map(item => {
+    let detailsParts = [];
+    if (settings.trainingTime) {
+      detailsParts.push(`${item.duration}分`);
+    }
+    if (settings.calories) {
+      detailsParts.push(`${Math.round(item.calories)}kcal`);
+    }
+    
+    const detailsText = detailsParts.join(' / ');
 
     return `
       <div class="training-item">
         <div class="training-name">${item.icon || '🏃'} ${item.name || '運動'}${item.details ? ` - ${item.details}` : ''}</div>
-        <div class="training-details">
-          ${item.duration}分 / ${Math.round(item.calories)}kcal
-        </div>
+        ${detailsText ? `<div class="training-details">${detailsText}</div>` : ''}
       </div>
     `;
   }).join('');
 
   return `
     <div class="data-section">
-      <div class="data-header">🏃 運動 (合計: ${totalTime}分 / ${Math.round(totalCalories)}kcal)</div>
+      <div class="data-header">🏃 運動${summaryText}</div>
       <div class="training-list">
         ${trainingHtml}
       </div>
