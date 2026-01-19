@@ -387,101 +387,129 @@ body {
 
 /* カードボディ */
 .card-body {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
-.data-section {
-  padding: 16px;
+/* バッジコンテナ */
+.badges-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* バッジ共通スタイル */
+.data-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.data-badge:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 血圧バッジ */
+.badge-blood-pressure {
+  background: linear-gradient(135deg, #FFE0E6, #FFF0F3);
+  border: 2px solid #FFB3C1;
+}
+
+/* 体重バッジ */
+.badge-weight {
+  background: linear-gradient(135deg, #E0F2FE, #F0F9FF);
+  border: 2px solid #7DD3FC;
+}
+
+/* 運動バッジ */
+.badge-exercise {
+  background: linear-gradient(135deg, #FFE5CC, #FFF3E6);
+  border: 2px solid #FFB366;
+}
+
+/* バッジアイコン */
+.badge-icon {
+  font-size: 1.5em;
+  margin-bottom: 8px;
+}
+
+/* バッジ数値 */
+.badge-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #212121;
+  line-height: 1.2;
+}
+
+/* バッジラベル */
+.badge-label {
+  font-size: 0.75em;
+  color: #616161;
+  margin-top: 5px;
+}
+
+/* バッジ変化量 */
+.badge-change {
+  font-size: 0.7em;
+  color: #4CAF50;
+  margin-top: 3px;
+}
+
+.badge-change.negative {
+  color: #EF5350;
+}
+
+/* 運動詳細セクション */
+.exercise-details {
+  padding: 15px;
   background: #FAFAFA;
   border-radius: 12px;
   border-left: 4px solid #FFB300;
 }
 
-.data-header {
-  font-size: 1.1em;
+.exercise-details-title {
   font-weight: 600;
   color: #424242;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.95em;
 }
 
-.data-content {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.exercise-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.data-row {
+.exercise-details-list li {
+  padding: 8px 0;
+  color: #616161;
+  font-size: 0.9em;
+  border-bottom: 1px solid #E0E0E0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
 }
 
-.data-label {
-  font-size: 0.95em;
-  color: #616161;
+.exercise-details-list li:last-child {
+  border-bottom: none;
 }
 
-.data-value {
-  font-size: 1.1em;
-  font-weight: 600;
-  color: #212121;
-}
-
-.data-change {
-  font-size: 0.85em;
-  margin-left: 8px;
-}
-
-.data-change.positive {
-  color: #4CAF50;
-}
-
-.data-change.negative {
-  color: #EF5350;
-}
-
-.empty-message {
-  text-align: center;
-  color: #9E9E9E;
-  font-size: 0.95em;
-  padding: 10px;
-}
-
-/* 運動リスト */
-.training-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.training-item {
-  background: white;
-  padding: 12px;
-  border-radius: 8px;
-  border-left: 3px solid #F57C00;
-  transition: all 0.3s ease;
-}
-
-.training-item:hover {
-  transform: translateX(3px);
-  box-shadow: 0 2px 6px rgba(245, 124, 0, 0.15);
-}
-
-.training-name {
-  font-weight: 600;
+.exercise-name {
   color: #424242;
-  margin-bottom: 5px;
+  font-weight: 500;
 }
 
-.training-details {
-  font-size: 0.9em;
+.exercise-stats {
   color: #616161;
+  font-size: 0.85em;
 }
 
 /* もっと見るセクション */
@@ -596,15 +624,12 @@ body {
     justify-content: center;
   }
 
-  .filter-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+  .badges-container {
+    justify-content: center;
   }
 
-  .filter-btn {
-    padding: 12px 16px;
-    font-size: 0.95em;
+  .data-badge {
+    min-width: 100px;
   }
 
   .card-header {
@@ -1081,19 +1106,25 @@ function createTimelineCard(record) {
   // 表示設定を読み込む
   const settings = loadDisplaySettings();
   
-  // 表示設定に応じて表示する項目を決定
-  let bodyContent = '';
+  // バッジとコンテンツを生成
+  let badgesHtml = '';
+  let exerciseDetailsHtml = '';
   
+  // 血圧バッジ
   if (settings.bloodPressure) {
-    bodyContent += renderBloodPressure(record.data.bloodPressure);
+    badgesHtml += renderBloodPressureBadge(record.data.bloodPressure);
   }
   
+  // 体重バッジ
   if (settings.weight) {
-    bodyContent += renderWeight(record.data.weight, record);
+    badgesHtml += renderWeightBadge(record.data.weight, record);
   }
   
-  if (settings.exerciseRecord) {
-    bodyContent += renderTraining(record.data.exercises, settings);
+  // 運動バッジ
+  if (settings.exerciseRecord && record.data.exercises && record.data.exercises.length > 0) {
+    const exerciseData = calculateExerciseTotals(record.data.exercises);
+    badgesHtml += renderExerciseBadge(exerciseData, settings);
+    exerciseDetailsHtml = renderExerciseDetails(record.data.exercises, settings);
   }
 
   card.innerHTML = `
@@ -1105,50 +1136,33 @@ function createTimelineCard(record) {
     </div>
 
     <div class="card-body">
-      ${bodyContent}
+      ${badgesHtml ? `<div class="badges-container">${badgesHtml}</div>` : ''}
+      ${exerciseDetailsHtml}
     </div>
   `;
 
   return card;
 }
 
-// 血圧表示
-function renderBloodPressure(bloodPressure) {
+// 血圧バッジ表示
+function renderBloodPressureBadge(bloodPressure) {
   if (!bloodPressure || !bloodPressure.systolic) {
-    return `
-      <div class="data-section">
-        <div class="data-header">🫀 血圧</div>
-        <div class="empty-message">未記録</div>
-      </div>
-    `;
+    return '';
   }
 
   return `
-    <div class="data-section">
-      <div class="data-header">🫀 血圧</div>
-      <div class="data-content">
-        <div class="data-row">
-          <span class="data-label">最高血圧</span>
-          <span class="data-value">${bloodPressure.systolic} <span style="font-size: 0.8em; color: #616161;">mmHg</span></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">最低血圧</span>
-          <span class="data-value">${bloodPressure.diastolic} <span style="font-size: 0.8em; color: #616161;">mmHg</span></span>
-        </div>
-      </div>
+    <div class="data-badge badge-blood-pressure">
+      <div class="badge-icon">🫀</div>
+      <div class="badge-value">${bloodPressure.systolic}/${bloodPressure.diastolic}</div>
+      <div class="badge-label">mmHg</div>
     </div>
   `;
 }
 
-// 体重表示
-function renderWeight(weight, record) {
+// 体重バッジ表示
+function renderWeightBadge(weight, record) {
   if (!weight) {
-    return `
-      <div class="data-section">
-        <div class="data-header">⚖️ 体重</div>
-        <div class="empty-message">未記録</div>
-      </div>
-    `;
+    return '';
   }
 
   // 前日との比較
@@ -1163,9 +1177,11 @@ function renderWeight(weight, record) {
       const prev = JSON.parse(prevData);
       if (prev.weight) {
         const change = weight - prev.weight;
-        const changeClass = change > 0 ? 'negative' : (change < 0 ? 'positive' : '');
-        const changeSymbol = change > 0 ? '▲' : (change < 0 ? '▼' : '');
-        changeHtml = `<span class="data-change ${changeClass}">(前日比 ${changeSymbol}${Math.abs(change).toFixed(1)}kg)</span>`;
+        if (change !== 0) {
+          const changeClass = change > 0 ? 'negative' : 'positive';
+          const changeSymbol = change > 0 ? '▲' : '▼';
+          changeHtml = `<div class="badge-change ${changeClass}">${changeSymbol}${Math.abs(change).toFixed(1)}kg</div>`;
+        }
       }
     } catch (error) {
       console.error('前日データ読み込みエラー:', error);
@@ -1173,72 +1189,97 @@ function renderWeight(weight, record) {
   }
 
   return `
-    <div class="data-section">
-      <div class="data-header">⚖️ 体重</div>
-      <div class="data-content">
-        <div class="data-row">
-          <span class="data-label">体重</span>
-          <span class="data-value">
-            ${weight} <span style="font-size: 0.8em; color: #616161;">kg</span>
-            ${changeHtml}
-          </span>
-        </div>
-      </div>
+    <div class="data-badge badge-weight">
+      <div class="badge-icon">⚖️</div>
+      <div class="badge-value">${weight}kg</div>
+      ${changeHtml}
     </div>
   `;
 }
 
-// 運動表示
-function renderTraining(training, settings) {
-  if (!training || training.length === 0) {
-    return '';
-  }
-
+// 運動データの合計計算
+function calculateExerciseTotals(exercises) {
   let totalTime = 0;
   let totalCalories = 0;
 
-  training.forEach(item => {
+  exercises.forEach(item => {
     totalTime += item.duration || 0;
     totalCalories += item.calories || 0;
   });
 
-  // サマリー部分を表示設定に応じて作成
-  let summaryParts = [];
-  if (settings.trainingTime) {
-    summaryParts.push(`${totalTime}分`);
-  }
+  return { totalTime, totalCalories };
+}
+
+// 運動バッジ表示
+function renderExerciseBadge(exerciseData, settings) {
+  const { totalTime, totalCalories } = exerciseData;
+  
+  let valueHtml = '';
+  let labelParts = [];
+  
   if (settings.calories) {
-    summaryParts.push(`${Math.round(totalCalories)}kcal`);
+    valueHtml = `${Math.round(totalCalories)}`;
+    labelParts.push('kcal');
   }
   
-  const summaryText = summaryParts.length > 0 ? ` (合計: ${summaryParts.join(' / ')})` : '';
-
-  // 各運動の詳細を表示設定に応じて作成
-  const trainingHtml = training.map(item => {
-    let detailsParts = [];
-    if (settings.trainingTime) {
-      detailsParts.push(`${item.duration}分`);
+  if (settings.trainingTime) {
+    if (valueHtml && labelParts.length > 0) {
+      labelParts.push(`${totalTime}分`);
+    } else {
+      valueHtml = `${totalTime}`;
+      labelParts.push('分');
     }
-    if (settings.calories) {
-      detailsParts.push(`${Math.round(item.calories)}kcal`);
+  }
+  
+  // 両方OFFの場合は運動記録の有無だけ表示
+  if (!settings.calories && !settings.trainingTime) {
+    valueHtml = '✓';
+    labelParts = ['記録あり'];
+  }
+  
+  return `
+    <div class="data-badge badge-exercise">
+      <div class="badge-icon">🔥</div>
+      <div class="badge-value">${valueHtml}</div>
+      <div class="badge-label">${labelParts.join(' / ')}</div>
+    </div>
+  `;
+}
+
+// 運動詳細表示
+function renderExerciseDetails(exercises, settings) {
+  if (!exercises || exercises.length === 0) {
+    return '';
+  }
+
+  const exerciseItems = exercises.map(item => {
+    let statsParts = [];
+    
+    if (settings.trainingTime) {
+      statsParts.push(`${item.duration}分`);
     }
     
-    const detailsText = detailsParts.join(' / ');
-
+    if (settings.calories) {
+      statsParts.push(`${Math.round(item.calories)}kcal`);
+    }
+    
+    const statsText = statsParts.length > 0 ? statsParts.join(' / ') : '';
+    const detailsText = item.details ? ` (${item.details})` : '';
+    
     return `
-      <div class="training-item">
-        <div class="training-name">${item.icon || '🏃'} ${item.name || '運動'}${item.details ? ` - ${item.details}` : ''}</div>
-        ${detailsText ? `<div class="training-details">${detailsText}</div>` : ''}
-      </div>
+      <li>
+        <span class="exercise-name">${item.icon || '🏃'} ${item.name || '運動'}${detailsText}</span>
+        ${statsText ? `<span class="exercise-stats">${statsText}</span>` : ''}
+      </li>
     `;
   }).join('');
 
   return `
-    <div class="data-section">
-      <div class="data-header">🔥 運動${summaryText}</div>
-      <div class="training-list">
-        ${trainingHtml}
-      </div>
+    <div class="exercise-details">
+      <div class="exercise-details-title">運動の詳細:</div>
+      <ul class="exercise-details-list">
+        ${exerciseItems}
+      </ul>
     </div>
   `;
 }
