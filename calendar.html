@@ -899,6 +899,10 @@ h1 {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #90CAF9;
+  min-height: 73px; /* すべてのカードの高さを73pxに統一 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .summary-value-label {
@@ -912,6 +916,73 @@ h1 {
   font-size: 0.8em;
 }
 
+/* 体重カード専用：デザイン3「カード風」 */
+.weight-values-row {
+  display: flex;
+  gap: 8px;
+}
+
+.weight-card {
+  flex: 1;
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid #E0E0E0;
+  text-align: center;
+  min-height: 73px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.weight-card:hover {
+  border-color: #2196F3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+}
+
+.weight-card.primary {
+  border-color: #2196F3;
+  background: linear-gradient(145deg, #E3F2FD, #FFFFFF);
+}
+
+.weight-card-label {
+  font-size: 0.6em;
+  color: #757575;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.weight-card.primary .weight-card-label {
+  color: #1976D2;
+}
+
+.weight-card-value {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #212121;
+}
+
+.weight-card.primary .weight-card-value {
+  font-size: 1.2em;
+  color: #1976D2;
+}
+
+.weight-card-date {
+  font-size: 0.5em;
+  color: #9E9E9E;
+  margin-top: 2px;
+}
+
+.weight-card .unit {
+  font-size: 0.75em;
+}
+
+
+
+
 .achievement-wrapper {
   text-align: center;
   padding: 8px;
@@ -924,6 +995,7 @@ h1 {
   font-size: 0.7em;
   margin-bottom: 4px;
   font-weight: 600;
+  text-align: center; /* 中央揃えを追加 */
 }
 
 .achievement-value {
@@ -931,6 +1003,7 @@ h1 {
   font-weight: bold;
   padding: 4px 8px;
   border-radius: 6px;
+  text-align: center; /* 中央揃えを追加 */
 }
 
 .achievement-success {
@@ -1827,6 +1900,29 @@ h1 {
     padding: 6px 12px;
     font-size: 0.85em;
   }
+  
+  /* 体重表示のモバイル調整 */
+  .weight-values-row .summary-value-wrapper {
+    padding: 3px 3px; /* さらに縮小 */
+  }
+  
+  .summary-value-primary {
+    font-size: 0.9em;
+  }
+  
+  .summary-value-secondary {
+    font-size: 0.8em;
+  }
+  
+  .weight-values-row .summary-value-label {
+    font-size: 0.6em;
+    margin-bottom: 1px;
+  }
+  
+  .latest-date {
+    font-size: 0.45em;
+    margin-top: 0;
+  }
 }
 
 </style>
@@ -2009,14 +2105,21 @@ h1 {
         </div>
 
         <div class="summary-card" data-item="weight">
-          <div class="summary-label">平均体重</div>
+          <div class="summary-label">体重</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
             <input type="text" class="goal-input" id="goal-weight" placeholder="" readonly>
           </div>
-          <div class="summary-value-wrapper">
-            <div class="summary-value-label">実績</div>
-            <div class="summary-value" id="avg-weight">-- <span class="unit">kg</span></div>
+          <div class="weight-values-row">
+            <div class="weight-card">
+              <div class="weight-card-label">平均</div>
+              <div class="weight-card-value" id="avg-weight">-- <span class="unit">kg</span></div>
+            </div>
+            <div class="weight-card primary">
+              <div class="weight-card-label">最新</div>
+              <div class="weight-card-value" id="latest-weight">-- <span class="unit">kg</span></div>
+              <div class="weight-card-date" id="latest-weight-date"></div>
+            </div>
           </div>
           <div class="achievement-wrapper">
             <div class="achievement-label">達成度</div>
@@ -2041,7 +2144,7 @@ h1 {
         </div>
 
         <div class="summary-card" data-item="trainingTime">
-          <div class="summary-label">総運動時間</div>
+          <div class="summary-label">運動時間</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
             <input type="text" class="goal-input" id="goal-time" placeholder="" readonly>
@@ -2057,7 +2160,7 @@ h1 {
         </div>
 
         <div class="summary-card" data-item="calories">
-          <div class="summary-label">総消費カロリー</div>
+          <div class="summary-label">消費カロリー</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
             <input type="text" class="goal-input" id="goal-calories" placeholder="" readonly>
@@ -3361,6 +3464,28 @@ function loadDayData(day) {
   return data ? JSON.parse(data) : null;
 }
 
+/**
+ * 月内の最新体重データを取得
+ * @param {number} year - 年
+ * @param {number} month - 月（0-11）
+ * @returns {Object|null} {value: 体重, date: 日付} or null
+ */
+function getLatestWeight(year, month) {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+  // 月末から遡って最初に見つかった体重データを返す
+  for (let day = daysInMonth; day >= 1; day--) {
+    const data = loadDayData(day);
+    if (data && data.weight) {
+      return {
+        value: data.weight,
+        date: day
+      };
+    }
+  }
+  return null;
+}
+
 function updateMonthlySummary() {
   let totalSystolic = 0, totalDiastolic = 0, bpCount = 0;
   let totalWeight = 0, weightCount = 0;
@@ -3396,9 +3521,26 @@ function updateMonthlySummary() {
   document.getElementById('avg-bp').innerHTML = bpCount > 0 
     ? `${Math.round(totalSystolic / bpCount)}/${Math.round(totalDiastolic / bpCount)} <span class="unit">mmHg</span>`
     : `--/-- <span class="unit">mmHg</span>`;
-  document.getElementById('avg-weight').innerHTML = weightCount > 0 
-    ? `${(totalWeight / weightCount).toFixed(1)} <span class="unit">kg</span>`
+  
+  // 平均体重を表示
+  const avgWeightValue = weightCount > 0 ? (totalWeight / weightCount).toFixed(1) : null;
+  document.getElementById('avg-weight').innerHTML = avgWeightValue
+    ? `${avgWeightValue} <span class="unit">kg</span>`
     : `-- <span class="unit">kg</span>`;
+  
+  // 最新体重を表示（新規）
+  const latestWeight = getLatestWeight(currentYear, currentMonth);
+  const latestWeightEl = document.getElementById('latest-weight');
+  const latestWeightDateEl = document.getElementById('latest-weight-date');
+  
+  if (latestWeight) {
+    latestWeightEl.innerHTML = `${latestWeight.value.toFixed(1)} <span class="unit">kg</span>`;
+    latestWeightDateEl.textContent = `(${currentMonth + 1}/${latestWeight.date})`;
+  } else {
+    latestWeightEl.innerHTML = `-- <span class="unit">kg</span>`;
+    latestWeightDateEl.textContent = '';
+  }
+  
   document.getElementById('training-days').innerHTML = `${trainingDays} <span class="unit">日</span>`;
   document.getElementById('total-time').innerHTML = `${totalTime} <span class="unit">分</span>`;
   document.getElementById('total-calories').innerHTML = `${totalCalories} <span class="unit">kcal</span>`;
@@ -3416,16 +3558,18 @@ function updateMonthlySummary() {
     goalCalories = goals.totalCalories || 0;
   }
   
-  // 達成度を更新
+  // 達成度を更新（最新体重を使用）
+  const latestWeightValue = latestWeight ? latestWeight.value : 0;
+  
   updateAchievements(
     bpCount > 0 ? Math.round(totalSystolic / bpCount) : 0,
     bpCount > 0 ? Math.round(totalDiastolic / bpCount) : 0,
-    weightCount > 0 ? totalWeight / weightCount : 0,
+    latestWeightValue,  // 平均値ではなく最新値を渡す
     trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories
   );
 }
 
-function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories) {
+function updateAchievements(avgSys, avgDia, latestWeight, trainingDays, totalTime, totalCalories, goalDays, goalTime, goalCalories) {
   // 血圧の達成度
   const goalBp = document.getElementById('goal-bp').value;
   const achievementBp = document.getElementById('achievement-bp');
@@ -3443,12 +3587,12 @@ function updateAchievements(avgSys, avgDia, avgWeight, trainingDays, totalTime, 
     achievementBp.className = 'achievement-value';
   }
   
-  // 体重の達成度
+  // 体重の達成度（最新体重で判定）
   const goalWeightStr = document.getElementById('goal-weight').value;
   const goalWeight = goalWeightStr ? parseFloat(goalWeightStr.replace(/[^\d.]/g, '')) : 0;
   const achievementWeight = document.getElementById('achievement-weight');
-  if (goalWeight && avgWeight > 0) {
-    if (avgWeight <= goalWeight) {
+  if (goalWeight && latestWeight > 0) {
+    if (latestWeight <= goalWeight) {
       achievementWeight.textContent = '達成';
       achievementWeight.className = 'achievement-value achievement-success';
     } else {

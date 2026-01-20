@@ -1407,7 +1407,7 @@ body {
       <div class="goal-display-item">
         <div class="goal-display-content">
           <div class="goal-display-main">
-            <span class="goal-display-label">総運動時間</span>
+            <span class="goal-display-label">運動時間</span>
             <span class="goal-display-value" id="display-goal-time">600 分</span>
           </div>
           <span class="goal-display-previous" id="display-prev-time">前月: 未設定</span>
@@ -1417,7 +1417,7 @@ body {
       <div class="goal-display-item">
         <div class="goal-display-content">
           <div class="goal-display-main">
-            <span class="goal-display-label">総消費カロリー</span>
+            <span class="goal-display-label">消費カロリー</span>
             <span class="goal-display-value" id="display-goal-calories">3,000 kcal</span>
           </div>
           <span class="goal-display-previous" id="display-prev-calories">前月: 未設定</span>
@@ -1624,7 +1624,7 @@ body {
           </div>
           <div class="goal-input-group">
             <div class="goal-input-wrapper">
-              <label>総運動時間（分）</label>
+              <label>運動時間（分）</label>
               <input type="number" id="goal-time" min="30" max="3000" placeholder="600">
               <div class="goal-error-message" id="error-time"></div>
             </div>
@@ -1635,7 +1635,7 @@ body {
           </div>
           <div class="goal-input-group">
             <div class="goal-input-wrapper">
-              <label>総消費カロリー（kcal）</label>
+              <label>消費カロリー（kcal）</label>
               <input type="number" id="goal-calories" min="100" max="15000" placeholder="3000">
               <div class="goal-error-message" id="error-calories"></div>
             </div>
@@ -2076,14 +2076,14 @@ function updateGoalDisplay() {
       document.getElementById('display-prev-days').textContent = '前月: 未設定';
     }
     
-    // 総運動時間
+    // 運動時間
     if (prevGoals.totalTime) {
       document.getElementById('display-prev-time').textContent = `前月: ${prevGoals.totalTime} 分`;
     } else {
       document.getElementById('display-prev-time').textContent = '前月: 未設定';
     }
     
-    // 総消費カロリー
+    // 消費カロリー
     if (prevGoals.totalCalories) {
       document.getElementById('display-prev-calories').textContent = 
         `前月: ${prevGoals.totalCalories.toLocaleString()} kcal`;
@@ -2452,12 +2452,12 @@ function displayChanges(mode, changes) {
     html += `<div class="change-item">日数: ${formatChange(changes.days, '日')}</div>`;
   }
   
-  // 総運動時間の変化
+  // 運動時間の変化
   if (changes.time !== 0) {
     html += `<div class="change-item">時間: ${formatChange(changes.time, '分')}</div>`;
   }
   
-  // 総消費カロリーの変化
+  // 消費カロリーの変化
   if (changes.calories !== 0) {
     html += `<div class="change-item">カロリー: ${formatChange(changes.calories, ' kcal')}</div>`;
   }
@@ -2555,14 +2555,14 @@ function loadPreviousMonthGoals() {
     document.getElementById('prev-days-value').textContent = '未設定';
   }
   
-  // 総運動時間
+  // 運動時間
   if (prevGoals?.totalTime) {
     document.getElementById('prev-time-value').textContent = `${prevGoals.totalTime} 分`;
   } else {
     document.getElementById('prev-time-value').textContent = '未設定';
   }
   
-  // 総消費カロリー
+  // 消費カロリー
   if (prevGoals?.totalCalories) {
     document.getElementById('prev-calories-value').textContent = 
       `${prevGoals.totalCalories.toLocaleString()} kcal`;
@@ -2603,10 +2603,10 @@ function saveGoals() {
     errors.push('トレーニング日数は1-25日の範囲で入力してください（週6日ペースが上限）');
   }
   if (!time || time < 30 || time > 3000) {
-    errors.push('総運動時間は30-3000分の範囲で入力してください');
+    errors.push('運動時間は30-3000分の範囲で入力してください');
   }
   if (!calories || calories < 100 || calories > 15000) {
-    errors.push('総消費カロリーは100-15000kcalの範囲で入力してください');
+    errors.push('消費カロリーは100-15000kcalの範囲で入力してください');
   }
   
   if (errors.length > 0) {

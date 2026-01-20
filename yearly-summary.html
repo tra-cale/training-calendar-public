@@ -348,11 +348,11 @@ body {
       <div class="yearly-stat-value" id="yearly-total-days">0 日</div>
     </div>
     <div class="yearly-stat-card">
-      <div class="yearly-stat-label">🔥 年間総消費カロリー</div>
+      <div class="yearly-stat-label">🔥 年間消費カロリー</div>
       <div class="yearly-stat-value" id="yearly-total-calories">0 kcal</div>
     </div>
     <div class="yearly-stat-card">
-      <div class="yearly-stat-label">⏱️ 年間総運動時間</div>
+      <div class="yearly-stat-label">⏱️ 年間運動時間</div>
       <div class="yearly-stat-value" id="yearly-total-time">0 分</div>
     </div>
   </div>
@@ -381,9 +381,9 @@ body {
     </div>
   </div>
 
-  <!-- 月別総消費カロリー -->
+  <!-- 月別消費カロリー -->
   <div class="chart-container">
-    <div class="chart-title">🔥 月別総消費カロリー</div>
+    <div class="chart-title">🔥 月別消費カロリー</div>
     <div class="chart-wrapper">
       <canvas id="calories-chart"></canvas>
     </div>
@@ -683,11 +683,11 @@ function displayYearlyStats(stats) {
   // トレーニング日数
   document.getElementById('yearly-total-days').textContent = `${stats.totalTrainingDays} 日`;
   
-  // 総消費カロリー
+  // 消費カロリー
   document.getElementById('yearly-total-calories').textContent = 
     `${stats.totalCalories.toLocaleString()} kcal`;
   
-  // 総運動時間
+  // 運動時間
   document.getElementById('yearly-total-time').textContent = `${stats.totalTime} 分`;
 }
 
@@ -848,7 +848,7 @@ function createCharts(allData) {
     data: {
       labels: monthLabels,
       datasets: [{
-        label: '総消費カロリー',
+        label: '消費カロリー',
         data: caloriesData,
         backgroundColor: 'rgba(156, 39, 176, 0.7)',
         borderColor: '#9C27B0',
@@ -912,7 +912,7 @@ function displayMonthlyDetails(allData) {
           <span class="monthly-summary-value">${stats.totalCalories.toLocaleString()} kcal</span>
         </div>
         <div class="monthly-summary-item">
-          <span class="monthly-summary-label">総運動時間</span>
+          <span class="monthly-summary-label">運動時間</span>
           <span class="monthly-summary-value">${stats.totalTime} 分</span>
         </div>
       `;
