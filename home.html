@@ -535,7 +535,7 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 10000;
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -551,7 +551,7 @@ body {
   border-radius: 20px;
   max-width: 800px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: modalSlideIn 0.3s ease;
@@ -1352,6 +1352,684 @@ body {
     width: 100%;
   }
 }
+/* ========== 今日の日付表示（カレンダー風デザイン） ========== */
+.today-date-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  width: fit-content;
+  margin: 0 auto 25px auto;
+}
+
+.date-header {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  padding: 12px 40px;
+  text-align: center;
+  font-size: 1em;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.date-body {
+  padding: 25px 40px;
+  text-align: center;
+}
+
+.date-day {
+  font-size: 3.5em;
+  font-weight: 800;
+  color: #F57C00;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.date-month-year {
+  font-size: 1.1em;
+  color: #616161;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.date-weekday {
+  font-size: 1em;
+  color: #9E9E9E;
+  font-weight: 500;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .date-header {
+    padding: 10px 30px;
+    font-size: 0.95em;
+  }
+  
+  .date-body {
+    padding: 20px 30px;
+  }
+  
+  .date-day {
+    font-size: 2.8em;
+  }
+  
+  .date-month-year {
+    font-size: 1em;
+  }
+  
+  .date-weekday {
+    font-size: 0.9em;
+  }
+}
+
+/* ========== 達成度サマリーカード（NEW） ========== */
+.achievement-card {
+  background: linear-gradient(145deg, #E8F5E9, #FFFFFF);
+  border: 2px solid #66BB6A;
+}
+
+.achievement-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #66BB6A;
+}
+
+.achievement-title {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #212121;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.settings-btn {
+  background: linear-gradient(135deg, #42A5F5, #64B5F6);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(66, 165, 245, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-btn:hover {
+  background: linear-gradient(135deg, #1976D2, #42A5F5);
+  box-shadow: 0 3px 8px rgba(66, 165, 245, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 励ましメッセージ */
+.encouragement-message {
+  background: linear-gradient(145deg, #FFF9C4, #FFFFFF);
+  border-left: 4px solid #66BB6A;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.encouragement-message.warning {
+  border-left-color: #FFB300;
+}
+
+.encouragement-message.alert {
+  border-left-color: #EF5350;
+}
+
+.encouragement-icon {
+  font-size: 1.5em;
+  margin-bottom: 8px;
+}
+
+.encouragement-text {
+  color: #424242;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.encouragement-text strong {
+  color: #2E7D32;
+}
+
+.encouragement-message.warning .encouragement-text strong {
+  color: #E65100;
+}
+
+.encouragement-message.alert .encouragement-text strong {
+  color: #C62828;
+}
+
+/* 達成度グリッド */
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.achievement-item {
+  background: white;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.achievement-item.hidden {
+  display: none;
+}
+
+.achievement-item.good {
+  border-color: #66BB6A;
+  background: linear-gradient(145deg, #E8F5E9, #FFFFFF);
+}
+
+.achievement-item.warning {
+  border-color: #FFB300;
+  background: linear-gradient(145deg, #FFF9C4, #FFFFFF);
+}
+
+.achievement-item.alert {
+  border-color: #EF5350;
+  background: linear-gradient(145deg, #FFEBEE, #FFFFFF);
+}
+
+.achievement-icon {
+  font-size: 2em;
+  margin-bottom: 8px;
+}
+
+.achievement-label {
+  font-size: 0.85em;
+  color: #616161;
+  margin-bottom: 8px;
+}
+
+.achievement-value {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 8px;
+}
+
+.achievement-status {
+  font-size: 0.8em;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.achievement-status.good {
+  background: #66BB6A;
+  color: white;
+}
+
+.achievement-status.warning {
+  background: #FFB300;
+  color: white;
+}
+
+.achievement-status.alert {
+  background: #EF5350;
+  color: white;
+}
+
+/* プログレスバー */
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.5s ease;
+  border-radius: 4px;
+}
+
+.progress-bar.low {
+  background: linear-gradient(90deg, #EF5350, #E57373);
+}
+
+.progress-bar.medium {
+  background: linear-gradient(90deg, #FFB300, #FFD54F);
+}
+
+.progress-bar.high {
+  background: linear-gradient(90deg, #66BB6A, #81C784);
+}
+
+/* ========== 折りたたみ機能 ========== */
+.collapsible-header {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+
+.collapsible-header:hover {
+  background: #F5F5F5;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #FFD54F;
+}
+
+.toggle-icon {
+  font-size: 1.2em;
+  color: #9E9E9E;
+  transition: transform 0.3s ease;
+}
+
+.toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.card-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.card-content.expanded {
+  max-height: 1000px;
+  padding-top: 20px;
+}
+
+/* プロフィールバッジ */
+.profile-badge {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+/* 月間目標バッジ */
+.goal-badge {
+  background: linear-gradient(135deg, #1976D2, #42A5F5);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+/* ========== 表示項目設定モーダル ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.display-settings-modal .modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.display-settings-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #E0E0E0;
+}
+
+.display-settings-modal .modal-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #212121;
+}
+
+.display-settings-modal .modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #9E9E9E;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.display-settings-modal .modal-close:hover {
+  background: #F5F5F5;
+  color: #212121;
+}
+
+.display-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.display-option-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #E0E0E0;
+  transition: background 0.3s ease;
+}
+
+.display-option-item:hover {
+  background: #F5F5F5;
+}
+
+.display-option-item:last-child {
+  border-bottom: none;
+}
+
+.display-option-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1em;
+  color: #424242;
+}
+
+.display-option-icon {
+  font-size: 1.5em;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background: #BDBDBD;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: #66BB6A;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.active .toggle-slider {
+  transform: translateX(24px);
+}
+
+.display-settings-modal .modal-footer {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.display-settings-modal .btn-modal {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.display-settings-modal .btn-cancel {
+  background: #F5F5F5;
+  color: #616161;
+}
+
+.display-settings-modal .btn-cancel:hover {
+  background: #E0E0E0;
+}
+
+.display-settings-modal .btn-save {
+  background: linear-gradient(135deg, #66BB6A, #81C784);
+  color: white;
+  box-shadow: 0 2px 6px rgba(102, 187, 106, 0.3);
+}
+
+.display-settings-modal .btn-save:hover {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  box-shadow: 0 3px 8px rgba(102, 187, 106, 0.4);
+}
+
+/* ========== プロフィール編集モーダル（NEW） ========== */
+.profile-edit-modal .modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.profile-edit-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #E0E0E0;
+}
+
+.profile-edit-modal .modal-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #212121;
+}
+
+.profile-edit-modal .modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #9E9E9E;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.profile-edit-modal .modal-close:hover {
+  background: #F5F5F5;
+  color: #212121;
+}
+
+.modal-form .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-form .form-label {
+  display: block;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 8px;
+}
+
+.modal-form .form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  font-size: 1em;
+  color: #212121;
+  transition: all 0.3s ease;
+}
+
+.modal-form .form-input:focus {
+  outline: none;
+  border-color: #F57C00;
+  box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.1);
+}
+
+.modal-form .form-input.error {
+  border-color: #EF5350;
+}
+
+.modal-form .input-with-unit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-form .input-with-unit .form-input {
+  flex: 1;
+}
+
+.modal-form .unit {
+  font-size: 0.9em;
+  color: #616161;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.modal-form .form-hint {
+  font-size: 0.85em;
+  color: #9E9E9E;
+  margin-top: 4px;
+}
+
+.modal-form .radio-group {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-form .radio-group.vertical {
+  flex-direction: column;
+}
+
+.modal-form .radio-group.horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.modal-form .radio-option {
+  display: flex;
+  align-items: center;
+}
+
+.modal-form .radio-option input[type="radio"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.modal-form .radio-option label {
+  font-size: 0.95em;
+  color: #424242;
+  cursor: pointer;
+}
+
+.modal-form .error-message {
+  display: none;
+  font-size: 0.85em;
+  color: #EF5350;
+  margin-top: 4px;
+}
+
+.modal-form .error-message.show {
+  display: block;
+}
+
+.profile-edit-modal .modal-footer {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.profile-edit-modal .btn-modal {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-edit-modal .btn-cancel {
+  background: #F5F5F5;
+  color: #616161;
+}
+
+.profile-edit-modal .btn-cancel:hover {
+  background: #E0E0E0;
+}
+
+.profile-edit-modal .btn-save {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  box-shadow: 0 2px 6px rgba(245, 124, 0, 0.3);
+}
+
+.profile-edit-modal .btn-save:hover {
+  background: linear-gradient(135deg, #E65100, #F57C00);
+  box-shadow: 0 3px 8px rgba(245, 124, 0, 0.4);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .achievement-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1362,7 +2040,6 @@ body {
     <div class="hero-icon">🍁</div>
     <h1 class="hero-title">トレーニング管理カレンダー</h1>
     <p class="hero-subtitle">健康的な毎日をサポート</p>
-    <a href="calendar.html" class="hero-cta hidden" id="hero-cta">📅 カレンダーを開く</a>
   </section>
 
   <!-- プロフィール設定（初回のみ表示） -->
@@ -1447,12 +2124,168 @@ body {
     </form>
   </div>
 
+  <!-- 今日の日付表示（カレンダー風デザイン） -->
+  <div class="today-date-card fade-in hidden" id="today-date-display">
+    <div class="date-header" id="date-header-text">2025年 1月</div>
+    <div class="date-body">
+      <div class="date-day" id="date-day-value">21</div>
+      <div class="date-month-year" id="date-month-year-text">January</div>
+      <div class="date-weekday" id="date-weekday-text">水曜日</div>
+    </div>
+  </div>
+
+  <!-- 達成度サマリーカード（NEW） -->
+  <div class="card achievement-card fade-in hidden" id="achievement-display">
+    <div class="achievement-header">
+      <div class="card-title achievement-title">📊 今月の達成度</div>
+      <button class="settings-btn" onclick="openDisplaySettings()">
+        ⚙️ 表示項目
+      </button>
+    </div>
+
+    <!-- 励ましメッセージ -->
+    <div class="encouragement-message" id="encouragement-message">
+      <div class="encouragement-icon">🎉</div>
+      <div class="encouragement-text" id="encouragement-text">
+        <strong>データを読み込んでいます...</strong>
+      </div>
+    </div>
+
+    <!-- 達成度グリッド -->
+    <div class="achievement-grid">
+      <!-- 血圧 -->
+      <div class="achievement-item" data-item="bloodPressure" id="achievement-bp">
+        <div class="achievement-icon">🫀</div>
+        <div class="achievement-label">血圧</div>
+        <div class="achievement-value" id="achievement-bp-value">--/--</div>
+        <div class="achievement-status" id="achievement-bp-status">-</div>
+      </div>
+
+      <!-- 体重 -->
+      <div class="achievement-item" data-item="weight" id="achievement-weight">
+        <div class="achievement-icon">⚖️</div>
+        <div class="achievement-label">体重</div>
+        <div class="achievement-value" id="achievement-weight-value">-- kg</div>
+        <div class="achievement-status" id="achievement-weight-status">-</div>
+      </div>
+
+      <!-- トレーニング日数 -->
+      <div class="achievement-item" data-item="trainingDays" id="achievement-days">
+        <div class="achievement-icon">📅</div>
+        <div class="achievement-label">トレーニング日数</div>
+        <div class="achievement-value" id="achievement-days-value">0/0 日</div>
+        <div class="achievement-status" id="achievement-days-status">0%</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="achievement-days-bar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- 運動時間 -->
+      <div class="achievement-item" data-item="totalTime" id="achievement-time">
+        <div class="achievement-icon">⏱️</div>
+        <div class="achievement-label">運動時間</div>
+        <div class="achievement-value" id="achievement-time-value">0/0 分</div>
+        <div class="achievement-status" id="achievement-time-status">0%</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="achievement-time-bar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- 消費カロリー -->
+      <div class="achievement-item" data-item="totalCalories" id="achievement-calories">
+        <div class="achievement-icon">🔥</div>
+        <div class="achievement-label">消費カロリー</div>
+        <div class="achievement-value" id="achievement-calories-value">0/0</div>
+        <div class="achievement-status" id="achievement-calories-status">0%</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="achievement-calories-bar" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 月間目標カード（登録済みの場合） -->
+  <div class="card goal-display-card fade-in hidden" id="goal-display">
+    <div class="card-header goal-display-header collapsible-header" onclick="toggleCard('goal-content')">
+      <div class="card-title">🎯 月間目標</div>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="goal-badge">
+          <span id="goal-display-month">11月</span>
+        </div>
+        <div class="toggle-icon" id="goal-toggle">▼</div>
+      </div>
+    </div>
+
+    <div class="card-content" id="goal-content">
+
+    <ul class="goal-display-grid" id="goal-display-content">
+      <li class="goal-display-item">
+        <div class="goal-display-content">
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">🫀</span>
+            血圧目標
+          </span>
+          <span class="goal-display-value" id="display-goal-bp">120/80 mmHg</span>
+        </div>
+      </li>
+
+      <li class="goal-display-item">
+        <div class="goal-display-content">
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">⚖️</span>
+            体重目標
+          </span>
+          <span class="goal-display-value" id="display-goal-weight">65.0 kg</span>
+        </div>
+      </li>
+
+      <li class="goal-display-item">
+        <div class="goal-display-content">
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">📅</span>
+            トレーニング日数
+          </span>
+          <span class="goal-display-value" id="display-goal-days">12 日</span>
+        </div>
+      </li>
+
+      <li class="goal-display-item">
+        <div class="goal-display-content">
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">⏱️</span>
+            運動時間
+          </span>
+          <span class="goal-display-value" id="display-goal-time">600 分</span>
+        </div>
+      </li>
+
+      <li class="goal-display-item">
+        <div class="goal-display-content">
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">🔥</span>
+            消費カロリー
+          </span>
+          <span class="goal-display-value" id="display-goal-calories">3,000 kcal</span>
+        </div>
+      </li>
+    </ul>
+
+    </div>
+
+    <button class="btn btn-edit" onclick="openGoalModal()">✏️ 編集</button>
+  </div>
+
   <!-- プロフィール表示（登録済みの場合） -->
   <div class="card profile-display-card fade-in hidden" id="profile-display">
-    <div class="profile-header">
+    <div class="card-header profile-header collapsible-header" onclick="toggleCard('profile-content')">
       <div class="card-title">👤 プロフィール</div>
-      <div class="profile-name" id="profile-name">30歳・男性</div>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="profile-name profile-badge" id="profile-name">30歳・男性</div>
+        <div class="toggle-icon" id="profile-toggle">▼</div>
+      </div>
     </div>
+
+    <div class="card-content" id="profile-content">
 
     <ul class="profile-info-grid">
       <li class="profile-info-item">
@@ -1504,74 +2337,9 @@ body {
       </li>
     </ul>
 
-    <button class="btn btn-edit" onclick="editProfile()">✏️ 編集</button>
-  </div>
-
-  <!-- 月間目標カード（登録済みの場合） -->
-  <div class="card goal-display-card fade-in hidden" id="goal-display">
-    <div class="goal-display-header">
-      <div class="card-title">🎯 月間目標</div>
-      <div class="goal-month-selector-home">
-        <label for="home-month-select">表示月:</label>
-        <select id="home-month-select" class="home-month-dropdown" onchange="onHomeMonthChange()">
-          <!-- JavaScriptで動的に生成 -->
-        </select>
-      </div>
     </div>
 
-    <ul class="goal-display-grid" id="goal-display-content">
-      <li class="goal-display-item">
-        <div class="goal-display-content">
-          <span class="goal-display-label">
-            <span class="goal-display-label-icon">❤️</span>
-            血圧目標
-          </span>
-          <span class="goal-display-value" id="display-goal-bp">120/80 mmHg</span>
-        </div>
-      </li>
-
-      <li class="goal-display-item">
-        <div class="goal-display-content">
-          <span class="goal-display-label">
-            <span class="goal-display-label-icon">⚖️</span>
-            体重目標
-          </span>
-          <span class="goal-display-value" id="display-goal-weight">65.0 kg</span>
-        </div>
-      </li>
-
-      <li class="goal-display-item">
-        <div class="goal-display-content">
-          <span class="goal-display-label">
-            <span class="goal-display-label-icon">📅</span>
-            トレーニング日数
-          </span>
-          <span class="goal-display-value" id="display-goal-days">12 日</span>
-        </div>
-      </li>
-
-      <li class="goal-display-item">
-        <div class="goal-display-content">
-          <span class="goal-display-label">
-            <span class="goal-display-label-icon">⏱️</span>
-            運動時間
-          </span>
-          <span class="goal-display-value" id="display-goal-time">600 分</span>
-        </div>
-      </li>
-
-      <li class="goal-display-item">
-        <div class="goal-display-content">
-          <span class="goal-display-label">
-            <span class="goal-display-label-icon">🔥</span>
-            消費カロリー
-          </span>
-          <span class="goal-display-value" id="display-goal-calories">3,000 kcal</span>
-        </div>
-      </li>
-    </ul>
-
-    <button class="btn btn-edit" onclick="openGoalModal()">✏️ 編集</button>
+    <button class="btn btn-edit" onclick="editProfile()">✏️ 編集</button>
   </div>
 
   <!-- メインナビゲーション（登録済みの場合） -->
@@ -2042,30 +2810,113 @@ document.getElementById('profile-form').addEventListener('submit', function(e) {
 });
 
 // 編集ボタン
+// プロフィール編集（モーダル表示に変更）
 function editProfile() {
   const profile = loadProfile();
   if (!profile) return;
+  
+  // モーダルのフォームに現在の値を設定
   if (profile.gender) {
-    document.getElementById(`gender-${profile.gender}`).checked = true;
+    document.getElementById(`edit-gender-${profile.gender}`).checked = true;
   }
   if (profile.age) {
-    document.getElementById('age').value = profile.age;
+    document.getElementById('edit-age').value = profile.age;
   }
   if (profile.height) {
-    document.getElementById('height').value = profile.height;
+    document.getElementById('edit-height').value = profile.height;
   }
   if (profile.weight) {
-    document.getElementById('weight').value = profile.weight;
+    document.getElementById('edit-weight').value = profile.weight;
   }
   if (profile.activityLevel) {
-    document.getElementById(`activity-${profile.activityLevel}`).checked = true;
+    document.getElementById(`edit-activity-${profile.activityLevel}`).checked = true;
   }
-  document.getElementById('profile-display').classList.add('hidden');
-  document.getElementById('goal-display').classList.add('hidden');
-  document.getElementById('main-navigation').classList.add('hidden');
-  document.getElementById('profile-setup').classList.remove('hidden');
-  document.getElementById('hero-cta').classList.add('hidden');
-  document.getElementById('profile-setup').scrollIntoView({ behavior: 'smooth' });
+  
+  // エラーメッセージをクリア
+  document.querySelectorAll('.profile-edit-modal .error-message').forEach(el => {
+    el.classList.remove('show');
+  });
+  document.querySelectorAll('.profile-edit-modal .form-input').forEach(el => {
+    el.classList.remove('error');
+  });
+  
+  // モーダルを表示
+  document.getElementById('profileEditModal').classList.add('show');
+}
+
+// プロフィール編集モーダルを閉じる
+function closeProfileEditModal() {
+  document.getElementById('profileEditModal').classList.remove('show');
+}
+
+// プロフィール編集フォームの送信処理
+document.addEventListener('DOMContentLoaded', function() {
+  const editForm = document.getElementById('profile-edit-form');
+  if (editForm) {
+    editForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const profile = {
+        gender: document.querySelector('input[name="editGender"]:checked')?.value,
+        age: parseInt(document.getElementById('edit-age').value) || null,
+        height: parseInt(document.getElementById('edit-height').value) || null,
+        weight: parseFloat(document.getElementById('edit-weight').value) || null,
+        activityLevel: document.querySelector('input[name="editActivityLevel"]:checked')?.value || 'moderate'
+      };
+      
+      const errors = validateProfileEdit(profile);
+      if (errors.length > 0) {
+        showEditErrors(errors);
+        return;
+      }
+      
+      saveProfile(profile);
+      updateProfileDisplay(profile);
+      closeProfileEditModal();
+      
+      // 達成度サマリーも更新（体重が変わる可能性があるため）
+      updateAchievementSummary();
+    });
+  }
+});
+
+// プロフィール編集のバリデーション
+function validateProfileEdit(profile) {
+  const errors = [];
+  if (!profile.gender) {
+    errors.push({ field: 'edit-gender', message: '性別を選択してください' });
+  }
+  if (!profile.age || profile.age < 10 || profile.age > 120) {
+    errors.push({ field: 'edit-age', message: '10歳から120歳の範囲で入力してください' });
+  }
+  if (!profile.weight || profile.weight < 30 || profile.weight > 200) {
+    errors.push({ field: 'edit-weight', message: '30kgから200kgの範囲で入力してください' });
+  }
+  if (profile.height && (profile.height < 100 || profile.height > 250)) {
+    errors.push({ field: 'edit-height', message: '100cmから250cmの範囲で入力してください' });
+  }
+  return errors;
+}
+
+// プロフィール編集のエラー表示
+function showEditErrors(errors) {
+  document.querySelectorAll('.profile-edit-modal .error-message').forEach(el => {
+    el.classList.remove('show');
+  });
+  document.querySelectorAll('.profile-edit-modal .form-input').forEach(el => {
+    el.classList.remove('error');
+  });
+  errors.forEach(error => {
+    const errorEl = document.getElementById(`error-${error.field}`);
+    const inputEl = document.getElementById(error.field);
+    if (errorEl) {
+      errorEl.classList.add('show');
+      errorEl.textContent = error.message;
+    }
+    if (inputEl) {
+      inputEl.classList.add('error');
+    }
+  });
 }
 
 // 月間目標の読み込み
@@ -2144,21 +2995,16 @@ function onHomeMonthChange() {
 }
 
 function updateGoalDisplay() {
-  // 選択中の月の目標を取得
-  const goalsKey = getGoalsKey(homeDisplayYear, homeDisplayMonth);
+  // 現在月を表示（NEW）
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  document.getElementById('goal-display-month').textContent = `${currentMonth}月`;
+  
+  // 現在月の目標を取得（月選択機能は廃止）
+  const currentYear = now.getFullYear();
+  const goalsKey = getGoalsKey(currentYear, now.getMonth());
   const goalsStr = localStorage.getItem(goalsKey);
   const goals = goalsStr ? JSON.parse(goalsStr) : null;
-  
-  // 前月のデータを取得
-  let prevYear = homeDisplayYear;
-  let prevMonth = homeDisplayMonth - 1;
-  if (prevMonth === 0) {
-    prevMonth = 12;
-    prevYear = prevYear - 1;
-  }
-  const prevGoalsKey = getGoalsKey(prevYear, prevMonth);
-  const prevGoalsStr = localStorage.getItem(prevGoalsKey);
-  const prevGoals = prevGoalsStr ? JSON.parse(prevGoalsStr) : null;
   
   // 今月の目標を表示
   if (goals) {
@@ -2791,22 +3637,427 @@ function closeSuccessModal() {
   document.getElementById('success-modal').classList.remove('active');
 }
 
+// ========== 今日の日付表示（カレンダー風デザイン） ==========
+
+// 今日の日付を更新
+function updateTodayDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  
+  // 曜日の配列
+  const weekdays = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
+  const weekday = weekdays[now.getDay()];
+  
+  // 英語の月名
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+  const monthNameEn = monthNames[now.getMonth()];
+  
+  // ヘッダー: "2025年 1月"
+  document.getElementById('date-header-text').textContent = `${year}年 ${month}月`;
+  
+  // 日付（大きく表示）
+  document.getElementById('date-day-value').textContent = day;
+  
+  // 英語の月名
+  document.getElementById('date-month-year-text').textContent = monthNameEn;
+  
+  // 曜日
+  document.getElementById('date-weekday-text').textContent = weekday;
+}
+
+// ========== 達成度サマリー関連（NEW） ==========
+
+// 達成度サマリーを更新
+function updateAchievementSummary() {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  
+  // 今月のデータを集計
+  const monthData = calculateMonthlyData(currentYear, currentMonth);
+  
+  // 今月の目標を取得
+  const goals = loadMonthlyGoals(currentYear, currentMonth);
+  
+  // 達成度を計算して表示
+  displayAchievementData(monthData, goals);
+  
+  // 励ましメッセージを生成
+  generateEncouragementMessage(monthData, goals);
+}
+
+// 月間データを集計
+function calculateMonthlyData(year, month) {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  let totalSystolic = 0, totalDiastolic = 0, bpCount = 0;
+  let totalWeight = 0, weightCount = 0;
+  let latestWeight = null;
+  let trainingDays = 0, totalTime = 0, totalCalories = 0;
+  
+  for (let day = 1; day <= daysInMonth; day++) {
+    const key = `training_${year}_${month}_${day}`;
+    const dataStr = localStorage.getItem(key);
+    
+    if (dataStr) {
+      const data = JSON.parse(dataStr);
+      
+      // 血圧
+      if (data.bloodPressure && data.bloodPressure.systolic && data.bloodPressure.diastolic) {
+        totalSystolic += data.bloodPressure.systolic;
+        totalDiastolic += data.bloodPressure.diastolic;
+        bpCount++;
+      }
+      
+      // 体重
+      if (data.weight) {
+        totalWeight += data.weight;
+        weightCount++;
+        latestWeight = { value: data.weight, date: day };
+      }
+      
+      // トレーニング
+      if (data.training && data.training.length > 0) {
+        trainingDays++;
+        data.training.forEach(t => {
+          totalTime += t.duration || 0;
+          totalCalories += t.calories || 0;
+        });
+      }
+    }
+  }
+  
+  return {
+    avgSystolic: bpCount > 0 ? Math.round(totalSystolic / bpCount) : 0,
+    avgDiastolic: bpCount > 0 ? Math.round(totalDiastolic / bpCount) : 0,
+    latestWeight: latestWeight ? latestWeight.value : 0,
+    trainingDays,
+    totalTime,
+    totalCalories
+  };
+}
+
+// 達成度データを表示
+function displayAchievementData(data, goals) {
+  if (!goals) {
+    // 目標未設定の場合
+    document.getElementById('achievement-bp-value').textContent = data.avgSystolic > 0 ? `${data.avgSystolic}/${data.avgDiastolic}` : '--/--';
+    document.getElementById('achievement-bp-status').textContent = '-';
+    document.getElementById('achievement-bp-status').className = 'achievement-status';
+    
+    document.getElementById('achievement-weight-value').textContent = data.latestWeight > 0 ? `${data.latestWeight.toFixed(1)} kg` : '-- kg';
+    document.getElementById('achievement-weight-status').textContent = '-';
+    document.getElementById('achievement-weight-status').className = 'achievement-status';
+    
+    document.getElementById('achievement-days-value').textContent = `${data.trainingDays} 日`;
+    document.getElementById('achievement-days-status').textContent = '-';
+    document.getElementById('achievement-days-status').className = 'achievement-status';
+    
+    document.getElementById('achievement-time-value').textContent = `${data.totalTime} 分`;
+    document.getElementById('achievement-time-status').textContent = '-';
+    document.getElementById('achievement-time-status').className = 'achievement-status';
+    
+    document.getElementById('achievement-calories-value').textContent = `${data.totalCalories} kcal`;
+    document.getElementById('achievement-calories-status').textContent = '-';
+    document.getElementById('achievement-calories-status').className = 'achievement-status';
+    
+    return;
+  }
+  
+  // 血圧の達成度
+  const bpItem = document.getElementById('achievement-bp');
+  if (data.avgSystolic > 0 && goals.bloodPressure) {
+    document.getElementById('achievement-bp-value').textContent = `${data.avgSystolic}/${data.avgDiastolic}`;
+    
+    if (data.avgSystolic <= goals.bloodPressure.systolic && data.avgDiastolic <= goals.bloodPressure.diastolic) {
+      document.getElementById('achievement-bp-status').textContent = '達成 ✓';
+      document.getElementById('achievement-bp-status').className = 'achievement-status good';
+      bpItem.className = 'achievement-item good';
+    } else {
+      document.getElementById('achievement-bp-status').textContent = '未達成';
+      document.getElementById('achievement-bp-status').className = 'achievement-status alert';
+      bpItem.className = 'achievement-item alert';
+    }
+  }
+  
+  // 体重の達成度
+  const weightItem = document.getElementById('achievement-weight');
+  if (data.latestWeight > 0 && goals.weight) {
+    document.getElementById('achievement-weight-value').textContent = `${data.latestWeight.toFixed(1)} kg`;
+    
+    if (data.latestWeight <= goals.weight) {
+      document.getElementById('achievement-weight-status').textContent = '達成 ✓';
+      document.getElementById('achievement-weight-status').className = 'achievement-status good';
+      weightItem.className = 'achievement-item good';
+    } else {
+      document.getElementById('achievement-weight-status').textContent = '未達成';
+      document.getElementById('achievement-weight-status').className = 'achievement-status alert';
+      weightItem.className = 'achievement-item alert';
+    }
+  }
+  
+  // トレーニング日数の達成度
+  const daysItem = document.getElementById('achievement-days');
+  if (goals.trainingDays > 0) {
+    const percentage = Math.round((data.trainingDays / goals.trainingDays) * 100);
+    document.getElementById('achievement-days-value').textContent = `${data.trainingDays}/${goals.trainingDays} 日`;
+    document.getElementById('achievement-days-status').textContent = `${percentage}%`;
+    
+    const bar = document.getElementById('achievement-days-bar');
+    bar.style.width = `${Math.min(percentage, 100)}%`;
+    
+    if (percentage >= 80) {
+      document.getElementById('achievement-days-status').className = 'achievement-status good';
+      bar.className = 'progress-bar high';
+      daysItem.className = 'achievement-item good';
+    } else if (percentage >= 50) {
+      document.getElementById('achievement-days-status').className = 'achievement-status warning';
+      bar.className = 'progress-bar medium';
+      daysItem.className = 'achievement-item warning';
+    } else {
+      document.getElementById('achievement-days-status').className = 'achievement-status alert';
+      bar.className = 'progress-bar low';
+      daysItem.className = 'achievement-item alert';
+    }
+  }
+  
+  // 運動時間の達成度
+  const timeItem = document.getElementById('achievement-time');
+  if (goals.totalTime > 0) {
+    const percentage = Math.round((data.totalTime / goals.totalTime) * 100);
+    document.getElementById('achievement-time-value').textContent = `${data.totalTime}/${goals.totalTime} 分`;
+    document.getElementById('achievement-time-status').textContent = `${percentage}%`;
+    
+    const bar = document.getElementById('achievement-time-bar');
+    bar.style.width = `${Math.min(percentage, 100)}%`;
+    
+    if (percentage >= 80) {
+      document.getElementById('achievement-time-status').className = 'achievement-status good';
+      bar.className = 'progress-bar high';
+      timeItem.className = 'achievement-item good';
+    } else if (percentage >= 50) {
+      document.getElementById('achievement-time-status').className = 'achievement-status warning';
+      bar.className = 'progress-bar medium';
+      timeItem.className = 'achievement-item warning';
+    } else {
+      document.getElementById('achievement-time-status').className = 'achievement-status alert';
+      bar.className = 'progress-bar low';
+      timeItem.className = 'achievement-item alert';
+    }
+  }
+  
+  // 消費カロリーの達成度
+  const caloriesItem = document.getElementById('achievement-calories');
+  if (goals.totalCalories > 0) {
+    const percentage = Math.round((data.totalCalories / goals.totalCalories) * 100);
+    document.getElementById('achievement-calories-value').textContent = `${data.totalCalories}/${goals.totalCalories}`;
+    document.getElementById('achievement-calories-status').textContent = `${percentage}%`;
+    
+    const bar = document.getElementById('achievement-calories-bar');
+    bar.style.width = `${Math.min(percentage, 100)}%`;
+    
+    if (percentage >= 80) {
+      document.getElementById('achievement-calories-status').className = 'achievement-status good';
+      bar.className = 'progress-bar high';
+      caloriesItem.className = 'achievement-item good';
+    } else if (percentage >= 50) {
+      document.getElementById('achievement-calories-status').className = 'achievement-status warning';
+      bar.className = 'progress-bar medium';
+      caloriesItem.className = 'achievement-item warning';
+    } else {
+      document.getElementById('achievement-calories-status').className = 'achievement-status alert';
+      bar.className = 'progress-bar low';
+      caloriesItem.className = 'achievement-item alert';
+    }
+  }
+}
+
+// 励ましメッセージを生成
+function generateEncouragementMessage(data, goals) {
+  const messageEl = document.getElementById('encouragement-message');
+  const textEl = document.getElementById('encouragement-text');
+  
+  if (!goals) {
+    messageEl.className = 'encouragement-message';
+    textEl.innerHTML = '<strong>目標を設定しましょう！</strong><br>月間目標を設定すると、達成度を確認できます。';
+    return;
+  }
+  
+  // 達成度を計算
+  let achievedCount = 0;
+  let totalCount = 0;
+  
+  // 血圧
+  if (data.avgSystolic > 0 && goals.bloodPressure) {
+    totalCount++;
+    if (data.avgSystolic <= goals.bloodPressure.systolic && data.avgDiastolic <= goals.bloodPressure.diastolic) {
+      achievedCount++;
+    }
+  }
+  
+  // 体重
+  if (data.latestWeight > 0 && goals.weight) {
+    totalCount++;
+    if (data.latestWeight <= goals.weight) {
+      achievedCount++;
+    }
+  }
+  
+  // トレーニング
+  const daysPercentage = goals.trainingDays > 0 ? (data.trainingDays / goals.trainingDays) * 100 : 0;
+  const timePercentage = goals.totalTime > 0 ? (data.totalTime / goals.totalTime) * 100 : 0;
+  const caloriesPercentage = goals.totalCalories > 0 ? (data.totalCalories / goals.totalCalories) * 100 : 0;
+  
+  const avgPercentage = (daysPercentage + timePercentage + caloriesPercentage) / 3;
+  
+  // メッセージを生成
+  if (achievedCount === totalCount && avgPercentage >= 80) {
+    messageEl.className = 'encouragement-message';
+    textEl.innerHTML = '<strong>素晴らしいです！🎉</strong><br>全ての目標を達成しています。この調子で頑張りましょう！';
+  } else if (avgPercentage >= 70) {
+    messageEl.className = 'encouragement-message';
+    textEl.innerHTML = `<strong>順調です！</strong><br>今月の進捗は${Math.round(avgPercentage)}%です。目標達成まであと少しです。`;
+  } else if (avgPercentage >= 40) {
+    messageEl.className = 'encouragement-message warning';
+    textEl.innerHTML = `<strong>もう少し頑張りましょう</strong><br>現在の進捗は${Math.round(avgPercentage)}%です。少しずつ運動量を増やしていきましょう。`;
+  } else {
+    messageEl.className = 'encouragement-message alert';
+    textEl.innerHTML = '<strong>一緒に頑張りましょう！</strong><br>目標達成にはもう一歩です。今日から少しずつ始めてみませんか？';
+  }
+}
+
+// ========== 折りたたみ機能（NEW） ==========
+
+function toggleCard(contentId) {
+  const content = document.getElementById(contentId);
+  const toggleIcon = document.getElementById(contentId.replace('-content', '-toggle'));
+  
+  if (content.classList.contains('expanded')) {
+    content.classList.remove('expanded');
+    toggleIcon.classList.remove('expanded');
+  } else {
+    content.classList.add('expanded');
+    toggleIcon.classList.add('expanded');
+  }
+}
+
+// ========== 表示項目設定（NEW） ==========
+
+// 表示項目設定の一時保存用
+let tempDisplaySettings = {
+  bloodPressure: true,
+  weight: true,
+  trainingDays: true,
+  totalTime: true,
+  totalCalories: true
+};
+
+// 表示項目設定を読み込み
+function loadDisplaySettings() {
+  const saved = localStorage.getItem('achievement_display_settings');
+  if (saved) {
+    tempDisplaySettings = JSON.parse(saved);
+  }
+  updateAchievementDisplay();
+}
+
+// 表示項目設定モーダルを開く
+function openDisplaySettings() {
+  // LocalStorageから設定を読み込み
+  const saved = localStorage.getItem('achievement_display_settings');
+  if (saved) {
+    tempDisplaySettings = JSON.parse(saved);
+  }
+  
+  // モーダル内のトグルスイッチを設定に合わせて更新
+  updateModalToggles();
+  
+  // モーダルを表示
+  document.getElementById('displaySettingsModal').classList.add('show');
+}
+
+// 表示項目設定モーダルを閉じる
+function closeDisplaySettings() {
+  document.getElementById('displaySettingsModal').classList.remove('show');
+}
+
+// モーダル内のトグルスイッチを更新
+function updateModalToggles() {
+  const items = document.querySelectorAll('.display-option-item');
+  const keys = ['bloodPressure', 'weight', 'trainingDays', 'totalTime', 'totalCalories'];
+  
+  items.forEach((item, index) => {
+    const toggle = item.querySelector('.toggle-switch');
+    const key = keys[index];
+    
+    if (tempDisplaySettings[key]) {
+      toggle.classList.add('active');
+    } else {
+      toggle.classList.remove('active');
+    }
+  });
+}
+
+// 表示項目のトグル切り替え
+function toggleDisplayOption(element, key) {
+  element.classList.toggle('active');
+  tempDisplaySettings[key] = element.classList.contains('active');
+}
+
+// 表示項目設定を保存
+function saveDisplaySettings() {
+  // LocalStorageに保存
+  localStorage.setItem('achievement_display_settings', JSON.stringify(tempDisplaySettings));
+  
+  // 達成度カードの表示を更新
+  updateAchievementDisplay();
+  
+  // モーダルを閉じる
+  closeDisplaySettings();
+}
+
+// 達成度カードの表示を更新
+function updateAchievementDisplay() {
+  const items = document.querySelectorAll('.achievement-item');
+  
+  items.forEach(item => {
+    const dataItem = item.getAttribute('data-item');
+    if (tempDisplaySettings[dataItem]) {
+      item.classList.remove('hidden');
+    } else {
+      item.classList.add('hidden');
+    }
+  });
+}
+
 // 初期化
 window.addEventListener('DOMContentLoaded', function() {
   applyMonthTheme();
   const profile = loadProfile();
   if (profile) {
-    document.getElementById('hero-cta').classList.remove('hidden');
     document.getElementById('profile-setup').classList.add('hidden');
     document.getElementById('profile-display').classList.remove('hidden');
     document.getElementById('goal-display').classList.remove('hidden');
+    document.getElementById('achievement-display').classList.remove('hidden'); // NEW
+    document.getElementById('today-date-display').classList.remove('hidden'); // NEW
     document.getElementById('main-navigation').classList.remove('hidden');
     updateProfileDisplay(profile);
     
-    // ホーム画面の月選択を初期化
-    initializeHomeMonthSelector();
+    // ホーム画面の月選択を初期化（廃止予定）
+    // initializeHomeMonthSelector();
+    
+    // 今日の日付を更新（NEW）
+    updateTodayDate();
     
     updateGoalDisplay();
+    
+    // 達成度サマリーを更新（NEW）
+    updateAchievementSummary();
+    
+    // 表示項目設定を読み込み（NEW）
+    loadDisplaySettings();
     
     // URLパラメータで目標設定モーダルを開く
     const urlParams = new URLSearchParams(window.location.search);
@@ -2817,10 +4068,11 @@ window.addEventListener('DOMContentLoaded', function() {
       }, 100);
     }
   } else {
-    document.getElementById('hero-cta').classList.add('hidden');
     document.getElementById('profile-setup').classList.remove('hidden');
     document.getElementById('profile-display').classList.add('hidden');
     document.getElementById('goal-display').classList.add('hidden');
+    document.getElementById('achievement-display').classList.add('hidden'); // NEW
+    document.getElementById('today-date-display').classList.add('hidden'); // NEW
     document.getElementById('main-navigation').classList.add('hidden');
   }
 });
@@ -2868,6 +4120,163 @@ window.addEventListener('DOMContentLoaded', function() {
     <span class="bottom-nav-icon">📖</span>
     <span class="bottom-nav-label">ガイド</span>
   </a>
+</div>
+
+<!-- 表示項目設定モーダル（NEW） -->
+<div class="modal-overlay display-settings-modal" id="displaySettingsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">⚙️ 表示項目の設定</div>
+      <button class="modal-close" onclick="closeDisplaySettings()">✕</button>
+    </div>
+
+    <p style="color: #616161; margin-bottom: 20px; font-size: 0.95em;">
+      達成度カードに表示する項目を選択してください。
+    </p>
+
+    <ul class="display-options">
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">🫀</span>
+          <span>血圧</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'bloodPressure')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">⚖️</span>
+          <span>体重</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'weight')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">📅</span>
+          <span>トレーニング日数</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'trainingDays')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">⏱️</span>
+          <span>運動時間</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'totalTime')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">🔥</span>
+          <span>消費カロリー</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'totalCalories')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="modal-footer">
+      <button class="btn-modal btn-cancel" onclick="closeDisplaySettings()">キャンセル</button>
+      <button class="btn-modal btn-save" onclick="saveDisplaySettings()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- プロフィール編集モーダル（NEW） -->
+<div class="modal-overlay profile-edit-modal" id="profileEditModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">👤 プロフィール編集</div>
+      <button class="modal-close" onclick="closeProfileEditModal()">✕</button>
+    </div>
+
+    <form id="profile-edit-form" class="modal-form">
+      <div class="form-group">
+        <label class="form-label">性別</label>
+        <div class="radio-group horizontal">
+          <div class="radio-option">
+            <input type="radio" id="edit-gender-male" name="editGender" value="male">
+            <label for="edit-gender-male">男性</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="edit-gender-female" name="editGender" value="female">
+            <label for="edit-gender-female">女性</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="edit-gender-other" name="editGender" value="other">
+            <label for="edit-gender-other">その他</label>
+          </div>
+        </div>
+        <div class="error-message" id="error-edit-gender"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-age">年齢</label>
+        <div class="input-with-unit">
+          <input type="number" id="edit-age" class="form-input" placeholder="30" min="10" max="120">
+          <span class="unit">歳</span>
+        </div>
+        <div class="error-message" id="error-edit-age"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-height">身長（任意）</label>
+        <div class="input-with-unit">
+          <input type="number" id="edit-height" class="form-input" placeholder="170" min="100" max="250">
+          <span class="unit">cm</span>
+        </div>
+        <p class="form-hint">BMI計算に使用されます</p>
+        <div class="error-message" id="error-edit-height"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-weight">体重</label>
+        <div class="input-with-unit">
+          <input type="number" id="edit-weight" class="form-input" placeholder="65" min="30" max="200" step="0.1">
+          <span class="unit">kg</span>
+        </div>
+        <div class="error-message" id="error-edit-weight"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">活動レベル</label>
+        <div class="radio-group vertical">
+          <div class="radio-option">
+            <input type="radio" id="edit-activity-sedentary" name="editActivityLevel" value="sedentary">
+            <label for="edit-activity-sedentary">ほとんど運動しない</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="edit-activity-light" name="editActivityLevel" value="light">
+            <label for="edit-activity-light">軽い運動（週1-2回）</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="edit-activity-moderate" name="editActivityLevel" value="moderate" checked>
+            <label for="edit-activity-moderate">中程度の運動（週3-5回）</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="edit-activity-intense" name="editActivityLevel" value="intense">
+            <label for="edit-activity-intense">激しい運動（週6-7回）</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-modal btn-cancel" onclick="closeProfileEditModal()">キャンセル</button>
+        <button type="submit" class="btn-modal btn-save">保存</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 </body>
