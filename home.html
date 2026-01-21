@@ -16,6 +16,7 @@ body {
   background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 50%, #FFE082 100%);
   min-height: 100vh;
   padding: 20px;
+  padding-bottom: 100px; /* ボトムナビゲーションバーのスペース確保 */
   color: #212121;
 }
 
@@ -446,7 +447,7 @@ body {
 
 /* ナビゲーションカード */
 .nav-card {
-  display: flex;
+  display: none; /* ボトムナビゲーションバーに置き換えたため非表示 */
   justify-content: space-between;
   align-items: center;
   background: white;
@@ -1095,6 +1096,112 @@ body {
 
   .goal-buttons {
     flex-direction: column;
+  }
+}
+
+/* ========== ボトムナビゲーションバー ========== */
+.bottom-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  border-top: 3px solid #FFD54F;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-decoration: none;
+  color: #9E9E9E;
+  transition: all 0.3s ease;
+  padding: 8px 8px;
+  border-radius: 12px;
+  min-width: 60px;
+  position: relative;
+}
+
+.bottom-nav-item:hover {
+  background: #FFF9C4;
+  color: #F57C00;
+  transform: translateY(-3px);
+}
+
+.bottom-nav-item.active {
+  color: #F57C00;
+  background: #FFF9C4;
+}
+
+/* アクティブ時のインジケーター */
+.bottom-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  border-radius: 2px;
+}
+
+.bottom-nav-icon {
+  font-size: 1.6em;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav-item:hover .bottom-nav-icon {
+  transform: scale(1.1);
+}
+
+.bottom-nav-label {
+  font-size: 0.7em;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ボトムナビのレスポンシブ対応 */
+@media (max-width: 480px) {
+  .bottom-nav-label {
+    font-size: 0.6em;
+  }
+  
+  .bottom-nav-icon {
+    font-size: 1.3em;
+  }
+  
+  .bottom-nav-item {
+    min-width: 50px;
+    padding: 6px 4px;
+  }
+}
+
+@media (min-width: 769px) {
+  /* PC画面では少し大きく */
+  .bottom-nav-bar {
+    padding: 12px 0;
+  }
+  
+  .bottom-nav-icon {
+    font-size: 1.8em;
+  }
+  
+  .bottom-nav-label {
+    font-size: 0.75em;
+  }
+  
+  .bottom-nav-item {
+    min-width: 90px;
+    padding: 10px 16px;
   }
 }
 
@@ -2684,7 +2791,7 @@ window.addEventListener('DOMContentLoaded', function() {
 <div class="success-modal" id="success-modal">
   <div class="success-modal-content">
     <div class="success-icon">✅</div>
-    <h2 class="success-title">目標を保存しました！</h2>
+    <h2 class="success-title">目標を保存しました!</h2>
     <p class="success-message">
       今月の目標が設定されました。<br>
       カレンダーで実績を記録して、達成度を確認しましょう。
@@ -2694,6 +2801,34 @@ window.addEventListener('DOMContentLoaded', function() {
       <button class="btn-success-secondary" onclick="closeSuccessModal()">🏠 ホームに戻る</button>
     </div>
   </div>
+</div>
+
+<!-- ========== ボトムナビゲーションバー ========== -->
+<div class="bottom-nav-bar">
+  <a href="home.html" class="bottom-nav-item active" title="ホーム">
+    <span class="bottom-nav-icon">🏠</span>
+    <span class="bottom-nav-label">ホーム</span>
+  </a>
+  
+  <a href="calendar.html" class="bottom-nav-item" title="カレンダー">
+    <span class="bottom-nav-icon">📅</span>
+    <span class="bottom-nav-label">カレンダー</span>
+  </a>
+  
+  <a href="timeline.html" class="bottom-nav-item" title="タイムライン">
+    <span class="bottom-nav-icon">📋</span>
+    <span class="bottom-nav-label">タイムライン</span>
+  </a>
+  
+  <a href="yearly-summary.html" class="bottom-nav-item" title="年間サマリー">
+    <span class="bottom-nav-icon">📊</span>
+    <span class="bottom-nav-label">サマリー</span>
+  </a>
+  
+  <a href="features.html" class="bottom-nav-item" title="使い方ガイド">
+    <span class="bottom-nav-icon">📖</span>
+    <span class="bottom-nav-label">ガイド</span>
+  </a>
 </div>
 
 </body>
