@@ -280,37 +280,55 @@ body {
 }
 
 .profile-header {
-  text-align: center;
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #FFD54F;
 }
 
 .profile-name {
-  font-size: 1.5em;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9em;
   font-weight: 600;
-  color: #212121;
-  margin-bottom: 8px;
 }
 
 .profile-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
 }
 
 .profile-info-item {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.profile-info-item:last-child {
+  border-bottom: none;
 }
 
 .profile-info-label {
-  font-size: 0.85em;
+  font-size: 0.95em;
   color: #616161;
-  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-info-label-icon {
+  font-size: 1.2em;
 }
 
 .profile-info-value {
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 600;
   color: #212121;
 }
@@ -350,89 +368,97 @@ body {
 }
 
 .goal-display-header {
-  text-align: center;
-  margin-bottom: 24px;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #66BB6A;
 }
 
 .goal-month-selector-home {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .goal-month-selector-home label {
-  font-size: 0.9em;
+  font-size: 0.85em;
   font-weight: 600;
   color: #616161;
 }
 
 .home-month-dropdown {
-  padding: 8px 16px;
+  padding: 4px 12px;
   border: 2px solid #66BB6A;
-  border-radius: 8px;
-  font-size: 0.95em;
+  border-radius: 20px;
+  font-size: 0.85em;
   font-weight: 600;
-  color: #2E7D32;
-  background: white;
+  color: white;
+  background: linear-gradient(135deg, #66BB6A, #81C784);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .home-month-dropdown:hover {
-  border-color: #4CAF50;
-  background: #E8F5E9;
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
 }
 
 .home-month-dropdown:focus {
   outline: none;
-  border-color: #388E3C;
   box-shadow: 0 0 0 3px rgba(56, 142, 60, 0.1);
 }
 
 .goal-display-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
 }
 
 .goal-display-item {
   display: flex;
-  flex-direction: column;
-  padding: 12px;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #E0E0E0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.goal-display-item:last-child {
+  border-bottom: none;
 }
 
 .goal-display-content {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   gap: 12px;
 }
 
 .goal-display-main {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .goal-display-label {
-  font-size: 0.85em;
+  font-size: 0.95em;
   color: #616161;
-  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.goal-display-label-icon {
+  font-size: 1.2em;
 }
 
 .goal-display-value {
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 600;
   color: #212121;
+  margin-left: auto;
 }
 
 .goal-display-previous {
@@ -1059,11 +1085,6 @@ body {
     font-size: 1em;
   }
 
-  .profile-info-grid,
-  .goal-display-grid {
-    grid-template-columns: 1fr;
-  }
-
   .nav-card-content {
     gap: 15px;
   }
@@ -1429,41 +1450,59 @@ body {
   <!-- プロフィール表示（登録済みの場合） -->
   <div class="card profile-display-card fade-in hidden" id="profile-display">
     <div class="profile-header">
-      <div class="card-title">👤 あなたのプロフィール</div>
+      <div class="card-title">👤 プロフィール</div>
       <div class="profile-name" id="profile-name">30歳・男性</div>
     </div>
 
-    <div class="profile-info-grid">
-      <div class="profile-info-item">
-        <span class="profile-info-label">身長</span>
+    <ul class="profile-info-grid">
+      <li class="profile-info-item">
+        <span class="profile-info-label">
+          <span class="profile-info-label-icon">📏</span>
+          身長
+        </span>
         <span class="profile-info-value" id="display-height">170 cm</span>
-      </div>
+      </li>
 
-      <div class="profile-info-item">
-        <span class="profile-info-label">体重</span>
+      <li class="profile-info-item">
+        <span class="profile-info-label">
+          <span class="profile-info-label-icon">⚖️</span>
+          体重
+        </span>
         <span class="profile-info-value" id="display-weight">65 kg</span>
-      </div>
+      </li>
 
-      <div class="profile-info-item">
-        <span class="profile-info-label">活動レベル</span>
+      <li class="profile-info-item">
+        <span class="profile-info-label">
+          <span class="profile-info-label-icon">🏃</span>
+          活動レベル
+        </span>
         <span class="profile-info-value" id="display-activity">中程度の運動</span>
-      </div>
+      </li>
 
-      <div class="profile-info-item">
-        <span class="profile-info-label">性別</span>
+      <li class="profile-info-item">
+        <span class="profile-info-label">
+          <span class="profile-info-label-icon">👤</span>
+          性別
+        </span>
         <span class="profile-info-value" id="display-gender">男性</span>
-      </div>
+      </li>
 
-      <div class="profile-info-item">
-        <span class="profile-info-label">BMI</span>
+      <li class="profile-info-item">
+        <span class="profile-info-label">
+          <span class="profile-info-label-icon">📊</span>
+          BMI
+        </span>
         <span class="profile-info-value" id="display-bmi">22.5 (標準)</span>
-      </div>
+      </li>
 
-      <div class="profile-info-item">
-        <span class="profile-info-label">基礎代謝</span>
+      <li class="profile-info-item">
+        <span class="profile-info-label">
+          <span class="profile-info-label-icon">🔥</span>
+          基礎代謝
+        </span>
         <span class="profile-info-value" id="display-bmr">約1,650 kcal/日</span>
-      </div>
-    </div>
+      </li>
+    </ul>
 
     <button class="btn btn-edit" onclick="editProfile()">✏️ 編集</button>
   </div>
@@ -1480,57 +1519,57 @@ body {
       </div>
     </div>
 
-    <div class="goal-display-grid" id="goal-display-content">
-      <div class="goal-display-item">
+    <ul class="goal-display-grid" id="goal-display-content">
+      <li class="goal-display-item">
         <div class="goal-display-content">
-          <div class="goal-display-main">
-            <span class="goal-display-label">血圧目標</span>
-            <span class="goal-display-value" id="display-goal-bp">120/80 mmHg</span>
-          </div>
-          <span class="goal-display-previous" id="display-prev-bp">前月: 未設定</span>
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">❤️</span>
+            血圧目標
+          </span>
+          <span class="goal-display-value" id="display-goal-bp">120/80 mmHg</span>
         </div>
-      </div>
+      </li>
 
-      <div class="goal-display-item">
+      <li class="goal-display-item">
         <div class="goal-display-content">
-          <div class="goal-display-main">
-            <span class="goal-display-label">体重目標</span>
-            <span class="goal-display-value" id="display-goal-weight">65.0 kg</span>
-          </div>
-          <span class="goal-display-previous" id="display-prev-weight">前月: 未設定</span>
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">⚖️</span>
+            体重目標
+          </span>
+          <span class="goal-display-value" id="display-goal-weight">65.0 kg</span>
         </div>
-      </div>
+      </li>
 
-      <div class="goal-display-item">
+      <li class="goal-display-item">
         <div class="goal-display-content">
-          <div class="goal-display-main">
-            <span class="goal-display-label">トレーニング日数</span>
-            <span class="goal-display-value" id="display-goal-days">12 日</span>
-          </div>
-          <span class="goal-display-previous" id="display-prev-days">前月: 未設定</span>
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">📅</span>
+            トレーニング日数
+          </span>
+          <span class="goal-display-value" id="display-goal-days">12 日</span>
         </div>
-      </div>
+      </li>
 
-      <div class="goal-display-item">
+      <li class="goal-display-item">
         <div class="goal-display-content">
-          <div class="goal-display-main">
-            <span class="goal-display-label">運動時間</span>
-            <span class="goal-display-value" id="display-goal-time">600 分</span>
-          </div>
-          <span class="goal-display-previous" id="display-prev-time">前月: 未設定</span>
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">⏱️</span>
+            運動時間
+          </span>
+          <span class="goal-display-value" id="display-goal-time">600 分</span>
         </div>
-      </div>
+      </li>
 
-      <div class="goal-display-item">
+      <li class="goal-display-item">
         <div class="goal-display-content">
-          <div class="goal-display-main">
-            <span class="goal-display-label">消費カロリー</span>
-            <span class="goal-display-value" id="display-goal-calories">3,000 kcal</span>
-          </div>
-          <span class="goal-display-previous" id="display-prev-calories">前月: 未設定</span>
+          <span class="goal-display-label">
+            <span class="goal-display-label-icon">🔥</span>
+            消費カロリー
+          </span>
+          <span class="goal-display-value" id="display-goal-calories">3,000 kcal</span>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
 
     <button class="btn btn-edit" onclick="openGoalModal()">✏️ 編集</button>
   </div>
