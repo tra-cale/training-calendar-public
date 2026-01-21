@@ -3697,8 +3697,11 @@ function calculateMonthlyData(year, month) {
   let latestWeight = null;
   let trainingDays = 0, totalTime = 0, totalCalories = 0;
   
+  // monthは0-11なので、LocalStorageキーには+1が必要
+  const storageMonth = month + 1;
+  
   for (let day = 1; day <= daysInMonth; day++) {
-    const key = `training_${year}_${month}_${day}`;
+    const key = `training_${year}_${storageMonth}_${day}`;
     const dataStr = localStorage.getItem(key);
     
     if (dataStr) {
