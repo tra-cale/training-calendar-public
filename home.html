@@ -3694,13 +3694,19 @@ function calculateMonthlyData(year, month) {
         latestWeight = { value: data.weight, date: day };
       }
       
-      // トレーニング
-      if (data.training && data.training.length > 0) {
+      // トレーニング（calendar.htmlではexercisesで保存）
+      if (data.exercises && data.exercises.length > 0) {
         trainingDays++;
-        data.training.forEach(t => {
-          totalTime += t.duration || 0;
-          totalCalories += t.calories || 0;
+        data.exercises.forEach(ex => {
+          totalTime += ex.duration || 0;
+          totalCalories += ex.calories || 0;
         });
+      }
+      // もしくは、totalTime/totalCaloriesが直接保存されている場合
+      else if (data.totalTime || data.totalCalories) {
+        trainingDays++;
+        totalTime += data.totalTime || 0;
+        totalCalories += data.totalCalories || 0;
       }
     }
   }
