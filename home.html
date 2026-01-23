@@ -3006,17 +3006,6 @@ function updateGoalDisplay() {
   const goalsStr = localStorage.getItem(goalsKey);
   const goals = goalsStr ? JSON.parse(goalsStr) : null;
   
-  // 前月の目標を取得
-  let prevMonth = now.getMonth() - 1;
-  let prevYear = currentYear;
-  if (prevMonth < 0) {
-    prevMonth = 11; // 12月
-    prevYear = currentYear - 1;
-  }
-  const prevGoalsKey = getGoalsKey(prevYear, prevMonth);
-  const prevGoalsStr = localStorage.getItem(prevGoalsKey);
-  const prevGoals = prevGoalsStr ? JSON.parse(prevGoalsStr) : null;
-  
   // 今月の目標を表示
   if (goals) {
     if (goals.bloodPressure) {
@@ -3053,53 +3042,6 @@ function updateGoalDisplay() {
     document.getElementById('display-goal-days').textContent = '未設定';
     document.getElementById('display-goal-time').textContent = '未設定';
     document.getElementById('display-goal-calories').textContent = '未設定';
-  }
-  
-  // 前月の目標を表示
-  if (prevGoals) {
-    // 血圧
-    if (prevGoals.bloodPressure) {
-      document.getElementById('display-prev-bp').textContent = 
-        `前月: ${prevGoals.bloodPressure.systolic}/${prevGoals.bloodPressure.diastolic} mmHg`;
-    } else {
-      document.getElementById('display-prev-bp').textContent = '前月: 未設定';
-    }
-    
-    // 体重
-    if (prevGoals.weight) {
-      document.getElementById('display-prev-weight').textContent = `前月: ${prevGoals.weight} kg`;
-    } else {
-      document.getElementById('display-prev-weight').textContent = '前月: 未設定';
-    }
-    
-    // トレーニング日数
-    if (prevGoals.trainingDays) {
-      document.getElementById('display-prev-days').textContent = `前月: ${prevGoals.trainingDays} 日`;
-    } else {
-      document.getElementById('display-prev-days').textContent = '前月: 未設定';
-    }
-    
-    // 運動時間
-    if (prevGoals.totalTime) {
-      document.getElementById('display-prev-time').textContent = `前月: ${prevGoals.totalTime} 分`;
-    } else {
-      document.getElementById('display-prev-time').textContent = '前月: 未設定';
-    }
-    
-    // 消費カロリー
-    if (prevGoals.totalCalories) {
-      document.getElementById('display-prev-calories').textContent = 
-        `前月: ${prevGoals.totalCalories.toLocaleString()} kcal`;
-    } else {
-      document.getElementById('display-prev-calories').textContent = '前月: 未設定';
-    }
-  } else {
-    // 前月のデータがない場合
-    document.getElementById('display-prev-bp').textContent = '前月: 未設定';
-    document.getElementById('display-prev-weight').textContent = '前月: 未設定';
-    document.getElementById('display-prev-days').textContent = '前月: 未設定';
-    document.getElementById('display-prev-time').textContent = '前月: 未設定';
-    document.getElementById('display-prev-calories').textContent = '前月: 未設定';
   }
 }
 
