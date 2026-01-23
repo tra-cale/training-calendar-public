@@ -4456,7 +4456,37 @@ toggleSwitches.forEach(toggle => {
   });
 });
 
+// URLパラメータから年月を取得して設定
+function loadFromURLParams() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const yearParam = urlParams.get('year');
+  const monthParam = urlParams.get('month');
+  
+  if (yearParam && monthParam) {
+    const year = parseInt(yearParam);
+    const month = parseInt(monthParam);
+    
+    // 年月が有効範囲内かチェック
+    if (year >= 2024 && year <= 2026 && month >= 0 && month <= 11) {
+      currentYear = year;
+      currentMonth = month;
+      
+      // 年と月のドロップダウンを更新
+      const yearSelect = document.getElementById('year-select');
+      const monthSelect = document.getElementById('month-select');
+      
+      if (yearSelect) {
+        yearSelect.value = year;
+      }
+      if (monthSelect) {
+        monthSelect.value = month;
+      }
+    }
+  }
+}
+
 // 初期化
+loadFromURLParams(); // URLパラメータを最初に読み込む
 updateAddedExercisesList();
 updateExerciseSummary();
 updateYearTitle(); // 年タイトルを現在の年に更新

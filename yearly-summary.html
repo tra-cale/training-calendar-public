@@ -153,11 +153,18 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   border: 2px solid #FFD54F;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .yearly-stat-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-color: #FFB300;
+}
+
+.yearly-stat-card:active {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
 }
 
 .yearly-stat-label {
@@ -214,11 +221,49 @@ body {
   padding: 20px;
   border: 1px solid #E0E0E0;
   transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
 }
 
 .monthly-summary-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: #FFB300;
+}
+
+.monthly-summary-card:active {
+  transform: translateY(-1px);
+}
+
+/* クリック可能であることを示すアイコン */
+.monthly-summary-card::after {
+  content: "📅";
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.2em;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.monthly-summary-card:hover::after {
+  opacity: 0.5;
+}
+
+/* データなしカードはクリック不可 */
+.monthly-summary-card.no-data {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.monthly-summary-card.no-data:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #E0E0E0;
+}
+
+.monthly-summary-card.no-data::after {
+  display: none;
 }
 
 .monthly-summary-header {
@@ -291,9 +336,399 @@ body {
   font-size: 4em;
   margin-bottom: 20px;
 }
+
+/* 表示項目設定ボタン（案3配置 + 案1デザイン） */
+.display-settings-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.settings-btn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #42A5F5, #64B5F6);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(66, 165, 245, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-btn:hover {
+  background: linear-gradient(135deg, #1976D2, #42A5F5);
+  box-shadow: 0 3px 8px rgba(66, 165, 245, 0.4);
+  transform: translateY(-1px);
+}
+
+.settings-btn:active {
+  transform: translateY(0);
+}
+
+/* ハンバーガーメニュー */
+.hamburger-menu {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1001;
+}
+
+.hamburger-button {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+}
+
+.hamburger-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
+}
+
+.hamburger-line {
+  width: 24px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-button.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translateY(8px);
+}
+
+.hamburger-button.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-button.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translateY(-8px);
+}
+
+/* ドロップダウンメニュー */
+.nav-dropdown {
+  position: fixed;
+  top: 70px;
+  right: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 220px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.nav-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #424242;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  transition: all 0.2s ease;
+}
+
+.nav-dropdown a:hover {
+  background: #F5F5F5;
+}
+
+.nav-dropdown .button-icon {
+  font-size: 1.3em;
+  width: 24px;
+  text-align: center;
+}
+
+/* 各メニュー項目の色 */
+.nav-dropdown a:nth-child(1) { color: #F57C00; }
+.nav-dropdown a:nth-child(2) { color: #FFB300; }
+.nav-dropdown a:nth-child(3) { color: #FF9800; }
+.nav-dropdown a:nth-child(4) { color: #43A047; }
+
+/* 古いナビゲーションボタンを非表示 */
+.nav-buttons {
+  display: none;
+}
+
+/* hiddenクラス */
+.hidden {
+  display: none !important;
+}
+
+/* モーダルオーバーレイ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+/* 表示項目設定モーダル */
+.display-settings-modal .modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.display-settings-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #FFD54F;
+}
+
+.display-settings-modal .modal-title {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #F57C00;
+}
+
+.display-settings-modal .modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #9E9E9E;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.display-settings-modal .modal-close:hover {
+  background: #F5F5F5;
+  color: #F57C00;
+}
+
+/* 表示オプションリスト */
+.display-options {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.display-option-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #F5F5F5;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.display-option-item:hover {
+  background: #EEEEEE;
+}
+
+.display-option-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.05em;
+  color: #212121;
+  font-weight: 500;
+}
+
+.display-option-icon {
+  font-size: 1.3em;
+}
+
+/* トグルスイッチ */
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background: #BDBDBD;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: #4CAF50;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.active .toggle-slider {
+  transform: translateX(24px);
+}
+
+/* モーダルフッター */
+.display-settings-modal .modal-footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+  justify-content: flex-end;
+}
+
+.display-settings-modal .btn-modal {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.display-settings-modal .btn-cancel {
+  background: #E0E0E0;
+  color: #616161;
+}
+
+.display-settings-modal .btn-cancel:hover {
+  background: #BDBDBD;
+}
+
+.display-settings-modal .btn-save {
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.3);
+}
+
+.display-settings-modal .btn-save:hover {
+  background: linear-gradient(135deg, #FF8F00, #FFC107);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.4);
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .header h1 {
+    font-size: 1.8em;
+  }
+
+  .yearly-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .yearly-stat-value {
+    font-size: 2em;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+  }
+
+  .nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
 </style>
 </head>
 <body>
+
+<!-- ハンバーガーメニュー -->
+<div class="hamburger-menu">
+  <button class="hamburger-button" id="hamburger-button" aria-label="メニュー">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+  
+  <div class="nav-dropdown" id="nav-dropdown">
+    <a href="home.html">
+      <span class="button-icon">🏠</span>
+      <span class="button-text">ホームへ戻る</span>
+    </a>
+    <a href="calendar.html">
+      <span class="button-icon">📅</span>
+      <span class="button-text">カレンダーを見る</span>
+    </a>
+    <a href="timeline.html">
+      <span class="button-icon">📋</span>
+      <span class="button-text">タイムライン</span>
+    </a>
+    <a href="features.html">
+      <span class="button-icon">📖</span>
+      <span class="button-text">使い方ガイド</span>
+    </a>
+  </div>
+</div>
 
 <div class="container">
   <!-- ヘッダー -->
@@ -333,32 +768,39 @@ body {
     </a>
   </div>
 
+  <!-- 表示項目設定ボタン（NEW） -->
+  <div class="display-settings-container">
+    <button class="settings-btn" onclick="openDisplaySettings()">
+      ⚙️ 表示項目
+    </button>
+  </div>
+
   <!-- 年間統計カード -->
   <div class="yearly-stats">
-    <div class="yearly-stat-card">
+    <div class="yearly-stat-card" data-item="bloodPressure" data-target="bp-chart-section" onclick="scrollToChart('bp-chart-section')">
       <div class="yearly-stat-label">🫀 年間平均血圧</div>
       <div class="yearly-stat-value" id="yearly-avg-bp">--/--</div>
     </div>
-    <div class="yearly-stat-card">
+    <div class="yearly-stat-card" data-item="weight" data-target="weight-chart-section" onclick="scrollToChart('weight-chart-section')">
       <div class="yearly-stat-label">⚖️ 年間平均体重</div>
       <div class="yearly-stat-value" id="yearly-avg-weight">-- kg</div>
     </div>
-    <div class="yearly-stat-card">
+    <div class="yearly-stat-card" data-item="trainingDays" data-target="days-chart-section" onclick="scrollToChart('days-chart-section')">
       <div class="yearly-stat-label">🏃 年間運動実施日数</div>
       <div class="yearly-stat-value" id="yearly-total-days">0 日</div>
     </div>
-    <div class="yearly-stat-card">
+    <div class="yearly-stat-card" data-item="totalTime" data-target="time-chart-section" onclick="scrollToChart('time-chart-section')">
       <div class="yearly-stat-label">⏱️ 年間運動時間</div>
       <div class="yearly-stat-value" id="yearly-total-time">0 分</div>
     </div>
-    <div class="yearly-stat-card">
+    <div class="yearly-stat-card" data-item="totalCalories" data-target="calories-chart-section" onclick="scrollToChart('calories-chart-section')">
       <div class="yearly-stat-label">🔥 年間消費カロリー</div>
       <div class="yearly-stat-value" id="yearly-total-calories">0 kcal</div>
     </div>
   </div>
 
   <!-- 月別平均血圧推移 -->
-  <div class="chart-container">
+  <div class="chart-container" id="bp-chart-section" data-item="bloodPressure">
     <div class="chart-title">🫀 月別平均血圧推移</div>
     <div class="chart-wrapper">
       <canvas id="bp-chart"></canvas>
@@ -366,7 +808,7 @@ body {
   </div>
 
   <!-- 月別平均体重推移 -->
-  <div class="chart-container">
+  <div class="chart-container" id="weight-chart-section" data-item="weight">
     <div class="chart-title">⚖️ 月別平均体重推移</div>
     <div class="chart-wrapper">
       <canvas id="weight-chart"></canvas>
@@ -374,7 +816,7 @@ body {
   </div>
 
   <!-- 月別トレーニング日数 -->
-  <div class="chart-container">
+  <div class="chart-container" id="days-chart-section" data-item="trainingDays">
     <div class="chart-title">🏃 月別運動実施日数</div>
     <div class="chart-wrapper">
       <canvas id="days-chart"></canvas>
@@ -382,7 +824,7 @@ body {
   </div>
 
   <!-- 月別運動時間 -->
-  <div class="chart-container">
+  <div class="chart-container" id="time-chart-section" data-item="totalTime">
     <div class="chart-title">⏱️ 月別運動時間</div>
     <div class="chart-wrapper">
       <canvas id="time-chart"></canvas>
@@ -390,7 +832,7 @@ body {
   </div>
 
   <!-- 月別消費カロリー -->
-  <div class="chart-container">
+  <div class="chart-container" id="calories-chart-section" data-item="totalCalories">
     <div class="chart-title">🔥 月別消費カロリー</div>
     <div class="chart-wrapper">
       <canvas id="calories-chart"></canvas>
@@ -936,9 +1378,26 @@ function displayMonthlyDetails(allData) {
     const card = document.createElement('div');
     card.className = 'monthly-summary-card';
     
+    // データの有無に応じてクラスを追加
+    const hasData = stats && stats.trainingDays > 0;
+    if (!hasData) {
+      card.classList.add('no-data');
+    }
+    
+    // クリックイベントを追加（データがある場合のみ）
+    if (hasData) {
+      card.style.cursor = 'pointer';
+      card.setAttribute('data-month', i);
+      card.setAttribute('data-year', selectedYear);
+      card.setAttribute('title', `${monthNames[i]}のカレンダーを見る`);
+      card.addEventListener('click', function() {
+        navigateToCalendar(selectedYear, i);
+      });
+    }
+    
     let content = `<div class="monthly-summary-header">${monthNames[i]}</div>`;
     
-    if (stats && stats.trainingDays > 0) {
+    if (hasData) {
       content += `
         <div class="monthly-summary-item">
           <span class="monthly-summary-label">平均血圧</span>
@@ -968,6 +1427,12 @@ function displayMonthlyDetails(allData) {
     card.innerHTML = content;
     container.appendChild(card);
   }
+}
+
+// カレンダーページへ遷移する関数
+function navigateToCalendar(year, month) {
+  // calendar.htmlに年月情報をURLパラメータとして渡す
+  window.location.href = `calendar.html?year=${year}&month=${month}`;
 }
 
 // データ読み込みと表示を更新する関数
@@ -1007,12 +1472,253 @@ function loadYearlyData() {
   displayMonthlyDetails(allData);
 }
 
+// 統計カードクリック時のスムーズスクロール
+function scrollToChart(targetId) {
+  const targetElement = document.getElementById(targetId);
+  
+  if (targetElement) {
+    // スクロール位置を計算（ヘッダー分のオフセットを考慮）
+    const headerOffset = 20; // ヘッダーとの余白
+    const elementPosition = targetElement.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+    // スムーズスクロール
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+    
+    // クリックしたカードを一時的にハイライト
+    const allCards = document.querySelectorAll('.yearly-stat-card');
+    allCards.forEach(card => card.style.borderColor = '#FFD54F');
+    
+    const clickedCard = event.target.closest('.yearly-stat-card');
+    if (clickedCard) {
+      clickedCard.style.borderColor = '#FF9800';
+      setTimeout(() => {
+        clickedCard.style.borderColor = '#FFD54F';
+      }, 1500);
+    }
+    
+    // グラフコンテナを一時的にハイライト
+    targetElement.style.transition = 'all 0.3s ease';
+    targetElement.style.boxShadow = '0 8px 30px rgba(245, 124, 0, 0.3)';
+    targetElement.style.borderColor = '#FF9800';
+    
+    setTimeout(() => {
+      targetElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+      targetElement.style.borderColor = '#E0E0E0';
+    }, 1500);
+  }
+}
+
 // 初期化
 window.addEventListener('DOMContentLoaded', function() {
   initializeYearSelector();
+  loadDisplaySettings();
   loadYearlyData();
 });
+
+// ========== 表示項目設定機能 ==========
+
+// 表示項目設定の一時保存用
+let tempDisplaySettings = {
+  bloodPressure: true,
+  weight: true,
+  trainingDays: true,
+  totalTime: true,
+  totalCalories: true
+};
+
+// 表示項目設定を読み込み
+function loadDisplaySettings() {
+  const saved = localStorage.getItem('yearly_summary_display_settings');
+  if (saved) {
+    tempDisplaySettings = JSON.parse(saved);
+  }
+  updateDisplay();
+}
+
+// 表示項目設定モーダルを開く
+function openDisplaySettings() {
+  // LocalStorageから設定を読み込み
+  const saved = localStorage.getItem('yearly_summary_display_settings');
+  if (saved) {
+    tempDisplaySettings = JSON.parse(saved);
+  }
+  
+  // モーダル内のトグルスイッチを設定に合わせて更新
+  updateModalToggles();
+  
+  // モーダルを表示
+  document.getElementById('displaySettingsModal').classList.add('show');
+}
+
+// 表示項目設定モーダルを閉じる
+function closeDisplaySettings() {
+  document.getElementById('displaySettingsModal').classList.remove('show');
+}
+
+// モーダル内のトグルスイッチを更新
+function updateModalToggles() {
+  const items = document.querySelectorAll('.display-option-item');
+  const keys = ['bloodPressure', 'weight', 'trainingDays', 'totalTime', 'totalCalories'];
+  
+  items.forEach((item, index) => {
+    const toggle = item.querySelector('.toggle-switch');
+    const key = keys[index];
+    
+    if (tempDisplaySettings[key]) {
+      toggle.classList.add('active');
+    } else {
+      toggle.classList.remove('active');
+    }
+  });
+}
+
+// 表示項目のトグル切り替え
+function toggleDisplayOption(element, key) {
+  element.classList.toggle('active');
+  tempDisplaySettings[key] = element.classList.contains('active');
+}
+
+// 表示項目設定を保存
+function saveDisplaySettings() {
+  // LocalStorageに保存
+  localStorage.setItem('yearly_summary_display_settings', JSON.stringify(tempDisplaySettings));
+  
+  // 表示を更新
+  updateDisplay();
+  
+  // モーダルを閉じる
+  closeDisplaySettings();
+}
+
+// 統計カードとグラフの表示を更新
+function updateDisplay() {
+  // 統計カード
+  const statCards = document.querySelectorAll('.yearly-stat-card');
+  statCards.forEach(card => {
+    const dataItem = card.getAttribute('data-item');
+    if (tempDisplaySettings[dataItem]) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  
+  // グラフコンテナ
+  const chartContainers = document.querySelectorAll('.chart-container[data-item]');
+  chartContainers.forEach(container => {
+    const dataItem = container.getAttribute('data-item');
+    if (tempDisplaySettings[dataItem]) {
+      container.classList.remove('hidden');
+    } else {
+      container.classList.add('hidden');
+    }
+  });
+}
+
+// ========== ハンバーガーメニューの開閉 ==========
+const hamburgerButton = document.getElementById('hamburger-button');
+const navDropdown = document.getElementById('nav-dropdown');
+
+if (hamburgerButton && navDropdown) {
+  // ハンバーガーボタンのクリック
+  hamburgerButton.addEventListener('click', function(e) {
+    e.stopPropagation();
+    hamburgerButton.classList.toggle('active');
+    navDropdown.classList.toggle('active');
+  });
+
+  // ドロップダウン外をクリックしたら閉じる
+  document.addEventListener('click', function(e) {
+    if (!navDropdown.contains(e.target) && !hamburgerButton.contains(e.target)) {
+      hamburgerButton.classList.remove('active');
+      navDropdown.classList.remove('active');
+    }
+  });
+
+  // ドロップダウン内のリンクをクリックしたらメニューを閉じる
+  navDropdown.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', function() {
+      hamburgerButton.classList.remove('active');
+      navDropdown.classList.remove('active');
+    });
+  });
+}
 </script>
+
+<!-- 表示項目設定モーダル -->
+<div class="modal-overlay display-settings-modal" id="displaySettingsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">⚙️ 表示項目の設定</div>
+      <button class="modal-close" onclick="closeDisplaySettings()">✕</button>
+    </div>
+
+    <p style="color: #616161; margin-bottom: 20px; font-size: 0.95em;">
+      年間サマリーに表示する項目を選択してください。
+    </p>
+
+    <ul class="display-options">
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">🫀</span>
+          <span>血圧</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'bloodPressure')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">⚖️</span>
+          <span>体重</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'weight')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">🏃</span>
+          <span>運動実施日数</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'trainingDays')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">⏱️</span>
+          <span>運動時間</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'totalTime')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+
+      <li class="display-option-item">
+        <label class="display-option-label">
+          <span class="display-option-icon">🔥</span>
+          <span>消費カロリー</span>
+        </label>
+        <div class="toggle-switch active" onclick="toggleDisplayOption(this, 'totalCalories')">
+          <div class="toggle-slider"></div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="modal-footer">
+      <button class="btn-modal btn-cancel" onclick="closeDisplaySettings()">キャンセル</button>
+      <button class="btn-modal btn-save" onclick="saveDisplaySettings()">保存</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
