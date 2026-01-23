@@ -2607,9 +2607,11 @@ let homeDisplayMonth = new Date().getMonth() + 1; // 1-12
 // 月間目標のキー（月別に保存）
 function getGoalsKey(year = null, month = null) {
   const targetYear = year || new Date().getFullYear();
-  const targetMonth = month || (new Date().getMonth() + 1);
-  const monthStr = String(targetMonth).padStart(2, '0');
-  return `monthly_goals_${targetYear}_${monthStr}`;
+  const targetMonth = month !== null ? month : new Date().getMonth();
+  // JavaScriptのmonthは0-11なので、1-12に変換
+  const actualMonth = targetMonth + 1;
+  // ゼロパディングなし（monthly_goals_2026_1 形式）
+  return `monthly_goals_${targetYear}_${actualMonth}`;
 }
 
 // 選択中の月の目標キーを取得
@@ -3640,8 +3642,8 @@ function updateAchievementSummary() {
   // 今月のデータを集計
   const monthData = calculateMonthlyData(currentYear, currentMonth);
   
-  // 今月の目標を取得（年月を指定してキーを生成）
-  const goalsKey = `monthly_goals_${currentYear}_${currentMonth + 1}`;
+  // 今月の目標を取得（getGoalsKey関数を使用、currentMonthは0-11）
+  const goalsKey = getGoalsKey(currentYear, currentMonth);
   const goalsStr = localStorage.getItem(goalsKey);
   const goals = goalsStr ? JSON.parse(goalsStr) : null;
   console.log('目標データキー:', goalsKey);
