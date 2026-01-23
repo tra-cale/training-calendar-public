@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>年間サマリー - トレーニング管理カレンダー</title>
+<title>年間サマリー - 健康管理カレンダー</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <style>
 * { 
@@ -299,7 +299,7 @@ body {
   <!-- ヘッダー -->
   <div class="header">
     <h1>📊 <span class="title-text"><span id="display-year">2025</span>年 年間サマリー</span></h1>
-    <p class="subtitle">あなたのトレーニング実績を振り返りましょう</p>
+    <p class="subtitle">あなたの健康管理実績を振り返りましょう</p>
     
     <!-- 年選択 -->
     <div class="year-selector">
@@ -344,16 +344,16 @@ body {
       <div class="yearly-stat-value" id="yearly-avg-weight">-- kg</div>
     </div>
     <div class="yearly-stat-card">
-      <div class="yearly-stat-label">🏃 年間トレーニング日数</div>
+      <div class="yearly-stat-label">🏃 年間運動実施日数</div>
       <div class="yearly-stat-value" id="yearly-total-days">0 日</div>
-    </div>
-    <div class="yearly-stat-card">
-      <div class="yearly-stat-label">🔥 年間消費カロリー</div>
-      <div class="yearly-stat-value" id="yearly-total-calories">0 kcal</div>
     </div>
     <div class="yearly-stat-card">
       <div class="yearly-stat-label">⏱️ 年間運動時間</div>
       <div class="yearly-stat-value" id="yearly-total-time">0 分</div>
+    </div>
+    <div class="yearly-stat-card">
+      <div class="yearly-stat-label">🔥 年間消費カロリー</div>
+      <div class="yearly-stat-value" id="yearly-total-calories">0 kcal</div>
     </div>
   </div>
 
@@ -375,9 +375,17 @@ body {
 
   <!-- 月別トレーニング日数 -->
   <div class="chart-container">
-    <div class="chart-title">🏃 月別トレーニング日数</div>
+    <div class="chart-title">🏃 月別運動実施日数</div>
     <div class="chart-wrapper">
       <canvas id="days-chart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別運動時間 -->
+  <div class="chart-container">
+    <div class="chart-title">⏱️ 月別運動時間</div>
+    <div class="chart-wrapper">
+      <canvas id="time-chart"></canvas>
     </div>
   </div>
 
@@ -716,6 +724,7 @@ function createCharts(allData) {
   if (window.weightChart) window.weightChart.destroy();
   if (window.daysChart) window.daysChart.destroy();
   if (window.caloriesChart) window.caloriesChart.destroy();
+  if (window.timeChart) window.timeChart.destroy();
 
   // 血圧グラフ
   const bpData = {
@@ -812,7 +821,7 @@ function createCharts(allData) {
     data: {
       labels: monthLabels,
       datasets: [{
-        label: 'トレーニング日数',
+        label: '運動実施日数',
         data: daysData,
         backgroundColor: 'rgba(255, 152, 0, 0.7)',
         borderColor: '#FF9800',
@@ -875,6 +884,42 @@ function createCharts(allData) {
       }
     }
   });
+
+  // 運動時間グラフ
+  const timeData = monthlyStats.map(stat => stat.totalTime);
+
+  window.timeChart = new Chart(document.getElementById('time-chart'), {
+    type: 'bar',
+    data: {
+      labels: monthLabels,
+      datasets: [{
+        label: '運動時間',
+        data: timeData,
+        backgroundColor: 'rgba(3, 169, 244, 0.7)',
+        borderColor: '#03A9F4',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '時間 (分)'
+          }
+        }
+      }
+    }
+  });
 }
 
 // 月別詳細の表示
@@ -904,16 +949,16 @@ function displayMonthlyDetails(allData) {
           <span class="monthly-summary-value">${stats.avgWeight ? `${stats.avgWeight} kg` : '--'}</span>
         </div>
         <div class="monthly-summary-item">
-          <span class="monthly-summary-label">トレーニング日数</span>
+          <span class="monthly-summary-label">運動実施日数</span>
           <span class="monthly-summary-value">${stats.trainingDays} 日</span>
-        </div>
-        <div class="monthly-summary-item">
-          <span class="monthly-summary-label">総カロリー</span>
-          <span class="monthly-summary-value">${stats.totalCalories.toLocaleString()} kcal</span>
         </div>
         <div class="monthly-summary-item">
           <span class="monthly-summary-label">運動時間</span>
           <span class="monthly-summary-value">${stats.totalTime} 分</span>
+        </div>
+        <div class="monthly-summary-item">
+          <span class="monthly-summary-label">総カロリー</span>
+          <span class="monthly-summary-value">${stats.totalCalories.toLocaleString()} kcal</span>
         </div>
       `;
     } else {
@@ -943,6 +988,7 @@ function loadYearlyData() {
     if (window.weightChart) window.weightChart.destroy();
     if (window.daysChart) window.daysChart.destroy();
     if (window.caloriesChart) window.caloriesChart.destroy();
+    if (window.timeChart) window.timeChart.destroy();
     
     // 月別詳細をクリア
     const container = document.getElementById('monthly-details');
