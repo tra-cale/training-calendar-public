@@ -477,7 +477,7 @@ function getAllMonthsData() {
     // 方法2: 日別データキー（training_2025_10_4形式）を確認
     const daysInMonth = new Date(selectedYear, month + 1, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
-      const dayKey = `training_${selectedYear}_${month}_${day}`;
+      const dayKey = `training_${selectedYear}_${month + 1}_${day}`;
       const dayDataStr = localStorage.getItem(dayKey);
       
       if (dayDataStr) {
