@@ -3676,17 +3676,31 @@ function updateAchievementSummary() {
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
   
+  console.log('=== updateAchievementSummary 開始 ===');
+  console.log(`現在日時: ${now}`);
+  console.log(`currentYear: ${currentYear}, currentMonth: ${currentMonth} (${currentMonth + 1}月)`);
+  
+  // LocalStorageのすべてのtrainingキーを表示
+  const allKeys = Object.keys(localStorage).filter(key => key.startsWith('training_'));
+  console.log('LocalStorageに保存されているtrainingキー:', allKeys);
+  
   // 今月のデータを集計
   const monthData = calculateMonthlyData(currentYear, currentMonth);
   
-  // 今月の目標を取得
-  const goals = loadMonthlyGoals(currentYear, currentMonth);
+  // 今月の目標を取得（年月を指定してキーを生成）
+  const goalsKey = `monthly_goals_${currentYear}_${currentMonth + 1}`;
+  const goalsStr = localStorage.getItem(goalsKey);
+  const goals = goalsStr ? JSON.parse(goalsStr) : null;
+  console.log('目標データキー:', goalsKey);
+  console.log('目標データ:', goals);
   
   // 達成度を計算して表示
   displayAchievementData(monthData, goals);
   
   // 励ましメッセージを生成
   generateEncouragementMessage(monthData, goals);
+  
+  console.log('=== updateAchievementSummary 完了 ===');
 }
 
 // 月間データを集計
@@ -3700,12 +3714,18 @@ function calculateMonthlyData(year, month) {
   // monthは0-11なので、LocalStorageキーには+1が必要
   const storageMonth = month + 1;
   
+  console.log('=== calculateMonthlyData デバッグ ===');
+  console.log(`検索対象: ${year}年${storageMonth}月 (${daysInMonth}日まで)`);
+  console.log(`検索キーパターン: training_${year}_${storageMonth}_[1-${daysInMonth}]`);
+  
   for (let day = 1; day <= daysInMonth; day++) {
     const key = `training_${year}_${storageMonth}_${day}`;
     const dataStr = localStorage.getItem(key);
     
     if (dataStr) {
+      console.log(`✓ データ発見: ${key}`);
       const data = JSON.parse(dataStr);
+      console.log('  内容:', data);
       
       // 血圧
       if (data.bloodPressure && data.bloodPressure.systolic && data.bloodPressure.diastolic) {
@@ -3731,6 +3751,13 @@ function calculateMonthlyData(year, month) {
       }
     }
   }
+  
+  console.log('=== 集計結果 ===');
+  console.log(`トレーニング日数: ${trainingDays}`);
+  console.log(`運動時間: ${totalTime}分`);
+  console.log(`消費カロリー: ${totalCalories}kcal`);
+  console.log(`血圧データ数: ${bpCount}`);
+  console.log('================');
   
   return {
     avgSystolic: bpCount > 0 ? Math.round(totalSystolic / bpCount) : 0,
