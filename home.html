@@ -3006,6 +3006,17 @@ function updateGoalDisplay() {
   const goalsStr = localStorage.getItem(goalsKey);
   const goals = goalsStr ? JSON.parse(goalsStr) : null;
   
+  // 前月の目標を取得
+  let prevMonth = now.getMonth() - 1;
+  let prevYear = currentYear;
+  if (prevMonth < 0) {
+    prevMonth = 11; // 12月
+    prevYear = currentYear - 1;
+  }
+  const prevGoalsKey = getGoalsKey(prevYear, prevMonth);
+  const prevGoalsStr = localStorage.getItem(prevGoalsKey);
+  const prevGoals = prevGoalsStr ? JSON.parse(prevGoalsStr) : null;
+  
   // 今月の目標を表示
   if (goals) {
     if (goals.bloodPressure) {
@@ -3771,7 +3782,16 @@ function calculateMonthlyData(year, month) {
 
 // 達成度データを表示
 function displayAchievementData(data, goals) {
+  console.log('=== displayAchievementData 開始 ===');
+  console.log('受け取ったデータ:', data);
+  console.log('受け取った目標:', goals);
+  
+  // 要素の存在確認
+  const bpValueEl = document.getElementById('achievement-bp-value');
+  console.log('achievement-bp-value要素:', bpValueEl);
+  
   if (!goals) {
+    console.log('⚠️ 目標が未設定のため、デフォルト表示');
     // 目標未設定の場合
     document.getElementById('achievement-bp-value').textContent = data.avgSystolic > 0 ? `${data.avgSystolic}/${data.avgDiastolic}` : '--/--';
     document.getElementById('achievement-bp-status').textContent = '-';
@@ -3793,8 +3813,12 @@ function displayAchievementData(data, goals) {
     document.getElementById('achievement-calories-status').textContent = '-';
     document.getElementById('achievement-calories-status').className = 'achievement-status';
     
+    console.log('✓ デフォルト表示完了');
+    console.log('=== displayAchievementData 完了 ===');
     return;
   }
+  
+  console.log('✓ 目標が設定されているため、達成度を計算');
   
   // 血圧の達成度
   const bpItem = document.getElementById('achievement-bp');
