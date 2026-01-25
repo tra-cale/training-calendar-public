@@ -277,6 +277,23 @@ body {
 .profile-display-card {
   background: linear-gradient(145deg, #FFF9C4, #FFFFFF);
   border: 2px solid #FFD54F;
+  transition: all 0.3s ease;
+}
+
+/* プロフィール入力促進時の強調表示 */
+.profile-display-card.highlight {
+  border: 3px solid #F57C00;
+  box-shadow: 0 0 0 4px rgba(245, 124, 0, 0.2), 0 4px 20px rgba(245, 124, 0, 0.3);
+  animation: pulseHighlight 2s ease-in-out 3;
+}
+
+@keyframes pulseHighlight {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(245, 124, 0, 0.2), 0 4px 20px rgba(245, 124, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(245, 124, 0, 0.3), 0 6px 30px rgba(245, 124, 0, 0.5);
+  }
 }
 
 .profile-header {
@@ -611,62 +628,135 @@ body {
 /* モード選択ボタン */
 .goal-mode-selector {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 30px;
-  flex-wrap: wrap;
 }
 
+/* アコーディオン風モード選択ボタン */
 .goal-mode-btn {
-  flex: 1;
-  min-width: 200px;
-  padding: 20px;
+  width: 100%;
   background: white;
-  border: 3px solid #E0E0E0;
+  border: 2px solid #E0E0E0;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-align: center;
+  margin-bottom: 10px;
+  overflow: hidden;
 }
 
 .goal-mode-btn:hover {
-  border-color: #66BB6A;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.2);
+  border-color: #1976D2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .goal-mode-btn.active {
-  border-color: #66BB6A;
-  background: linear-gradient(145deg, #E8F5E9, #FFFFFF);
-  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
+  border-color: #2196F3;
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+}
+
+/* アコーディオンヘッダー */
+.goal-mode-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 20px;
+  transition: background 0.3s ease;
+  font-weight: 600;
+  color: #333;
+}
+
+.goal-mode-btn:hover .goal-mode-header {
+  background: #F5F5F5;
+}
+
+.goal-mode-btn.active .goal-mode-header {
+  background: #E3F2FD;
+  color: #1976D2;
 }
 
 .goal-mode-icon {
-  font-size: 2.5em;
-  margin-bottom: 10px;
+  font-size: 1.5em;
+  flex-shrink: 0;
 }
 
 .goal-mode-title {
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 600;
-  color: #212121;
-  margin-bottom: 8px;
+  flex: 1;
 }
 
 .goal-mode-description {
-  font-size: 0.85em;
-  color: #616161;
-  line-height: 1.4;
+  display: none; /* ヘッダーには表示しない */
 }
 
 .goal-mode-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  background: #66BB6A;
+  background: #FF9800;
   color: white;
+  padding: 3px 10px;
   border-radius: 12px;
-  font-size: 0.75em;
+  font-size: 0.7em;
   font-weight: 600;
-  margin-top: 8px;
+  margin-left: 8px;
+}
+
+.goal-mode-arrow {
+  font-size: 0.8em;
+  color: #757575;
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.goal-mode-btn.active .goal-mode-arrow {
+  transform: rotate(90deg);
+  color: #1976D2;
+}
+
+/* アコーディオンコンテンツ */
+.goal-mode-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 20px;
+}
+
+.goal-mode-btn.active .goal-mode-content {
+  max-height: 400px;
+  padding: 0 20px 20px 20px;
+}
+
+.goal-mode-content-desc {
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.goal-mode-content-details {
+  background: #F5F5F5;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.85em;
+}
+
+.goal-mode-detail-title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.goal-mode-detail-item {
+  margin-bottom: 8px;
+  color: #555;
+  padding-left: 8px;
+}
+
+.goal-mode-detail-item:last-child {
+  margin-bottom: 0;
 }
 
 .goal-mode-change {
@@ -1102,13 +1192,60 @@ body {
   }
 
   .goal-mode-selector {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .goal-mode-btn {
     min-width: 100%;
+  }
+
+  /* スマホ版アコーディオンの調整 */
+  .goal-mode-header {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+
+  .goal-mode-icon {
+    font-size: 1.3em;
+  }
+
+  .goal-mode-title {
+    font-size: 0.95em;
+  }
+
+  .goal-mode-badge {
+    font-size: 0.65em;
+    padding: 2px 8px;
+  }
+
+  .goal-mode-content {
+    padding: 0 16px;
+  }
+
+  .goal-mode-btn.active .goal-mode-content {
+    padding: 0 16px 16px 16px;
+  }
+
+  .goal-mode-content-desc {
+    font-size: 0.85em;
+    margin-bottom: 12px;
+  }
+
+  .goal-mode-content-details {
+    padding: 12px;
+    font-size: 0.8em;
+  }
+
+  .goal-mode-detail-title {
+    font-size: 0.9em;
+    margin-bottom: 8px;
+  }
+
+  .goal-mode-detail-item {
+    font-size: 0.85em;
+    margin-bottom: 6px;
   }
 
   .goal-input-row {
@@ -2287,28 +2424,6 @@ body {
         <div class="error-message" id="error-weight"></div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">活動レベル</label>
-        <div class="radio-group vertical">
-          <div class="radio-option">
-            <input type="radio" id="activity-sedentary" name="activityLevel" value="sedentary">
-            <label for="activity-sedentary">ほとんど運動しない</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" id="activity-light" name="activityLevel" value="light">
-            <label for="activity-light">軽い運動（週1-2回）</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" id="activity-moderate" name="activityLevel" value="moderate" checked>
-            <label for="activity-moderate">中程度の運動（週3-5回）</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" id="activity-intense" name="activityLevel" value="intense">
-            <label for="activity-intense">激しい運動（週6-7回）</label>
-          </div>
-        </div>
-      </div>
-
       <button type="submit" class="btn btn-primary">✅ 完了してカレンダーへ</button>
     </form>
   </div>
@@ -2495,14 +2610,6 @@ body {
 
       <li class="profile-info-item">
         <span class="profile-info-label">
-          <span class="profile-info-label-icon">🏃</span>
-          活動レベル
-        </span>
-        <span class="profile-info-value" id="display-activity">中程度の運動</span>
-      </li>
-
-      <li class="profile-info-item">
-        <span class="profile-info-label">
           <span class="profile-info-label-icon">👤</span>
           性別
         </span>
@@ -2608,32 +2715,8 @@ body {
       </div>
       
       <!-- モード選択 -->
-      <div class="goal-mode-selector">
-        <button type="button" class="goal-mode-btn" data-mode="maintain" onclick="selectGoalMode('maintain')">
-          <div class="goal-mode-icon">🟢</div>
-          <div class="goal-mode-title">現状維持</div>
-          <div class="goal-mode-description">今のペースを継続</div>
-          <div class="goal-mode-change" id="change-maintain" style="display: none;"></div>
-        </button>
-        <button type="button" class="goal-mode-btn active" data-mode="light" onclick="selectGoalMode('light')">
-          <div class="goal-mode-icon">🟡</div>
-          <div class="goal-mode-title">軽い改善</div>
-          <div class="goal-mode-description">無理なく少しずつ</div>
-          <span class="goal-mode-badge">推奨</span>
-          <div class="goal-mode-change" id="change-light"></div>
-        </button>
-        <button type="button" class="goal-mode-btn" data-mode="aggressive" onclick="selectGoalMode('aggressive')">
-          <div class="goal-mode-icon">🔴</div>
-          <div class="goal-mode-title">積極的改善</div>
-          <div class="goal-mode-description">目標達成を重視</div>
-          <div class="goal-mode-change" id="change-aggressive"></div>
-        </button>
-        <button type="button" class="goal-mode-btn" data-mode="custom" onclick="selectGoalMode('custom')">
-          <div class="goal-mode-icon">✏️</div>
-          <div class="goal-mode-title">カスタム</div>
-          <div class="goal-mode-description">自由に入力</div>
-          <div class="goal-mode-change" id="change-custom" style="display: none;"></div>
-        </button>
+      <div class="goal-mode-selector" id="goal-mode-selector">
+        <!-- JavaScriptで動的に生成 -->
       </div>
       
       <!-- 血圧目標 -->
@@ -2793,6 +2876,79 @@ let selectedGoalMonth = new Date().getMonth() + 1; // 1-12
 let homeDisplayYear = new Date().getFullYear();
 let homeDisplayMonth = new Date().getMonth() + 1; // 1-12
 
+// モードラベル定義（前月データあり）
+const modeLabelsHistory = {
+  maintain: { icon: '🟢', title: 'いつも通り', desc: '前月と同じペースで継続' },
+  light: { icon: '🟡', title: '少しがんばる', desc: '無理なく少しずつ向上', badge: '推奨' },
+  aggressive: { icon: '🔴', title: 'しっかりがんばる', desc: '積極的に改善' },
+  custom: { icon: '✏️', title: '自分で決める', desc: 'すべて手動で入力' }
+};
+
+// モードラベル定義（前月データなし・初回）
+const modeLabelsPreset = {
+  beginner: { icon: '🌱', title: '週1回ペース', desc: 'まずは習慣づくりから' },
+  moderate: { icon: '💪', title: '週2-3回ペース', desc: '健康的な生活習慣を目指す', badge: '推奨' },
+  active: { icon: '🏃', title: '週4回以上ペース', desc: '積極的に健康改善' },
+  custom: { icon: '✏️', title: '自分で決める', desc: 'すべて手動で入力' }
+};
+
+// 前月データの有無を判定
+function hasPreviousMonthData() {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1; // 1-12
+  
+  // 前月を計算
+  let lastMonth = currentMonth - 1;
+  let lastMonthYear = currentYear;
+  
+  if (lastMonth === 0) {
+    lastMonth = 12;
+    lastMonthYear = currentYear - 1;
+  }
+  
+  // 前月の目標キーを取得
+  const lastMonthGoalsKey = `monthly_goals_${lastMonthYear}_${lastMonth}`;
+  const lastMonthGoals = localStorage.getItem(lastMonthGoalsKey);
+  
+  return lastMonthGoals !== null;
+}
+
+// プリセット目標を生成（初回訪問時用）
+function getPresetGoals(mode) {
+  const profile = loadProfile();
+  const userWeight = profile?.weight || 65;
+  
+  const presets = {
+    beginner: {
+      mode: 'beginner',
+      bloodPressure: { systolic: 120, diastolic: 80 },
+      weight: userWeight,
+      trainingDays: 4,    // 週1回 × 4週
+      totalTime: 80,      // 1回20分 × 4日
+      totalCalories: 400  // 想定100kcal/回
+    },
+    moderate: {
+      mode: 'moderate',
+      bloodPressure: { systolic: 120, diastolic: 80 },
+      weight: userWeight,
+      trainingDays: 10,   // 週2.5回 × 4週
+      totalTime: 300,     // 1回30分 × 10日
+      totalCalories: 1500 // 想定150kcal/回
+    },
+    active: {
+      mode: 'active',
+      bloodPressure: { systolic: 115, diastolic: 75 },
+      weight: Math.max(userWeight - 2, 45), // 2kg減（最低45kg）
+      trainingDays: 16,   // 週4回 × 4週
+      totalTime: 640,     // 1回40分 × 16日
+      totalCalories: 3200 // 想定200kcal/回
+    }
+  };
+  
+  return presets[mode] || null;
+}
+
 // 月間目標のキー（月別に保存）
 function getGoalsKey(year = null, month = null) {
   const targetYear = year || new Date().getFullYear();
@@ -2838,13 +2994,6 @@ function applyMonthTheme() {
 }
 
 // 活動レベルの表示名
-const activityLabels = {
-  sedentary: 'ほとんど運動しない',
-  light: '軽い運動（週1-2回）',
-  moderate: '中程度の運動（週3-5回）',
-  intense: '激しい運動（週6-7回）'
-};
-
 // 性別の表示名
 const genderLabels = {
   male: '男性',
@@ -2913,15 +3062,15 @@ function saveProfile(profile) {
 
 // プロフィール表示の更新
 function updateProfileDisplay(profile) {
-  const genderText = genderLabels[profile.gender] || '---';
+  const genderText = genderLabels[profile.gender] || '未設定';
+  const ageText = profile.age ? `${profile.age}歳` : '未設定';
+  
   document.getElementById('profile-name').textContent = 
-    `${profile.age}歳・${genderText}`;
+    `${ageText}・${genderText}`;
   document.getElementById('display-height').textContent = 
-    profile.height ? `${profile.height} cm` : '未入力';
+    profile.height ? `${profile.height} cm` : '未設定';
   document.getElementById('display-weight').textContent = 
-    profile.weight ? `${profile.weight} kg` : '---';
-  document.getElementById('display-activity').textContent = 
-    activityLabels[profile.activityLevel] || '未設定';
+    profile.weight ? `${profile.weight} kg` : '未設定';
   document.getElementById('display-gender').textContent = genderText;
   
   const bmi = calculateBMI(profile.weight, profile.height);
@@ -2930,7 +3079,7 @@ function updateProfileDisplay(profile) {
     const status = getBMIStatus(parseFloat(bmi));
     bmiDisplay.innerHTML = `<span class="${status.class}">${bmi}</span> <span style="font-size: 0.8em;">(${status.text})</span>`;
   } else {
-    bmiDisplay.innerHTML = '<span style="color: #9E9E9E;">身長を入力すると<br>計算されます</span>';
+    bmiDisplay.innerHTML = '<span style="color: #9E9E9E;">身長・体重を入力すると<br>計算されます</span>';
   }
   
   const bmr = calculateBMR(profile.gender, profile.weight, profile.height, profile.age);
@@ -2938,7 +3087,7 @@ function updateProfileDisplay(profile) {
   if (bmr) {
     bmrDisplay.textContent = `約${bmr.toLocaleString()} kcal/日`;
   } else {
-    bmrDisplay.textContent = '---';
+    bmrDisplay.textContent = '未設定';
   }
 }
 
@@ -2988,8 +3137,7 @@ document.getElementById('profile-form').addEventListener('submit', function(e) {
     gender: document.querySelector('input[name="gender"]:checked')?.value,
     age: parseInt(document.getElementById('age').value) || null,
     height: parseInt(document.getElementById('height').value) || null,
-    weight: parseFloat(document.getElementById('weight').value) || null,
-    activityLevel: document.querySelector('input[name="activityLevel"]:checked')?.value || 'moderate'
+    weight: parseFloat(document.getElementById('weight').value) || null
   };
   const errors = validateProfile(profile);
   if (errors.length > 0) {
@@ -3004,23 +3152,21 @@ document.getElementById('profile-form').addEventListener('submit', function(e) {
 // プロフィール編集（モーダル表示に変更）
 function editProfile() {
   const profile = loadProfile();
-  if (!profile) return;
   
-  // モーダルのフォームに現在の値を設定
-  if (profile.gender) {
-    document.getElementById(`edit-gender-${profile.gender}`).checked = true;
-  }
-  if (profile.age) {
-    document.getElementById('edit-age').value = profile.age;
-  }
-  if (profile.height) {
-    document.getElementById('edit-height').value = profile.height;
-  }
-  if (profile.weight) {
-    document.getElementById('edit-weight').value = profile.weight;
-  }
-  if (profile.activityLevel) {
-    document.getElementById(`edit-activity-${profile.activityLevel}`).checked = true;
+  // プロフィールが存在する場合、モーダルのフォームに現在の値を設定
+  if (profile) {
+    if (profile.gender) {
+      document.getElementById(`edit-gender-${profile.gender}`).checked = true;
+    }
+    if (profile.age) {
+      document.getElementById('edit-age').value = profile.age;
+    }
+    if (profile.height) {
+      document.getElementById('edit-height').value = profile.height;
+    }
+    if (profile.weight) {
+      document.getElementById('edit-weight').value = profile.weight;
+    }
   }
   
   // エラーメッセージをクリア
@@ -3051,8 +3197,7 @@ document.addEventListener('DOMContentLoaded', function() {
         gender: document.querySelector('input[name="editGender"]:checked')?.value,
         age: parseInt(document.getElementById('edit-age').value) || null,
         height: parseInt(document.getElementById('edit-height').value) || null,
-        weight: parseFloat(document.getElementById('edit-weight').value) || null,
-        activityLevel: document.querySelector('input[name="editActivityLevel"]:checked')?.value || 'moderate'
+        weight: parseFloat(document.getElementById('edit-weight').value) || null
       };
       
       const errors = validateProfileEdit(profile);
@@ -3250,8 +3395,135 @@ function openGoalModal() {
   // 月選択ドロップダウンを初期化
   initializeGoalMonthSelector();
   
+  // モードボタンを動的生成
+  renderGoalModeButtons();
+  
   document.getElementById('goalModal').classList.add('active');
   loadGoalsToModal();
+}
+
+// モードボタンを動的に生成（アコーディオン風）
+function renderGoalModeButtons() {
+  const hasHistory = hasPreviousMonthData();
+  const container = document.getElementById('goal-mode-selector');
+  
+  if (!container) return;
+  
+  container.innerHTML = ''; // クリア
+  
+  const labels = hasHistory ? modeLabelsHistory : modeLabelsPreset;
+  const modes = hasHistory ? ['maintain', 'light', 'aggressive', 'custom'] : ['beginner', 'moderate', 'active', 'custom'];
+  
+  // 説明テキストを追加
+  if (!hasHistory) {
+    const introText = document.createElement('div');
+    introText.style.cssText = 'text-align: center; margin-bottom: 20px; color: #333; font-size: 1.1em; font-weight: 500;';
+    introText.innerHTML = '👋 はじめまして！';
+    container.appendChild(introText);
+  } else {
+    const introText = document.createElement('div');
+    introText.style.cssText = 'text-align: center; margin-bottom: 15px; color: #666; font-size: 0.95em;';
+    introText.textContent = '前月の実績をベースに目標を設定';
+    container.appendChild(introText);
+  }
+  
+  // プリセット目標の詳細情報
+  const presetDetails = {
+    beginner: {
+      desc: 'まずは習慣づくりから',
+      details: [
+        'トレーニング: 月4日',
+        '運動時間: 80分',
+        '消費カロリー: 400kcal',
+        '血圧: 120/80 mmHg'
+      ]
+    },
+    moderate: {
+      desc: '健康的な生活習慣を目指す',
+      details: [
+        'トレーニング: 月10日',
+        '運動時間: 300分',
+        '消費カロリー: 1500kcal',
+        '血圧: 120/80 mmHg'
+      ]
+    },
+    active: {
+      desc: '積極的に健康改善',
+      details: [
+        'トレーニング: 月16日',
+        '運動時間: 640分',
+        '消費カロリー: 3200kcal',
+        '血圧: 115/75 mmHg',
+        '体重: 現在-2kg'
+      ]
+    },
+    custom: {
+      desc: 'すべて手動で入力',
+      details: [
+        '自由に目標を設定できます'
+      ]
+    }
+  };
+  
+  // ボタンを生成
+  modes.forEach((mode, index) => {
+    const label = labels[mode];
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'goal-mode-btn';
+    button.setAttribute('data-mode', mode);
+    
+    // デフォルトで推奨モードをアクティブに
+    if (label.badge === '推奨') {
+      button.classList.add('active');
+      currentGoalMode = mode;
+    }
+    
+    // アコーディオンヘッダー
+    const header = document.createElement('div');
+    header.className = 'goal-mode-header';
+    header.innerHTML = `
+      <span class="goal-mode-icon">${label.icon}</span>
+      <span class="goal-mode-title">${label.title}</span>
+      ${label.badge ? `<span class="goal-mode-badge">${label.badge}</span>` : ''}
+      <span class="goal-mode-arrow">▶</span>
+    `;
+    
+    // アコーディオンコンテンツ
+    const content = document.createElement('div');
+    content.className = 'goal-mode-content';
+    
+    // プリセットモードの場合は詳細情報を表示
+    if (!hasHistory && presetDetails[mode]) {
+      const detail = presetDetails[mode];
+      content.innerHTML = `
+        <div class="goal-mode-content-desc">${detail.desc}</div>
+        <div class="goal-mode-content-details">
+          <div class="goal-mode-detail-title">📊 目標</div>
+          ${detail.details.map(item => `<div class="goal-mode-detail-item">• ${item}</div>`).join('')}
+        </div>
+      `;
+    } else if (hasHistory && mode !== 'custom') {
+      // 前月ベースの場合は説明文を表示
+      content.innerHTML = `
+        <div class="goal-mode-content-desc">${label.desc}</div>
+        <div class="goal-mode-change" id="change-${mode}" style="display: none;"></div>
+      `;
+    } else {
+      // カスタムモード
+      content.innerHTML = `
+        <div class="goal-mode-content-desc">${label.desc}</div>
+      `;
+    }
+    
+    button.appendChild(header);
+    button.appendChild(content);
+    
+    // クリックイベント
+    button.onclick = () => selectGoalMode(mode);
+    
+    container.appendChild(button);
+  });
 }
 
 // 月選択ドロップダウンを初期化（過去12ヶ月+未来2ヶ月）
@@ -3371,19 +3643,30 @@ let currentGoalMode = 'light';
 let previousGoalData = null; // 前回の目標データを保持
 
 function selectGoalMode(mode) {
-  currentGoalMode = mode;
+  const clickedButton = document.querySelector(`[data-mode="${mode}"]`);
+  const wasActive = clickedButton.classList.contains('active');
+  
+  // 全てのボタンを非アクティブに
   document.querySelectorAll('.goal-mode-btn').forEach(btn => {
     btn.classList.remove('active');
   });
-  document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
   
-  if (mode === 'custom') {
-    // カスタムモードでは入力フィールドを有効化
-    enableCustomInput();
+  // クリックされたボタンをアクティブに（既にアクティブだった場合は閉じる）
+  if (!wasActive) {
+    clickedButton.classList.add('active');
+    currentGoalMode = mode;
+    
+    if (mode === 'custom') {
+      // カスタムモードでは入力フィールドを有効化
+      enableCustomInput();
+    } else {
+      // 自動計算モードでは入力フィールドを無効化
+      disableCustomInput();
+      calculateGoalsFromMode(mode);
+    }
   } else {
-    // 自動計算モードでは入力フィールドを無効化
-    disableCustomInput();
-    calculateGoalsFromMode(mode);
+    // 閉じた場合はcurrentGoalModeをクリア
+    currentGoalMode = null;
   }
 }
 
@@ -3420,6 +3703,27 @@ function calculateGoalsFromMode(mode) {
   const profile = loadProfile();
   if (!profile) return;
   
+  // プリセットモードの場合
+  if (['beginner', 'moderate', 'active'].includes(mode)) {
+    const preset = getPresetGoals(mode);
+    if (preset) {
+      document.getElementById('goal-systolic').value = preset.bloodPressure.systolic;
+      document.getElementById('goal-diastolic').value = preset.bloodPressure.diastolic;
+      document.getElementById('goal-weight').value = preset.weight;
+      document.getElementById('goal-days').value = preset.trainingDays;
+      document.getElementById('goal-time').value = preset.totalTime;
+      document.getElementById('goal-calories').value = preset.totalCalories;
+      
+      // BMIを計算して表示
+      updateGoalBMI();
+      
+      // プリセットモードは変化量表示なし
+      displayChanges(mode, {});
+      return;
+    }
+  }
+  
+  // 以下、既存の処理（前月ベースの計算）
   // デフォルト値（選択中の月の目標があればそれを使用、なければデフォルト）
   const goalsStr = localStorage.getItem(getSelectedGoalsKey());
   const currentGoals = goalsStr ? JSON.parse(goalsStr) : null;
@@ -3562,7 +3866,8 @@ function displayChanges(mode, changes) {
   const changeElement = document.getElementById(`change-${mode}`);
   if (!changeElement) return;
   
-  if (mode === 'maintain' || mode === 'custom') {
+  // プリセットモード、maintain、customは変化量表示なし
+  if (mode === 'maintain' || mode === 'custom' || mode === 'beginner' || mode === 'moderate' || mode === 'active') {
     changeElement.style.display = 'none';
     return;
   }
@@ -4280,8 +4585,7 @@ window.addEventListener('DOMContentLoaded', function() {
       gender: null,
       age: null,
       height: null,
-      weight: null,
-      activityLevel: 'moderate'
+      weight: null
     });
     
     updateGoalDisplay();
@@ -4309,7 +4613,28 @@ function closeProfilePrompt() {
 // 「今すぐ設定する」ボタン
 function setupProfileNow() {
   closeProfilePrompt();
-  openProfileEditModal();
+  
+  // プロフィール表示カードまでスムーズスクロール
+  const profileCard = document.getElementById('profile-display');
+  if (profileCard) {
+    // 強調表示を追加
+    profileCard.classList.add('highlight');
+    
+    // スムーズスクロール
+    profileCard.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'center' 
+    });
+    
+    // 1秒後に自動的に編集モーダルを開く
+    setTimeout(() => {
+      editProfile();
+      // 強調表示を解除（アニメーション終了後）
+      setTimeout(() => {
+        profileCard.classList.remove('highlight');
+      }, 6000); // アニメーション3回 × 2秒
+    }, 1000);
+  }
 }
 
 // 「後で設定する」ボタン
@@ -4501,28 +4826,6 @@ document.addEventListener('DOMContentLoaded', function() {
           <span class="unit">kg</span>
         </div>
         <div class="error-message" id="error-edit-weight"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">活動レベル</label>
-        <div class="radio-group vertical">
-          <div class="radio-option">
-            <input type="radio" id="edit-activity-sedentary" name="editActivityLevel" value="sedentary">
-            <label for="edit-activity-sedentary">ほとんど運動しない</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" id="edit-activity-light" name="editActivityLevel" value="light">
-            <label for="edit-activity-light">軽い運動（週1-2回）</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" id="edit-activity-moderate" name="editActivityLevel" value="moderate" checked>
-            <label for="edit-activity-moderate">中程度の運動（週3-5回）</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" id="edit-activity-intense" name="editActivityLevel" value="intense">
-            <label for="edit-activity-intense">激しい運動（週6-7回）</label>
-          </div>
-        </div>
       </div>
 
       <div class="modal-footer">
