@@ -886,21 +886,78 @@ body {
 
 /* 目標セクション */
 .goal-section {
-  margin-bottom: 30px;
-  padding: 20px;
+  margin-bottom: 20px;
   background: linear-gradient(145deg, #FAFAFA, #FFFFFF);
   border-radius: 12px;
   border: 2px solid #E0E0E0;
+  transition: all 0.3s ease;
+}
+
+.goal-section.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.goal-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+
+.goal-section-header:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.goal-section-checkbox {
+  flex-shrink: 0;
+}
+
+.checkbox-custom {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #9E9E9E;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.checkbox-custom.checked {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: #667eea;
+}
+
+.checkbox-custom.checked::after {
+  content: '✓';
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.goal-section-content {
+  padding: 0 20px 20px 20px;
+  display: block;
+}
+
+.goal-section.disabled .goal-section-content {
+  display: none;
 }
 
 .goal-section-title {
-  font-size: 1.3em;
+  font-size: 1.2em;
   color: #212121;
-  margin-bottom: 15px;
+  margin: 0;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
 }
 
 .goal-current-info {
@@ -2720,8 +2777,14 @@ body {
       </div>
       
       <!-- 血圧目標 -->
-      <div class="goal-section">
-        <h3 class="goal-section-title">💉 血圧目標</h3>
+      <div class="goal-section" id="goal-section-bp">
+        <div class="goal-section-header" onclick="toggleGoalSection('bloodPressure')">
+          <div class="goal-section-checkbox">
+            <div class="checkbox-custom" id="checkbox-bp"></div>
+          </div>
+          <h3 class="goal-section-title">🫀 血圧目標</h3>
+        </div>
+        <div class="goal-section-content" id="content-bp">
         <div class="goal-current-info" id="current-bp-info" style="display: none;">
           <div class="goal-current-title">📊 現在の平均血圧</div>
           <div class="goal-current-value" id="current-bp-value">--/-- mmHg</div>
@@ -2754,11 +2817,18 @@ body {
           <span class="goal-hint-icon">💡</span>
           <span>健康管理のため、100-139 / 70-89 mmHgの範囲で設定してください</span>
         </div>
+        </div>
       </div>
 
       <!-- 体重目標 -->
-      <div class="goal-section">
-        <h3 class="goal-section-title">⚖️ 体重目標</h3>
+      <div class="goal-section" id="goal-section-weight">
+        <div class="goal-section-header" onclick="toggleGoalSection('weight')">
+          <div class="goal-section-checkbox">
+            <div class="checkbox-custom" id="checkbox-weight"></div>
+          </div>
+          <h3 class="goal-section-title">⚖️ 体重目標</h3>
+        </div>
+        <div class="goal-section-content" id="content-weight">
         <div class="goal-current-info" id="current-weight-info" style="display: none;">
           <div class="goal-current-title">📊 現在の平均体重</div>
           <div class="goal-current-value" id="current-weight-value">-- kg (BMI: --)</div>
@@ -2785,11 +2855,18 @@ body {
           <span class="goal-hint-icon">💡</span>
           <span id="weight-hint">健康管理のため、<strong>BMI 18.5-25（標準体重）</strong>の範囲で設定してください。低体重（18.5未満）・肥満（30以上）は設定できません。</span>
         </div>
+        </div>
       </div>
 
-      <!-- トレーニング目標 -->
-      <div class="goal-section">
-        <h3 class="goal-section-title">🏃 トレーニング目標</h3>
+      <!-- トレーニング日数 -->
+      <div class="goal-section" id="goal-section-days">
+        <div class="goal-section-header" onclick="toggleGoalSection('trainingDays')">
+          <div class="goal-section-checkbox">
+            <div class="checkbox-custom" id="checkbox-days"></div>
+          </div>
+          <h3 class="goal-section-title">📅 トレーニング日数</h3>
+        </div>
+        <div class="goal-section-content" id="content-days">
         <div class="goal-current-info" id="current-training-info" style="display: none;">
           <div class="goal-current-title">📊 今月の実績</div>
           <div class="goal-current-value" id="current-training-value">
@@ -2808,6 +2885,24 @@ body {
               <span class="value" id="prev-days-value">読み込み中...</span>
             </div>
           </div>
+        </div>
+        <div class="goal-hint">
+          <span class="goal-hint-icon">💡</span>
+          <span><strong>トレーニング日数は1-25日</strong>の範囲で設定できます。週6日ペース（月25日）が健康的な上限です。</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- 運動時間 -->
+      <div class="goal-section" id="goal-section-time">
+        <div class="goal-section-header" onclick="toggleGoalSection('totalTime')">
+          <div class="goal-section-checkbox">
+            <div class="checkbox-custom" id="checkbox-time"></div>
+          </div>
+          <h3 class="goal-section-title">⏱️ 運動時間</h3>
+        </div>
+        <div class="goal-section-content" id="content-time">
+        <div class="goal-input-row">
           <div class="goal-input-group">
             <div class="goal-input-wrapper">
               <label>運動時間（分）</label>
@@ -2819,6 +2914,24 @@ body {
               <span class="value" id="prev-time-value">読み込み中...</span>
             </div>
           </div>
+        </div>
+        <div class="goal-hint">
+          <span class="goal-hint-icon">💡</span>
+          <span>月間の総運動時間を設定してください。</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- 消費カロリー -->
+      <div class="goal-section" id="goal-section-calories">
+        <div class="goal-section-header" onclick="toggleGoalSection('totalCalories')">
+          <div class="goal-section-checkbox">
+            <div class="checkbox-custom" id="checkbox-calories"></div>
+          </div>
+          <h3 class="goal-section-title">🔥 消費カロリー</h3>
+        </div>
+        <div class="goal-section-content" id="content-calories">
+        <div class="goal-input-row">
           <div class="goal-input-group">
             <div class="goal-input-wrapper">
               <label>消費カロリー（kcal）</label>
@@ -2833,7 +2946,8 @@ body {
         </div>
         <div class="goal-hint">
           <span class="goal-hint-icon">💡</span>
-          <span><strong>トレーニング日数は1-25日</strong>の範囲で設定できます。週6日ペース（月25日）が健康的な上限です。休息日も体の成長に必要です。</span>
+          <span>月間の総消費カロリーを設定してください。</span>
+        </div>
         </div>
       </div>
 
@@ -2875,6 +2989,15 @@ let selectedGoalMonth = new Date().getMonth() + 1; // 1-12
 // ホーム画面で選択中の年月（表示用）
 let homeDisplayYear = new Date().getFullYear();
 let homeDisplayMonth = new Date().getMonth() + 1; // 1-12
+
+// 目標項目の有効/無効状態
+let goalItemsEnabled = {
+  bloodPressure: true,
+  weight: true,
+  trainingDays: true,
+  totalTime: true,
+  totalCalories: true
+};
 
 // モードラベル定義（前月データあり）
 const modeLabelsHistory = {
@@ -3398,6 +3521,9 @@ function openGoalModal() {
   // モードボタンを動的生成
   renderGoalModeButtons();
   
+  // チェックボックスの状態を初期化
+  initializeGoalCheckboxes();
+  
   document.getElementById('goalModal').classList.add('active');
   loadGoalsToModal();
 }
@@ -3630,6 +3756,58 @@ function confirmEditPreviousMonth(confirmed) {
   // 一時変数をクリア
   delete window.tempSelectedYear;
   delete window.tempSelectedMonth;
+}
+
+// ========== 目標項目選択機能 ==========
+
+// チェックボックスの初期化
+function initializeGoalCheckboxes() {
+  // すべての項目を有効にして表示
+  const items = ['bloodPressure', 'weight', 'trainingDays', 'totalTime', 'totalCalories'];
+  items.forEach(item => {
+    goalItemsEnabled[item] = true;
+    updateGoalSectionUI(item);
+  });
+}
+
+// 目標セクションのトグル
+function toggleGoalSection(itemKey) {
+  goalItemsEnabled[itemKey] = !goalItemsEnabled[itemKey];
+  updateGoalSectionUI(itemKey);
+}
+
+// UIの更新
+function updateGoalSectionUI(itemKey) {
+  const keyToId = {
+    bloodPressure: 'bp',
+    weight: 'weight',
+    trainingDays: 'days',
+    totalTime: 'time',
+    totalCalories: 'calories'
+  };
+  
+  const id = keyToId[itemKey];
+  const section = document.getElementById(`goal-section-${id}`);
+  const checkbox = document.getElementById(`checkbox-${id}`);
+  const content = document.getElementById(`content-${id}`);
+  
+  if (goalItemsEnabled[itemKey]) {
+    section.classList.remove('disabled');
+    checkbox.classList.add('checked');
+    if (content) content.style.display = 'block';
+  } else {
+    section.classList.add('disabled');
+    checkbox.classList.remove('checked');
+    if (content) content.style.display = 'none';
+  }
+}
+
+// すべてのセクションのUIを更新
+function updateAllGoalSectionsUI() {
+  const items = ['bloodPressure', 'weight', 'trainingDays', 'totalTime', 'totalCalories'];
+  items.forEach(item => {
+    updateGoalSectionUI(item);
+  });
 }
 
 
@@ -3920,6 +4098,23 @@ function loadGoalsToModal() {
   loadPreviousMonthGoals();
   
   if (goals) {
+    // 有効な項目の情報を復元
+    if (goals.enabledItems) {
+      goalItemsEnabled = { ...goals.enabledItems };
+    } else {
+      // 古いデータの場合はすべて有効
+      goalItemsEnabled = {
+        bloodPressure: true,
+        weight: true,
+        trainingDays: true,
+        totalTime: true,
+        totalCalories: true
+      };
+    }
+    
+    // チェックボックスのUIを更新
+    updateAllGoalSectionsUI();
+    
     if (goals.bloodPressure) {
       document.getElementById('goal-systolic').value = goals.bloodPressure.systolic;
       document.getElementById('goal-diastolic').value = goals.bloodPressure.diastolic;
@@ -4026,32 +4221,44 @@ function saveGoals() {
   const time = parseInt(document.getElementById('goal-time').value);
   const calories = parseInt(document.getElementById('goal-calories').value);
   
-  // バリデーション
+  // バリデーション（有効な項目のみ）
   const errors = [];
   
-  if (!systolic || systolic < 100 || systolic > 139) {
-    errors.push('収縮期血圧は100-139の範囲で入力してください');
-  }
-  if (!diastolic || diastolic < 70 || diastolic > 89) {
-    errors.push('拡張期血圧は70-89の範囲で入力してください');
-  }
-  
-  const profile = loadProfile();
-  if (profile && profile.height) {
-    const bmi = calculateBMI(weight, profile.height);
-    if (bmi < 18.5 || bmi > 25) {
-      errors.push('体重はBMI 18.5-25（標準体重）の範囲で設定してください');
+  if (goalItemsEnabled.bloodPressure) {
+    if (!systolic || systolic < 100 || systolic > 139) {
+      errors.push('収縮期血圧は100-139の範囲で入力してください');
+    }
+    if (!diastolic || diastolic < 70 || diastolic > 89) {
+      errors.push('拡張期血圧は70-89の範囲で入力してください');
     }
   }
   
-  if (!days || days < 1 || days > 25) {
-    errors.push('トレーニング日数は1-25日の範囲で入力してください（週6日ペースが上限）');
+  if (goalItemsEnabled.weight) {
+    const profile = loadProfile();
+    if (profile && profile.height) {
+      const bmi = calculateBMI(weight, profile.height);
+      if (bmi < 18.5 || bmi > 25) {
+        errors.push('体重はBMI 18.5-25（標準体重）の範囲で設定してください');
+      }
+    }
   }
-  if (!time || time < 30 || time > 3000) {
-    errors.push('運動時間は30-3000分の範囲で入力してください');
+  
+  if (goalItemsEnabled.trainingDays) {
+    if (!days || days < 1 || days > 25) {
+      errors.push('トレーニング日数は1-25日の範囲で入力してください（週6日ペースが上限）');
+    }
   }
-  if (!calories || calories < 100 || calories > 15000) {
-    errors.push('消費カロリーは100-15000kcalの範囲で入力してください');
+  
+  if (goalItemsEnabled.totalTime) {
+    if (!time || time < 30 || time > 3000) {
+      errors.push('運動時間は30-3000分の範囲で入力してください');
+    }
+  }
+  
+  if (goalItemsEnabled.totalCalories) {
+    if (!calories || calories < 100 || calories > 15000) {
+      errors.push('消費カロリーは100-15000kcalの範囲で入力してください');
+    }
   }
   
   if (errors.length > 0) {
@@ -4059,18 +4266,34 @@ function saveGoals() {
     return;
   }
   
-  // 保存
+  // 保存（有効な項目のみ）
   const goals = {
     mode: currentGoalMode,
-    bloodPressure: {
+    enabledItems: { ...goalItemsEnabled }
+  };
+  
+  if (goalItemsEnabled.bloodPressure) {
+    goals.bloodPressure = {
       systolic: systolic,
       diastolic: diastolic
-    },
-    weight: weight,
-    trainingDays: days,
-    totalTime: time,
-    totalCalories: calories
-  };
+    };
+  }
+  
+  if (goalItemsEnabled.weight) {
+    goals.weight = weight;
+  }
+  
+  if (goalItemsEnabled.trainingDays) {
+    goals.trainingDays = days;
+  }
+  
+  if (goalItemsEnabled.totalTime) {
+    goals.totalTime = time;
+  }
+  
+  if (goalItemsEnabled.totalCalories) {
+    goals.totalCalories = calories;
+  }
   
   saveGoalsData(goals);
   updateGoalDisplay();
