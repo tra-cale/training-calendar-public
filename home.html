@@ -3460,12 +3460,12 @@ function onHomeMonthChange() {
 function updateGoalDisplay() {
   // 現在月を表示（NEW）
   const now = new Date();
-  const currentMonth = now.getMonth() + 1;
+  const currentMonth = now.getMonth() + 1; // 1-12形式
   document.getElementById('goal-display-month').textContent = `${currentMonth}月`;
   
-  // 現在月の目標を取得（月選択機能は廃止）
+  // 現在月の目標を取得
   const currentYear = now.getFullYear();
-  const goalsKey = getGoalsKey(currentYear, now.getMonth());
+  const goalsKey = getGoalsKey(currentYear, currentMonth); // 1-12形式で渡す
   const goalsStr = localStorage.getItem(goalsKey);
   const goals = goalsStr ? JSON.parse(goalsStr) : null;
   
@@ -4350,7 +4350,7 @@ function updateTodayDate() {
 function updateAchievementSummary() {
   const now = new Date();
   const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth();
+  const currentMonth = now.getMonth(); // 0-11形式
   
   console.log('=== updateAchievementSummary 開始 ===');
   console.log(`現在日時: ${now}`);
@@ -4360,11 +4360,11 @@ function updateAchievementSummary() {
   const allKeys = Object.keys(localStorage).filter(key => key.startsWith('training_'));
   console.log('LocalStorageに保存されているtrainingキー:', allKeys);
   
-  // 今月のデータを集計
+  // 今月のデータを集計（0-11形式を渡す）
   const monthData = calculateMonthlyData(currentYear, currentMonth);
   
-  // 今月の目標を取得（getGoalsKey関数を使用、currentMonthは0-11）
-  const goalsKey = getGoalsKey(currentYear, currentMonth);
+  // 今月の目標を取得（1-12形式で渡す）
+  const goalsKey = getGoalsKey(currentYear, currentMonth + 1);
   const goalsStr = localStorage.getItem(goalsKey);
   const goals = goalsStr ? JSON.parse(goalsStr) : null;
   console.log('目標データキー:', goalsKey);
