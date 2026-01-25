@@ -2030,6 +2030,174 @@ body {
   }
 }
 
+/* ===== プロフィール未設定モーダル（案1: モーダル型） ===== */
+.profile-prompt-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-prompt-modal.show {
+  display: flex;
+}
+
+.profile-prompt-content {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: modalSlideUp 0.4s ease;
+}
+
+.profile-prompt-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: bounce 1s infinite;
+}
+
+.profile-prompt-title {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.profile-prompt-text {
+  color: #666;
+  font-size: 1em;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.profile-prompt-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.profile-prompt-btn-primary {
+  flex: 1;
+  padding: 16px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-prompt-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+}
+
+.profile-prompt-btn-secondary {
+  flex: 1;
+  padding: 16px;
+  background: transparent;
+  color: #999;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  font-size: 1.05em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-prompt-btn-secondary:hover {
+  border-color: #999;
+  color: #666;
+}
+
+/* フローティングボタン */
+.profile-floating-button {
+  position: fixed;
+  bottom: 100px; /* ボトムナビゲーションの上 */
+  right: 30px;
+  background: linear-gradient(135deg, #F57C00, #FFB300);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.4);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  animation: floatBounce 2s ease-in-out infinite;
+  z-index: 9999;
+}
+
+.profile-floating-button.show {
+  display: flex;
+}
+
+.profile-floating-badge {
+  background: #EF5350;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: 700;
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .profile-prompt-content {
+    padding: 30px 20px;
+  }
+  
+  .profile-floating-button {
+    bottom: 90px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 0.9em;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2042,8 +2210,30 @@ body {
     <p class="hero-subtitle">健康的な毎日をサポート</p>
   </section>
 
-  <!-- プロフィール設定（初回のみ表示） -->
-  <div class="card profile-setup-card fade-in" id="profile-setup">
+  <!-- プロフィール未設定モーダル（案1: モーダル型） -->
+  <div class="profile-prompt-modal" id="profile-prompt-modal">
+    <div class="profile-prompt-content">
+      <div class="profile-prompt-icon">🔔</div>
+      <h2 class="profile-prompt-title">プロフィールを入力してください</h2>
+      <p class="profile-prompt-text">
+        あなたの健康データを記録する前に、基本情報を登録すると、<br>
+        より正確なカロリー計算やBMI表示が可能になります。
+      </p>
+      <div class="profile-prompt-buttons">
+        <button class="profile-prompt-btn-primary" onclick="setupProfileNow()">今すぐ設定する</button>
+        <button class="profile-prompt-btn-secondary" onclick="setupProfileLater()">後で設定する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- フローティングボタン -->
+  <div class="profile-floating-button" id="profile-floating-btn" onclick="showProfilePrompt()">
+    <span>👤 プロフィール設定</span>
+    <span class="profile-floating-badge">1</span>
+  </div>
+
+  <!-- プロフィール設定（初回のみ表示） - 削除して常に非表示 -->
+  <div class="card profile-setup-card fade-in hidden" id="profile-setup">
     <div class="setup-header">
       <h2 class="setup-title">👤 プロフィール設定</h2>
       <p class="setup-subtitle">あなたの基本情報を入力してください</p>
@@ -2120,7 +2310,6 @@ body {
       </div>
 
       <button type="submit" class="btn btn-primary">✅ 完了してカレンダーへ</button>
-      <a href="calendar.html" class="skip-link">スキップ →</a>
     </form>
   </div>
 
@@ -2875,6 +3064,10 @@ document.addEventListener('DOMContentLoaded', function() {
       saveProfile(profile);
       updateProfileDisplay(profile);
       closeProfileEditModal();
+      
+      // モーダルとフローティングボタンを非表示
+      closeProfilePrompt();
+      document.getElementById('profile-floating-btn').classList.remove('show');
       
       // 達成度サマリーも更新（体重が変わる可能性があるため）
       updateAchievementSummary();
@@ -4040,27 +4233,26 @@ function updateAchievementDisplay() {
 window.addEventListener('DOMContentLoaded', function() {
   applyMonthTheme();
   const profile = loadProfile();
+  
   if (profile) {
+    // プロフィール設定済み: モーダルとフローティングボタンを非表示、全コンテンツを表示
     document.getElementById('profile-setup').classList.add('hidden');
     document.getElementById('profile-display').classList.remove('hidden');
     document.getElementById('goal-display').classList.remove('hidden');
-    document.getElementById('achievement-display').classList.remove('hidden'); // NEW
-    document.getElementById('today-date-display').classList.remove('hidden'); // NEW
+    document.getElementById('achievement-display').classList.remove('hidden');
+    document.getElementById('today-date-display').classList.remove('hidden');
     document.getElementById('main-navigation').classList.remove('hidden');
     updateProfileDisplay(profile);
     
-    // ホーム画面の月選択を初期化（廃止予定）
-    // initializeHomeMonthSelector();
-    
-    // 今日の日付を更新（NEW）
+    // 今日の日付を更新
     updateTodayDate();
     
     updateGoalDisplay();
     
-    // 達成度サマリーを更新（NEW）
+    // 達成度サマリーを更新
     updateAchievementSummary();
     
-    // 表示項目設定を読み込み（NEW）
+    // 表示項目設定を読み込み
     loadDisplaySettings();
     
     // URLパラメータで目標設定モーダルを開く
@@ -4072,12 +4264,70 @@ window.addEventListener('DOMContentLoaded', function() {
       }, 100);
     }
   } else {
-    document.getElementById('profile-setup').classList.remove('hidden');
-    document.getElementById('profile-display').classList.add('hidden');
-    document.getElementById('goal-display').classList.add('hidden');
-    document.getElementById('achievement-display').classList.add('hidden'); // NEW
-    document.getElementById('today-date-display').classList.add('hidden'); // NEW
-    document.getElementById('main-navigation').classList.add('hidden');
+    // プロフィール未設定: 全コンテンツを表示し、2秒後にモーダル表示
+    document.getElementById('profile-setup').classList.add('hidden');
+    document.getElementById('profile-display').classList.remove('hidden');
+    document.getElementById('goal-display').classList.remove('hidden');
+    document.getElementById('achievement-display').classList.remove('hidden');
+    document.getElementById('today-date-display').classList.remove('hidden');
+    document.getElementById('main-navigation').classList.remove('hidden');
+    
+    // 今日の日付を更新
+    updateTodayDate();
+    
+    // プロフィール表示を空の状態で初期化
+    updateProfileDisplay({
+      gender: null,
+      age: null,
+      height: null,
+      weight: null,
+      activityLevel: 'moderate'
+    });
+    
+    updateGoalDisplay();
+    updateAchievementSummary();
+    loadDisplaySettings();
+    
+    // 2秒後にプロフィール設定モーダルを表示
+    setTimeout(() => {
+      showProfilePrompt();
+    }, 2000);
+  }
+});
+
+// プロフィール設定モーダルを表示
+function showProfilePrompt() {
+  document.getElementById('profile-prompt-modal').classList.add('show');
+  document.getElementById('profile-floating-btn').classList.remove('show');
+}
+
+// プロフィール設定モーダルを閉じる
+function closeProfilePrompt() {
+  document.getElementById('profile-prompt-modal').classList.remove('show');
+}
+
+// 「今すぐ設定する」ボタン
+function setupProfileNow() {
+  closeProfilePrompt();
+  openProfileEditModal();
+}
+
+// 「後で設定する」ボタン
+function setupProfileLater() {
+  closeProfilePrompt();
+  // フローティングボタンを表示
+  document.getElementById('profile-floating-btn').classList.add('show');
+}
+
+// モーダル外クリックで閉じる
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('profile-prompt-modal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        setupProfileLater();
+      }
+    });
   }
 });
 </script>
