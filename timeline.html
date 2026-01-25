@@ -137,23 +137,28 @@ body {
   box-shadow: 0 0 0 2px rgba(245, 124, 0, 0.1);
 }
 
-/* 表示設定ボタン */
+/* 表示項目ボタン（home.html/yearly-summary.html/calendar.htmlと統一） */
 .btn-display-settings {
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #F57C00, #FFB300);
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #42A5F5, #64B5F6);
   color: white;
   border: none;
-  border-radius: 10px;
-  font-size: 0.95em;
+  border-radius: 20px;
+  font-size: 0.85em;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(245, 124, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(66, 165, 245, 0.3);
 }
 
 .btn-display-settings:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+  background: linear-gradient(135deg, #1976D2, #42A5F5);
+  box-shadow: 0 3px 8px rgba(66, 165, 245, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-display-settings:active {
+  transform: translateY(0);
 }
 
 /* 設定パネル */
@@ -467,49 +472,54 @@ body {
   color: #EF5350;
 }
 
-/* 運動詳細セクション */
+/* 運動詳細セクション - 案5: テーブル風 */
 .exercise-details {
-  padding: 15px;
-  background: #FAFAFA;
-  border-radius: 12px;
-  border-left: 4px solid #FFB300;
+  margin-top: 15px;
 }
 
 .exercise-details-title {
   font-weight: 600;
   color: #424242;
-  margin-bottom: 10px;
-  font-size: 0.95em;
+  margin-bottom: 8px;
+  font-size: 0.9em;
 }
 
 .exercise-details-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  background: #FAFAFA;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .exercise-details-list li {
-  padding: 8px 0;
-  color: #616161;
-  font-size: 0.9em;
-  border-bottom: 1px solid #E0E0E0;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  padding: 10px 12px;
   align-items: center;
+  border-bottom: 1px solid #F0F0F0;
 }
 
 .exercise-details-list li:last-child {
   border-bottom: none;
 }
 
+.exercise-icon {
+  font-size: 1.2em;
+}
+
 .exercise-name {
-  color: #424242;
+  color: #212121;
   font-weight: 500;
+  font-size: 0.9em;
 }
 
 .exercise-stats {
   color: #616161;
   font-size: 0.85em;
+  text-align: right;
 }
 
 /* もっと見るセクション */
@@ -624,12 +634,36 @@ body {
     justify-content: center;
   }
 
+  /* 表示項目ボタン（スマホ版：中央配置・コンパクト） */
+  .btn-display-settings {
+    align-self: center;
+    width: auto;
+    padding: 8px 16px;
+  }
+
   .badges-container {
-    justify-content: center;
+    justify-content: space-between;
+    gap: 8px;
   }
 
   .data-badge {
-    min-width: 100px;
+    flex: 1;
+    min-width: 0;
+    padding: 10px 5px;
+  }
+
+  .badge-icon {
+    font-size: 1.2em;
+    margin-bottom: 4px;
+  }
+
+  .badge-value {
+    font-size: 0.85em;
+  }
+
+  .badge-label {
+    font-size: 0.65em;
+    margin-top: 2px;
   }
 
   .card-header {
@@ -710,8 +744,8 @@ body {
       <span class="label-text">以前</span>
     </div>
 
-    <!-- 表示設定ボタン -->
-    <button class="btn-display-settings" id="btnDisplaySettings">⚙️ 表示設定</button>
+    <!-- 表示項目ボタン -->
+    <button class="btn-display-settings" id="btnDisplaySettings">⚙️ 表示項目</button>
   </div>
 
   <!-- 設定パネル -->
@@ -791,14 +825,14 @@ const recordsPerPage = 10;
 document.addEventListener('DOMContentLoaded', function() {
   initYearSelector();
   loadTimeline();
-  applyDisplaySettings(); // 表示設定を適用
+  applyDisplaySettings(); // 表示項目設定を適用
 
   // イベントリスナー
   document.getElementById('select-year').addEventListener('change', onMonthChange);
   document.getElementById('select-month').addEventListener('change', onMonthChange);
   document.getElementById('btn-load-more').addEventListener('click', loadMoreRecords);
 
-  // 表示設定ボタンのクリック
+  // 表示項目ボタンのクリック
   const btnDisplaySettings = document.getElementById('btnDisplaySettings');
   const settingsPanel = document.getElementById('settingsPanel');
   
@@ -908,9 +942,9 @@ function loadTimeline() {
   loadMoreRecords();
 }
 
-// ===== 表示設定機能 =====
+// ===== 表示項目設定機能 =====
 
-// デフォルトの表示設定
+// デフォルトの表示項目設定
 const DEFAULT_DISPLAY_SETTINGS = {
   bloodPressure: true,
   weight: true,
@@ -919,7 +953,7 @@ const DEFAULT_DISPLAY_SETTINGS = {
   calories: true
 };
 
-// 表示設定を読み込む
+// 表示項目設定を読み込む
 function loadDisplaySettings() {
   try {
     const settingsStr = localStorage.getItem('summary_display_settings');
@@ -927,21 +961,21 @@ function loadDisplaySettings() {
       return { ...DEFAULT_DISPLAY_SETTINGS, ...JSON.parse(settingsStr) };
     }
   } catch (e) {
-    console.error('表示設定の読み込みエラー:', e);
+    console.error('表示項目設定の読み込みエラー:', e);
   }
   return { ...DEFAULT_DISPLAY_SETTINGS };
 }
 
-// 表示設定を保存する
+// 表示項目設定を保存する
 function saveDisplaySettings(settings) {
   try {
     localStorage.setItem('summary_display_settings', JSON.stringify(settings));
   } catch (e) {
-    console.error('表示設定の保存エラー:', e);
+    console.error('表示項目設定の保存エラー:', e);
   }
 }
 
-// 表示設定をUIに適用する
+// 表示項目設定をUIに適用する
 function applyDisplaySettings() {
   const settings = loadDisplaySettings();
   
@@ -1103,7 +1137,7 @@ function createTimelineCard(record) {
   const weekday = weekdays[record.date.getDay()];
   const dateStr = `${record.date.getMonth() + 1}月${record.date.getDate()}日`;
 
-  // 表示設定を読み込む
+  // 表示項目設定を読み込む
   const settings = loadDisplaySettings();
   
   // バッジとコンテンツを生成
@@ -1246,7 +1280,7 @@ function renderExerciseBadge(exerciseData, settings) {
   `;
 }
 
-// 運動詳細表示
+// 運動詳細表示 - 案5: テーブル風
 function renderExerciseDetails(exercises, settings) {
   if (!exercises || exercises.length === 0) {
     return '';
@@ -1264,11 +1298,13 @@ function renderExerciseDetails(exercises, settings) {
     }
     
     const statsText = statsParts.length > 0 ? statsParts.join(' / ') : '';
-    const detailsText = item.details ? ` (${item.details})` : '';
+    
+    // 詳細（速度・距離・時間）は非表示
     
     return `
       <li>
-        <span class="exercise-name">${item.icon || '🏃'} ${item.name || '運動'}${detailsText}</span>
+        <span class="exercise-icon">${item.icon || '🏃'}</span>
+        <span class="exercise-name">${item.name || '運動'}</span>
         ${statsText ? `<span class="exercise-stats">${statsText}</span>` : ''}
       </li>
     `;
