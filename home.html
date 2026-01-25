@@ -895,7 +895,6 @@ body {
 
 .goal-section.disabled {
   opacity: 0.5;
-  pointer-events: none;
 }
 
 .goal-section-header {
@@ -906,6 +905,7 @@ body {
   cursor: pointer;
   user-select: none;
   transition: background 0.3s ease;
+  pointer-events: auto; /* 常にクリック可能 */
 }
 
 .goal-section-header:hover {
@@ -3075,11 +3075,11 @@ function getPresetGoals(mode) {
 // 月間目標のキー（月別に保存）
 function getGoalsKey(year = null, month = null) {
   const targetYear = year || new Date().getFullYear();
-  const targetMonth = month !== null ? month : new Date().getMonth();
-  // JavaScriptのmonthは0-11なので、1-12に変換
-  const actualMonth = targetMonth + 1;
+  // monthがnullの場合は現在の月（1-12）を使用
+  // monthが指定されている場合はそのまま使用（既に1-12形式を想定）
+  const targetMonth = month !== null ? month : (new Date().getMonth() + 1);
   // ゼロパディングなし（monthly_goals_2026_1 形式）
-  return `monthly_goals_${targetYear}_${actualMonth}`;
+  return `monthly_goals_${targetYear}_${targetMonth}`;
 }
 
 // 選択中の月の目標キーを取得
