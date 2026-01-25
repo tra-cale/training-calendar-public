@@ -1020,31 +1020,32 @@ h1 {
   color: #F57C00;
 }
 
-/* 表示設定ボタン */
+/* 表示項目ボタン（home.html/yearly-summary.htmlと統一） */
 .display-settings-container {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .btn-display-settings {
-  background: linear-gradient(135deg, #F57C00, #FFB300);
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #42A5F5, #64B5F6);
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 12px 24px;
-  font-size: 1em;
+  border-radius: 20px;
+  font-size: 0.85em;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(66, 165, 245, 0.3);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 10px rgba(245, 124, 0, 0.3);
-  transition: all 0.3s ease;
+  gap: 6px;
 }
 
 .btn-display-settings:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(245, 124, 0, 0.4);
+  background: linear-gradient(135deg, #1976D2, #42A5F5);
+  box-shadow: 0 3px 8px rgba(66, 165, 245, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-display-settings:active {
@@ -1052,7 +1053,7 @@ h1 {
 }
 
 .settings-icon {
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 .settings-text {
@@ -1325,7 +1326,7 @@ h1 {
     font-size: 0.95em;
   }
   
-  /* 表示設定ボタン（スマホ版） */
+  /* 表示項目ボタン（スマホ版） */
   .btn-display-settings {
     padding: 10px 20px;
     font-size: 0.95em;
@@ -2025,11 +2026,11 @@ h1 {
       </div>
     </div>
 
-    <!-- 表示設定ボタン -->
+    <!-- 表示項目ボタン -->
     <div class="display-settings-container">
       <button class="btn-display-settings" id="btnDisplaySettings">
         <span class="settings-icon">⚙️</span>
-        <span class="settings-text">表示設定</span>
+        <span class="settings-text">表示項目</span>
       </button>
     </div>
 
@@ -2089,7 +2090,7 @@ h1 {
       <h2 class="summary-title">📊 月間目標・サマリー・達成度</h2>
       <div class="summary-grid">
         <div class="summary-card" data-item="bloodPressure">
-          <div class="summary-label">平均血圧</div>
+          <div class="summary-label">血圧</div>
           <div class="goal-input-wrapper">
             <div class="goal-label">目標</div>
             <input type="text" class="goal-input" id="goal-bp" placeholder="" readonly>
@@ -4001,8 +4002,39 @@ function renderDetailContent(data) {
       html += `</div>`;
 
       data.exercises.forEach(ex => {
-        const exerciseName = ex.category || '運動';
         const exerciseType = ex.type || '';
+        
+        // 運動種目ごとのアイコンマッピング（実装されている9種類のみ）
+        const exerciseIcons = {
+          // 有酸素運動
+          'walking': '🚶',
+          'running': '🏃',
+          'cycling': '🚴',
+          // 水中運動
+          'water-walking': '🏊',
+          'swimming': '🏊‍♂️',
+          // 柔軟性・バランス
+          'stretching': '🤸',
+          'yoga': '🧘',
+          // その他
+          'dance': '💃'
+        };
+        
+        // 表示名マッピング（日本語）
+        const exerciseDisplayNames = {
+          'walking': 'ウォーキング',
+          'running': 'ランニング',
+          'cycling': 'サイクリング',
+          'water-walking': '水中ウォーキング',
+          'swimming': 'スイミング',
+          'stretching': 'ストレッチ',
+          'yoga': 'ヨガ・ピラティス',
+          'dance': 'ダンス・エアロビクス'
+        };
+        
+        // アイコンと表示名を取得（デフォルト値あり）
+        const icon = exerciseIcons[exerciseType] || '🔥';
+        const displayName = exerciseDisplayNames[exerciseType] || exerciseType;
         
         // 各運動の詳細も表示設定に応じて調整
         let exerciseDetail = [];
@@ -4015,7 +4047,7 @@ function renderDetailContent(data) {
         
         html += `
           <div class="detail-data-row">
-            <span class="detail-data-label">${exerciseName}${exerciseType ? ` - ${exerciseType}` : ''}</span>
+            <span class="detail-data-label">${icon} ${displayName}</span>
             <span class="detail-data-value">${exerciseDetail.join(' / ')}</span>
           </div>
         `;
@@ -4267,9 +4299,9 @@ if (window.innerWidth <= 768) {
   }
 }
 
-// ===== 月間サマリー表示設定機能 =====
+// ===== 月間サマリー表示項目設定機能 =====
 
-// デフォルトの表示設定（階層構造対応）
+// デフォルトの表示項目設定（階層構造対応）
 const DEFAULT_DISPLAY_SETTINGS = {
   bloodPressure: true,
   weight: true,
@@ -4279,30 +4311,30 @@ const DEFAULT_DISPLAY_SETTINGS = {
   calories: true               // 消費カロリー（サブ項目）
 };
 
-// 表示設定を読み込む
+// 表示項目設定を読み込む
 function loadDisplaySettings() {
   const saved = localStorage.getItem('summary_display_settings');
   if (saved) {
     try {
       return JSON.parse(saved);
     } catch (e) {
-      console.error('表示設定の読み込みエラー:', e);
+      console.error('表示項目設定の読み込みエラー:', e);
       return { ...DEFAULT_DISPLAY_SETTINGS };
     }
   }
   return { ...DEFAULT_DISPLAY_SETTINGS };
 }
 
-// 表示設定を保存する
+// 表示項目設定を保存する
 function saveDisplaySettings(settings) {
   try {
     localStorage.setItem('summary_display_settings', JSON.stringify(settings));
   } catch (e) {
-    console.error('表示設定の保存エラー:', e);
+    console.error('表示項目設定の保存エラー:', e);
   }
 }
 
-// 表示設定をUIに適用する
+// 表示項目設定をUIに適用する
 function applyDisplaySettings() {
   const settings = loadDisplaySettings();
   
@@ -4369,7 +4401,7 @@ function applyDisplaySettings() {
   }
 }
 
-// 表示設定ボタンのクリック
+// 表示項目ボタンのクリック
 const btnDisplaySettings = document.getElementById('btnDisplaySettings');
 const settingsPanel = document.getElementById('settingsPanel');
 
@@ -4493,7 +4525,7 @@ updateYearTitle(); // 年タイトルを現在の年に更新
 generateCalendar();
 updateMonthNavButtons(); // 初期状態でボタンの有効/無効を設定
 updateYearNavButtons(); // 初期状態で年ボタンの有効/無効を設定
-applyDisplaySettings(); // 表示設定を適用
+applyDisplaySettings(); // 表示項目設定を適用
 
 // ===== ハンバーガーメニューの開閉 =====
 const hamburgerButton = document.getElementById('hamburger-button');
